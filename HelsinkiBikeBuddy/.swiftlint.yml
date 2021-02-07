@@ -1,0 +1,5 @@
+excluded: # paths to ignore during linting. Takes precedence over `included`.
+  - services/API.swift
+identifier_name:
+    excluded:
+    - id

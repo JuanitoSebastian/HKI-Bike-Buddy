@@ -1,0 +1,6 @@
+query AllBikeRentalStatations {
+    bikeRentalStations {
+        name
+        stationId
+    }
+}
