@@ -13,6 +13,8 @@
 		281C5BC025D01329001502BE /* MyBikeRentalStationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 281C5BBF25D01329001502BE /* MyBikeRentalStationsView.swift */; };
 		281C5BCB25D016C2001502BE /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 281C5BCA25D016C2001502BE /* State.swift */; };
 		281C5BD025D01BD0001502BE /* CreateBikeRentalStationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 281C5BCF25D01BD0001502BE /* CreateBikeRentalStationView.swift */; };
+		281C5BDE25D0261E001502BE /* BikeRentalStationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 281C5BDD25D0261E001502BE /* BikeRentalStationViewModel.swift */; };
+		281C5BE925D0294D001502BE /* BikeRentalStationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 281C5BE825D0294D001502BE /* BikeRentalStationView.swift */; };
 		2884BDD025D00D9000747091 /* BikeRentalStation+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2884BDCE25D00D9000747091 /* BikeRentalStation+CoreDataClass.swift */; };
 		2884BDD125D00D9000747091 /* BikeRentalStation+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2884BDCF25D00D9000747091 /* BikeRentalStation+CoreDataProperties.swift */; };
 		28A120A825CEF5DC005CAD77 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A120A725CEF5DC005CAD77 /* API.swift */; };
@@ -55,6 +57,8 @@
 		281C5BBF25D01329001502BE /* MyBikeRentalStationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyBikeRentalStationsView.swift; sourceTree = "<group>"; };
 		281C5BCA25D016C2001502BE /* State.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = State.swift; sourceTree = "<group>"; };
 		281C5BCF25D01BD0001502BE /* CreateBikeRentalStationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateBikeRentalStationView.swift; sourceTree = "<group>"; };
+		281C5BDD25D0261E001502BE /* BikeRentalStationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BikeRentalStationViewModel.swift; sourceTree = "<group>"; };
+		281C5BE825D0294D001502BE /* BikeRentalStationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BikeRentalStationView.swift; sourceTree = "<group>"; };
 		2884BDCE25D00D9000747091 /* BikeRentalStation+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BikeRentalStation+CoreDataClass.swift"; sourceTree = "<group>"; };
 		2884BDCF25D00D9000747091 /* BikeRentalStation+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BikeRentalStation+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		28A120A725CEF5DC005CAD77 /* API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
@@ -109,6 +113,7 @@
 			children = (
 				281C5BA925D01059001502BE /* MyBikeRentalStationsViewModel.swift */,
 				281C5BBA25D0127E001502BE /* CreateBikeRentalStationViewModel.swift */,
+				281C5BDD25D0261E001502BE /* BikeRentalStationViewModel.swift */,
 			);
 			path = viewmodels;
 			sourceTree = "<group>";
@@ -118,6 +123,7 @@
 			children = (
 				281C5BBF25D01329001502BE /* MyBikeRentalStationsView.swift */,
 				281C5BCF25D01BD0001502BE /* CreateBikeRentalStationView.swift */,
+				281C5BE825D0294D001502BE /* BikeRentalStationView.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -406,6 +412,7 @@
 			files = (
 				28A21C6725CEEA150062C7AC /* HelsinkiBikeBuddy.xcdatamodeld in Sources */,
 				2884BDD025D00D9000747091 /* BikeRentalStation+CoreDataClass.swift in Sources */,
+				281C5BE925D0294D001502BE /* BikeRentalStationView.swift in Sources */,
 				2884BDD125D00D9000747091 /* BikeRentalStation+CoreDataProperties.swift in Sources */,
 				28A21C6425CEEA150062C7AC /* Persistence.swift in Sources */,
 				28A21C5D25CEEA140062C7AC /* ContentView.swift in Sources */,
@@ -416,6 +423,7 @@
 				281C5BBB25D0127E001502BE /* CreateBikeRentalStationViewModel.swift in Sources */,
 				281C5BAA25D01059001502BE /* MyBikeRentalStationsViewModel.swift in Sources */,
 				28A120A825CEF5DC005CAD77 /* API.swift in Sources */,
+				281C5BDE25D0261E001502BE /* BikeRentalStationViewModel.swift in Sources */,
 				281C5BCB25D016C2001502BE /* State.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

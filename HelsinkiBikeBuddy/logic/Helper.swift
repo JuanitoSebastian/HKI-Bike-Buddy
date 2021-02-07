@@ -6,8 +6,7 @@
 //
 
 import Foundation
-
-import Foundation
+import CoreData
 
 class Helper {
 
@@ -15,5 +14,17 @@ class Helper {
         #if DEBUG
         print(printMe)
         #endif
+    }
+
+    static func saveViewContext(_ viewContext: NSManagedObjectContext) {
+        do {
+            try viewContext.save()
+        } catch {
+            Helper.log("Failed to save ViewContext")
+        }
+    }
+
+    static func removeBikeRentalStation(bikeRentalStation: BikeRentalStation, viewContext: NSManagedObjectContext) {
+        viewContext.delete(bikeRentalStation)
     }
 }

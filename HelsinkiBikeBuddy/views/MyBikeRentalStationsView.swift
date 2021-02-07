@@ -9,13 +9,13 @@ import SwiftUI
 
 struct MyBikeRentalStationsView: View {
 
-    var viewModel: MyBikeRentalStationsViewModel
+    @ObservedObject var viewModel: MyBikeRentalStationsViewModel
 
     var body: some View {
-        HStack {
+        VStack {
             Text("My Rental Stations")
             ForEach(viewModel.bikeRentalStations, id: \.id) { bikeRentalStationModel in
-                Text(bikeRentalStationModel.name)
+                BikeRentalStationView(viewModel: BikeRentalStationViewModel(viewContext: viewModel.viewContext, bikeRentalStation: bikeRentalStationModel))
             }
         }
     }

@@ -22,14 +22,6 @@ class CreateBikeRentalStationViewModel {
         bikeRentalStation.stationId = stationId
         bikeRentalStation.lat = Double(lat) ?? -1
         bikeRentalStation.lon = Double(lon) ?? -1
-        saveViewContext()
-    }
-
-    private func saveViewContext() {
-        do {
-            try viewContext.save()
-        } catch {
-            Helper.log("Failed to save ViewContext")
-        }
+        Helper.saveViewContext(viewContext)
     }
 }

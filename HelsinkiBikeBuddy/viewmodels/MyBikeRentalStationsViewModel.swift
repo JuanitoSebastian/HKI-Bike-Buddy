@@ -8,12 +8,18 @@
 import Foundation
 import CoreData
 
-class MyBikeRentalStationsViewModel {
+class MyBikeRentalStationsViewModel: ObservableObject {
 
     let viewContext: NSManagedObjectContext
 
     init(viewContext: NSManagedObjectContext) {
         self.viewContext = viewContext
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(dataHasChanged),
+            name: Notification.Name.NSManagedObjectContextDidSave,
+            object: nil
+        )
     }
 
     var bikeRentalStations: [BikeRentalStation] {
@@ -24,5 +30,10 @@ class MyBikeRentalStationsViewModel {
         } catch {
             return [BikeRentalStation]()
         }
+    }
+
+    @objc
+    func dataHasChanged() {
+        objectWillChange.send()
     }
 }
