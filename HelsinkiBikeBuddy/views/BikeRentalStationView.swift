@@ -20,7 +20,9 @@ struct BikeRentalStationView: View {
             Button(action: { deleteStation() }) {
                 Text("Remove station")
             }
-        }
+        }.onAppear(perform: {
+            // Helper.log("Currently displaying: \(viewModel.name)")
+        })
     }
 
     func deleteStation() {

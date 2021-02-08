@@ -14,9 +14,17 @@ struct MyBikeRentalStationsView: View {
     var body: some View {
         VStack {
             Text("My Rental Stations")
-            ForEach(viewModel.bikeRentalStations, id: \.id) { bikeRentalStationModel in
-                BikeRentalStationView(viewModel: BikeRentalStationViewModel(viewContext: viewModel.viewContext, bikeRentalStation: bikeRentalStationModel))
+            ForEach(viewModel.bikeRentalStations, id: \.name) { brStation in
+                BikeRentalStationView(viewModel: BikeRentalStationViewModel(
+                                        viewContext: viewModel.viewContext,
+                                        bikeRentalStation: brStation)
+                )
             }
-        }
+        }.onAppear(perform: {
+            Helper.log("Inside view:")
+            for station in viewModel.bikeRentalStations {
+                Helper.log(station.name)
+            }
+        })
     }
 }

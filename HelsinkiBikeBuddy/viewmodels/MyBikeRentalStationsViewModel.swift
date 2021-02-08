@@ -17,16 +17,18 @@ class MyBikeRentalStationsViewModel: ObservableObject {
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(dataHasChanged),
-            name: Notification.Name.NSManagedObjectContextDidSave,
+            name: Notification.Name.NSManagedObjectContextObjectsDidChange,
             object: nil
         )
     }
 
     var bikeRentalStations: [BikeRentalStation] {
+        Helper.log("Fetching stations from viewmodel")
         let fetchRequest: NSFetchRequest<BikeRentalStation> = BikeRentalStation.fetchRequest()
 
         do {
-            return try viewContext.fetch(fetchRequest) as [BikeRentalStation]
+            let stations = try viewContext.fetch(fetchRequest) as [BikeRentalStation]
+            return stations
         } catch {
             return [BikeRentalStation]()
         }

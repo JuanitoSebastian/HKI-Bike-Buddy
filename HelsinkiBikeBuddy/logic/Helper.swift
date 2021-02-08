@@ -17,10 +17,12 @@ class Helper {
     }
 
     static func saveViewContext(_ viewContext: NSManagedObjectContext) {
+        if !viewContext.hasChanges { return }
         do {
             try viewContext.save()
         } catch {
             Helper.log("Failed to save ViewContext")
+            Helper.log("Because of error: \(error.localizedDescription)")
         }
     }
 

@@ -22,6 +22,13 @@ class CreateBikeRentalStationViewModel {
         bikeRentalStation.stationId = stationId
         bikeRentalStation.lat = Double(lat) ?? -1
         bikeRentalStation.lon = Double(lon) ?? -1
-        Helper.saveViewContext(viewContext)
+        do {
+            try BikeRentalStation.validateBikeRentalStation(bikeRentalStation)
+            Helper.saveViewContext(viewContext)
+        } catch {
+            Helper.log("Failed to create Bike Rental Station: \(error)")
+            Helper.removeBikeRentalStation(bikeRentalStation: bikeRentalStation, viewContext: viewContext)
+        }
+
     }
 }

@@ -2,7 +2,7 @@
 //  BikeRentalStation+CoreDataProperties.swift
 //  HelsinkiBikeBuddy
 //
-//  Created by Juan Covarrubias on 7.2.2021.
+//  Created by Juan Covarrubias on 8.2.2021.
 //
 //
 
@@ -23,10 +23,4 @@ extension BikeRentalStation {
     @NSManaged public var spacesAvailable: Int64
     @NSManaged public var stationId: String
 
-}
-
-extension BikeRentalStation: Identifiable {
-    public var id: String {
-        return stationId
-    }
 }

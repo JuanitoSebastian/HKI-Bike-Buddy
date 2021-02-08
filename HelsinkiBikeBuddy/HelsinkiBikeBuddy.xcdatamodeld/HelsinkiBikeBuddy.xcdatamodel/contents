@@ -2,12 +2,12 @@
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17511" systemVersion="20B29" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="BikeRentalStation" representedClassName="BikeRentalStation" syncable="YES">
         <attribute name="allowDropoff" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
-        <attribute name="bikesAvailable" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="lat" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <attribute name="lon" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="bikesAvailable" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="lat" attributeType="Double" minValueString="-90" maxValueString="90" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="lon" attributeType="Double" minValueString="-180" maxValueString="180" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="name" attributeType="String"/>
-        <attribute name="spacesAvailable" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="stationId" attributeType="String"/>
+        <attribute name="spacesAvailable" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="stationId" attributeType="String" minValueString="3" maxValueString="4"/>
     </entity>
     <elements>
         <element name="BikeRentalStation" positionX="-63" positionY="-18" width="128" height="134"/>
