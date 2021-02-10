@@ -10,10 +10,10 @@ import SwiftUI
 struct CreateBikeRentalStationView: View {
 
     var viewModel: CreateBikeRentalStationViewModel
-    @State private var inputName: String = ""
-    @State private var inputStationId: String = ""
-    @State private var inputLat: String = ""
-    @State private var inputLon: String = ""
+    @State private var inputName: String = "Name"
+    @State private var inputStationId: String = "Id"
+    @State private var inputLat: String = "Lat"
+    @State private var inputLon: String = "Lon"
     @EnvironmentObject var appState: AppState
 
     var body: some View {
@@ -23,8 +23,10 @@ struct CreateBikeRentalStationView: View {
             TextField("", text: $inputStationId)
             TextField("", text: $inputLat)
             TextField("", text: $inputLon)
-            Button(action: { createStop() } ) {
-                Text("Add station")
+            Button {
+                createStop()
+            } label: {
+                Text("Create station!")
             }
         }
     }

@@ -6,26 +6,67 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct BikeRentalStationView: View {
 
     let viewModel: BikeRentalStationViewModel
+    @EnvironmentObject var userLocationManager: UserLocationManager
 
     var body: some View {
-        HStack {
-            Text(viewModel.name)
-            Spacer()
-            Text(viewModel.stationId)
-            Spacer()
-            Button(action: { deleteStation() }) {
-                Text("Remove station")
+        ZStack {
+            VStack {
+                HStack {
+                    Text(viewModel.name)
+                        .font(.largeTitle)
+                    Spacer()
+                }
+                HStack {
+                    Text(viewModel.distanceInMeters(comparison: userLocationManager.userLocation))
+                    Spacer()
+                }
+                HStack {
+                    Text("\(viewModel.bikes) bikes")
+                        .font(.headline)
+                    Spacer()
+                    Text("\(viewModel.spaces) spaces")
+                        .font(.headline)
+                }
+                CapacityBar(bikesAvailable: viewModel.bikes, spacesAvailable: viewModel.spaces)
+                HStack {
+                    Button { viewModel.decrementBikes()}
+                        label: { Text("-") }
+                    Button { deleteStation() }
+                        label: { Text("Remove station!") }
+                    Button { viewModel.incrementBikes()}
+                        label: { Text("+") }
+                }
             }
-        }.onAppear(perform: {
-            // Helper.log("Currently displaying: \(viewModel.name)")
-        })
+        }
     }
 
     func deleteStation() {
         viewModel.deleteStation()
     }
+}
+
+struct BikeRentalStationView_Previews: PreviewProvider {
+    static var previews: some View {
+        let context = PersistenceController.testing.container.viewContext
+        let bikeRentalStation = createBikeRentalStation(viewContext: context)
+        BikeRentalStationView(viewModel: BikeRentalStationViewModel(viewContext: context, bikeRentalStation: bikeRentalStation))
+    }
+}
+
+func createBikeRentalStation(viewContext: NSManagedObjectContext) -> BikeRentalStation {
+    let bikeRentalStation = BikeRentalStation(context: viewContext)
+    bikeRentalStation.name = "Rajasaarentie"
+    bikeRentalStation.stationId = "074"
+    bikeRentalStation.lat = 44
+    bikeRentalStation.lon = 123
+    bikeRentalStation.allowDropoff = true
+    bikeRentalStation.spacesAvailable = 4
+    bikeRentalStation.bikesAvailable = 5
+    bikeRentalStation.fetched = Date()
+    return bikeRentalStation
 }

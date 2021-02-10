@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreData
+import CoreLocation
 
 class BikeRentalStationViewModel {
 
@@ -50,8 +51,36 @@ class BikeRentalStationViewModel {
         spaces + bikes
     }
 
+    var coordinates: CLLocation {
+        CLLocation(latitude: lat, longitude: lon)
+    }
+
+    func distanceInMeters(comparison: CLLocation) -> String {
+        let distD: Double = Double(coordinates.distance(from: comparison)).rounded()
+        return "\(distD)m away"
+    }
+
+    var fetched: String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HH:mm"
+        Helper.log(bikeRentalStation.fetched)
+        return dateFormatter.string(from: bikeRentalStation.fetched)
+    }
+
     func deleteStation() {
         Helper.removeBikeRentalStation(bikeRentalStation: bikeRentalStation, viewContext: viewContext)
+        Helper.saveViewContext(viewContext)
+    }
+
+    func incrementBikes() {
+        bikeRentalStation.bikesAvailable += 1
+        bikeRentalStation.spacesAvailable -= 1
+        Helper.saveViewContext(viewContext)
+    }
+
+    func decrementBikes() {
+        bikeRentalStation.spacesAvailable += 1
+        bikeRentalStation.bikesAvailable -= 1
         Helper.saveViewContext(viewContext)
     }
 

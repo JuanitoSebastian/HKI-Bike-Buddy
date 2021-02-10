@@ -37,4 +37,9 @@ struct PersistenceController {
             }
         })
     }
+
+    func previewStations(viewContext: NSManagedObjectContext) {
+        let stationOne = BikeRentalStation(context: viewContext)
+
+    }
 }

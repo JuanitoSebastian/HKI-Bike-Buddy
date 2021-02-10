@@ -20,11 +20,7 @@ struct MyBikeRentalStationsView: View {
                                         bikeRentalStation: brStation)
                 )
             }
-        }.onAppear(perform: {
-            Helper.log("Inside view:")
-            for station in viewModel.bikeRentalStations {
-                Helper.log(station.name)
-            }
-        })
+            Spacer()
+        }
     }
 }
