@@ -22,15 +22,16 @@ struct BikeRentalStationView: View {
                     Spacer()
                 }
                 HStack {
-                    Text(viewModel.distanceInMeters(comparison: userLocationManager.userLocation))
+                    Text("\(viewModel.distanceInMeters()) away 🚶")
                     Spacer()
                 }
                 HStack {
-                    Text("\(viewModel.bikes) bikes")
-                        .font(.headline)
+                    Text("ID: \(viewModel.stationId)")
+                        .font(.caption)
+
+                    Text("Last updated at \(viewModel.fetched)")
+                        .font(.caption)
                     Spacer()
-                    Text("\(viewModel.spaces) spaces")
-                        .font(.headline)
                 }
                 CapacityBar(bikesAvailable: viewModel.bikes, spacesAvailable: viewModel.spaces)
                 HStack {
@@ -49,7 +50,7 @@ struct BikeRentalStationView: View {
         viewModel.deleteStation()
     }
 }
-
+/*
 struct BikeRentalStationView_Previews: PreviewProvider {
     static var previews: some View {
         let context = PersistenceController.testing.container.viewContext
@@ -57,6 +58,8 @@ struct BikeRentalStationView_Previews: PreviewProvider {
         BikeRentalStationView(viewModel: BikeRentalStationViewModel(viewContext: context, bikeRentalStation: bikeRentalStation))
     }
 }
+
+*/
 
 func createBikeRentalStation(viewContext: NSManagedObjectContext) -> BikeRentalStation {
     let bikeRentalStation = BikeRentalStation(context: viewContext)

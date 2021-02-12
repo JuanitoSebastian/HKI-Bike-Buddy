@@ -11,7 +11,6 @@ import CoreData
 struct ContentView: View {
 
     @Environment(\.managedObjectContext) private var viewContext
-    @EnvironmentObject private var appState: AppState
     @State private var selectedTab = "view"
 
     var body: some View {
@@ -38,27 +37,6 @@ struct ContentView: View {
                 Text("Add Bike Rental Station")
             }
             .tag("add")
-        }
-    }
-
-    func changeView() {
-        if appState.currentViewState == .myTranstiStops {
-            appState.currentViewState = .addStop
-        } else {
-            appState.currentViewState = .myTranstiStops
-        }
-    }
-
-    func viewToDisplay() -> AnyView {
-        switch appState.currentViewState {
-        case .myTranstiStops:
-            return AnyView(MyBikeRentalStationsView(
-                viewModel: MyBikeRentalStationsViewModel(viewContext: viewContext)
-            ))
-        case .addStop:
-            return AnyView(CreateBikeRentalStationView(
-                viewModel: CreateBikeRentalStationViewModel(viewContext: viewContext)
-            ))
         }
     }
 }

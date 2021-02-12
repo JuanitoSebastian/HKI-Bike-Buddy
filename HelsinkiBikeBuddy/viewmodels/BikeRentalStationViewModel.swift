@@ -13,10 +13,16 @@ class BikeRentalStationViewModel {
 
     let viewContext: NSManagedObjectContext
     let bikeRentalStation: BikeRentalStation
+    let userLocationManager: UserLocationManager
 
-    init(viewContext: NSManagedObjectContext, bikeRentalStation: BikeRentalStation) {
+    init(
+        viewContext: NSManagedObjectContext,
+        bikeRentalStation: BikeRentalStation,
+        userLocationManager: UserLocationManager
+    ) {
         self.viewContext = viewContext
         self.bikeRentalStation = bikeRentalStation
+        self.userLocationManager = userLocationManager
     }
 
     var name: String {
@@ -55,9 +61,13 @@ class BikeRentalStationViewModel {
         CLLocation(latitude: lat, longitude: lon)
     }
 
-    func distanceInMeters(comparison: CLLocation) -> String {
-        let distD: Double = Double(coordinates.distance(from: comparison)).rounded()
-        return "\(distD)m away"
+    func distanceInMeters() -> String {
+        var distanceDouble = Double(coordinates.distance(from: userLocationManager.userLocation)).rounded()
+        if distanceDouble >= 1000 {
+            distanceDouble /= 1000
+            return "\(String(distanceDouble))km"
+        }
+        return "\(String(distanceDouble))m"
     }
 
     var fetched: String {

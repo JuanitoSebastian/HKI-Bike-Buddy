@@ -19,14 +19,21 @@ struct CapacityBar: View {
                     .opacity(0.2)
                 Rectangle().frame(width: progressWidth(fullWidth: geometry.size.width), height: geometry.size.height)
                     .foregroundColor(progressColor)
-                    .animation(.linear)
-                Text("🚴‍♀️")
-                    .offset(x: progressWidth(fullWidth: geometry.size.width) - 25)
-                    .animation(.linear)
+                    .animation(.easeInOut)
+                HStack {
+                    Text("\(bikesAvailable) bikes")
+                        .font(.headline)
+                    Spacer()
+                    Text("\(spacesAvailable) spaces")
+                        .font(.headline)
+                }
+                .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
+                LinearGradient(gradient: Gradient(colors: [.clear, Color.white]), startPoint: .top, endPoint: .bottom)
+                    .opacity(0.2)
             }
         }
-        .frame(height: 20)
-        .cornerRadius(20)
+        .frame(height: 25)
+        .cornerRadius(10)
     }
 
     func progressWidth(fullWidth: CGFloat) -> CGFloat {
@@ -34,14 +41,7 @@ struct CapacityBar: View {
     }
 
     var progressColor: Color {
-        switch factor {
-        case 0.4...1:
-            return Color(red: 0.5, green: 0.9, blue: 0.2)
-        case 0.2..<0.4:
-            return Color(red: 1, green: 0.8, blue: 0)
-        default:
-            return Color(red: 1, green: 0.3, blue: 0)
-        }
+        return Color(red: 1.0, green: factor*1, blue: 0.2)
     }
 
     var factor: Double {

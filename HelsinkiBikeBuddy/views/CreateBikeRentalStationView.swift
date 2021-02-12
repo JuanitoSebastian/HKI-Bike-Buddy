@@ -14,7 +14,6 @@ struct CreateBikeRentalStationView: View {
     @State private var inputStationId: String = "Id"
     @State private var inputLat: String = "Lat"
     @State private var inputLon: String = "Lon"
-    @EnvironmentObject var appState: AppState
 
     var body: some View {
         VStack {

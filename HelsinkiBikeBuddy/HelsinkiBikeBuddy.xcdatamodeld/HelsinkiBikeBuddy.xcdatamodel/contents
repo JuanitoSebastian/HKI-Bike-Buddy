@@ -3,6 +3,7 @@
     <entity name="BikeRentalStation" representedClassName="BikeRentalStation" syncable="YES">
         <attribute name="allowDropoff" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="bikesAvailable" attributeType="Integer 64" minValueString="0" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="favorite" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="fetched" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="lat" attributeType="Double" minValueString="-90" maxValueString="90" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="lon" attributeType="Double" minValueString="-180" maxValueString="180" defaultValueString="0.0" usesScalarValueType="YES"/>
@@ -11,6 +12,6 @@
         <attribute name="stationId" attributeType="String" minValueString="3" maxValueString="4"/>
     </entity>
     <elements>
-        <element name="BikeRentalStation" positionX="-63" positionY="-18" width="128" height="149"/>
+        <element name="BikeRentalStation" positionX="-63" positionY="-18" width="128" height="164"/>
     </elements>
 </model>
