@@ -11,7 +11,10 @@ import CoreData
 struct BikeRentalStationView: View {
 
     let viewModel: BikeRentalStationViewModel
-    @EnvironmentObject var userLocationManager: UserLocationManager
+
+    init(bikeRentalStation: BikeRentalStation) {
+        self.viewModel = BikeRentalStationViewModel(bikeRentalStation: bikeRentalStation)
+    }
 
     var body: some View {
         ZStack {
@@ -34,32 +37,30 @@ struct BikeRentalStationView: View {
                     Spacer()
                 }
                 CapacityBar(bikesAvailable: viewModel.bikes, spacesAvailable: viewModel.spaces)
-                HStack {
-                    Button { viewModel.decrementBikes()}
-                        label: { Text("-") }
-                    Button { deleteStation() }
-                        label: { Text("Remove station!") }
-                    Button { viewModel.incrementBikes()}
-                        label: { Text("+") }
-                }
             }
+            .padding([.top, .bottom], 10)
+            .padding([.leading, .trailing], 5)
         }
+        .overlay(
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(Color(.sRGB, red: 150/255, green: 150/255, blue: 150/255, opacity: 0.1), lineWidth: 1)
+        )
+        .padding([.top, .horizontal], 10)
+        .cornerRadius(10)
     }
 
     func deleteStation() {
         viewModel.deleteStation()
     }
 }
-/*
+
 struct BikeRentalStationView_Previews: PreviewProvider {
     static var previews: some View {
         let context = PersistenceController.testing.container.viewContext
         let bikeRentalStation = createBikeRentalStation(viewContext: context)
-        BikeRentalStationView(viewModel: BikeRentalStationViewModel(viewContext: context, bikeRentalStation: bikeRentalStation))
+        BikeRentalStationView(bikeRentalStation: bikeRentalStation)
     }
 }
-
-*/
 
 func createBikeRentalStation(viewContext: NSManagedObjectContext) -> BikeRentalStation {
     let bikeRentalStation = BikeRentalStation(context: viewContext)

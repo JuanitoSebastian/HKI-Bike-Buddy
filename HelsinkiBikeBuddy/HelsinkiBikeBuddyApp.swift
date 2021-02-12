@@ -11,13 +11,11 @@ import CoreLocation
 @main
 struct HelsinkiBikeBuddyApp: App {
     let persistenceController = PersistenceController.shared
-    let userLocationManager = UserLocationManager(CLLocationManager())
 
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
-                .environmentObject(userLocationManager)
         }
     }
 }

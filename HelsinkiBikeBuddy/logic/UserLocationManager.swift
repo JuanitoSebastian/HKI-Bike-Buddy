@@ -10,10 +10,11 @@ import CoreLocation
 
 class UserLocationManager: ObservableObject {
 
-    let manager: CLLocationManager
+    static let shared: UserLocationManager = UserLocationManager()
+    private let manager: CLLocationManager
 
-    init(_ manager: CLLocationManager) {
-        self.manager = manager
+    private init() {
+        manager = CLLocationManager()
         requestPermissions()
     }
 

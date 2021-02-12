@@ -11,6 +11,7 @@ struct CapacityBar: View {
 
     let bikesAvailable: Int
     let spacesAvailable: Int
+    @State var barFillAmount: Int = 0
 
     var body: some View {
         GeometryReader { geometry in
@@ -34,6 +35,11 @@ struct CapacityBar: View {
         }
         .frame(height: 25)
         .cornerRadius(10)
+        .onAppear(perform: {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                barFillAmount = bikesAvailable
+            }
+        })
     }
 
     func progressWidth(fullWidth: CGFloat) -> CGFloat {
@@ -45,7 +51,7 @@ struct CapacityBar: View {
     }
 
     var factor: Double {
-        Double(bikesAvailable) / Double(spacesAvailable + bikesAvailable)
+        Double(barFillAmount) / Double(spacesAvailable + bikesAvailable)
     }
 
     var factorInvert: Double {

@@ -9,22 +9,32 @@ import SwiftUI
 
 struct MyBikeRentalStationsView: View {
 
-    @ObservedObject var viewModel: MyBikeRentalStationsViewModel
-    @EnvironmentObject var userLocationManager: UserLocationManager
+    @StateObject var viewModel = MyBikeRentalStationsViewModel()
+    @State private var favToggle = false
+    @State private var selected = 0
 
     var body: some View {
         VStack {
-            Text("My Rental Stations")
-            ForEach(viewModel.bikeRentalStations, id: \.name) { brStation in
-                BikeRentalStationView(
-                    viewModel: BikeRentalStationViewModel(
-                        viewContext: viewModel.viewContext,
-                        bikeRentalStation: brStation,
-                        userLocationManager: userLocationManager
-                    )
-                )
-            }
+            Text("Bike Rental Stations")
+            Picker(selection: $selected, label: Text(""), content: {
+                Text("My Stations").tag(0)
+                Text("All Stations").tag(1)
+            }).pickerStyle(SegmentedPickerStyle())
+            stationList
             Spacer()
+        }
+    }
+
+    var stationList: AnyView {
+        switch selected {
+        case 0:
+            return AnyView(ForEach(viewModel.favoriteStations, id: \.id) { bikeRentalStation in
+                BikeRentalStationView(bikeRentalStation: bikeRentalStation)
+            })
+        default:
+            return AnyView(ForEach(viewModel.bikeRentalStations, id: \.id) { bikeRentalStation in
+                BikeRentalStationView(bikeRentalStation: bikeRentalStation)
+            })
         }
     }
 }

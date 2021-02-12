@@ -14,6 +14,7 @@ struct CreateBikeRentalStationView: View {
     @State private var inputStationId: String = "Id"
     @State private var inputLat: String = "Lat"
     @State private var inputLon: String = "Lon"
+    @State private var inputFav: Bool = true
 
     var body: some View {
         VStack {
@@ -22,6 +23,7 @@ struct CreateBikeRentalStationView: View {
             TextField("", text: $inputStationId)
             TextField("", text: $inputLat)
             TextField("", text: $inputLon)
+            Toggle("Favorite", isOn: $inputFav)
             Button {
                 createStop()
             } label: {
@@ -35,7 +37,8 @@ struct CreateBikeRentalStationView: View {
             name: inputName,
             stationId: inputStationId,
             lat: inputLat,
-            lon: inputLon
+            lon: inputLon,
+            favorite: inputFav
         )
     }
 }

@@ -11,18 +11,12 @@ import CoreLocation
 
 class BikeRentalStationViewModel {
 
-    let viewContext: NSManagedObjectContext
+    let bikeRentalStorage = BikeRentalStationStorage.shared
+    let userLocationManager = UserLocationManager.shared
     let bikeRentalStation: BikeRentalStation
-    let userLocationManager: UserLocationManager
 
-    init(
-        viewContext: NSManagedObjectContext,
-        bikeRentalStation: BikeRentalStation,
-        userLocationManager: UserLocationManager
-    ) {
-        self.viewContext = viewContext
+    init(bikeRentalStation: BikeRentalStation) {
         self.bikeRentalStation = bikeRentalStation
-        self.userLocationManager = userLocationManager
     }
 
     var name: String {
@@ -78,20 +72,19 @@ class BikeRentalStationViewModel {
     }
 
     func deleteStation() {
-        Helper.removeBikeRentalStation(bikeRentalStation: bikeRentalStation, viewContext: viewContext)
-        Helper.saveViewContext(viewContext)
+        bikeRentalStorage.deleteBikeRentalStation(bikeRentalStation)
     }
 
     func incrementBikes() {
         bikeRentalStation.bikesAvailable += 1
         bikeRentalStation.spacesAvailable -= 1
-        Helper.saveViewContext(viewContext)
+        bikeRentalStorage.saveMoc()
     }
 
     func decrementBikes() {
         bikeRentalStation.spacesAvailable += 1
         bikeRentalStation.bikesAvailable -= 1
-        Helper.saveViewContext(viewContext)
+        bikeRentalStorage.saveMoc()
     }
 
 }

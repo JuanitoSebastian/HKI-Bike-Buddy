@@ -22,8 +22,10 @@ class BikeRentalStationStorage: NSObject, ObservableObject {
     static let shared: BikeRentalStationStorage = BikeRentalStationStorage()
 
     private override init() {
+        let fetchRequest: NSFetchRequest<BikeRentalStation> = BikeRentalStation.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
         bikeRentalStationFetchController = NSFetchedResultsController(
-            fetchRequest: BikeRentalStation.fetchRequest(),
+            fetchRequest: fetchRequest,
             managedObjectContext: PersistenceController.shared.container.viewContext,
             sectionNameKeyPath: nil,
             cacheName: nil
@@ -60,7 +62,7 @@ class BikeRentalStationStorage: NSObject, ObservableObject {
         bikeRentalStationToCreate.spacesAvailable = Int64(spacesAvailable)
         bikeRentalStationToCreate.allowDropoff = allowDropoff
         bikeRentalStationToCreate.favorite = favorite
-
+        bikeRentalStationToCreate.fetched = Date()
         saveMoc()
     }
 
