@@ -10,35 +10,28 @@ import SwiftUI
 struct CreateBikeRentalStationView: View {
 
     var viewModel: CreateBikeRentalStationViewModel
-    @State private var inputName: String = "Name"
     @State private var inputStationId: String = "Id"
-    @State private var inputLat: String = "Lat"
-    @State private var inputLon: String = "Lon"
     @State private var inputFav: Bool = true
 
     var body: some View {
         VStack {
             Text("Input the info")
-            TextField("", text: $inputName)
             TextField("", text: $inputStationId)
-            TextField("", text: $inputLat)
-            TextField("", text: $inputLon)
             Toggle("Favorite", isOn: $inputFav)
             Button {
-                createStop()
+                fetchStop()
             } label: {
                 Text("Create station!")
+            }
+            Button {
+                viewModel.fetchAll()
+            } label: {
+                Text("Fetch all stations")
             }
         }
     }
 
-    func createStop() {
-        viewModel.createBikeRentalStop(
-            name: inputName,
-            stationId: inputStationId,
-            lat: inputLat,
-            lon: inputLon,
-            favorite: inputFav
-        )
+    func fetchStop() {
+        viewModel.fetchStop(stationId: inputStationId)
     }
 }

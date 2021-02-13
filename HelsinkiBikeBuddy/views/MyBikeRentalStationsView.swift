@@ -35,13 +35,19 @@ struct MyBikeRentalStationsView: View {
     var stationList: AnyView {
         switch selected {
         case 0:
-            return AnyView(ForEach(viewModel.favoriteStations, id: \.id) { bikeRentalStation in
-                BikeRentalStationView(viewModel: BikeRentalStationViewModel(stationId: bikeRentalStation.stationId))
-            })
+            return AnyView(
+                ScrollView {
+                    ForEach(viewModel.favoriteStations, id: \.id) { bikeRentalStation in
+                        BikeRentalStationView(viewModel: BikeRentalStationViewModel(stationId: bikeRentalStation.stationId))
+                    }
+                })
         default:
-            return AnyView(ForEach(viewModel.bikeRentalStations, id: \.id) { bikeRentalStation in
-                BikeRentalStationView(viewModel: BikeRentalStationViewModel(stationId: bikeRentalStation.stationId))
-            })
+            return AnyView(
+                ScrollView {
+                    ForEach(0...10, id: \.self) {
+                        BikeRentalStationView(viewModel: BikeRentalStationViewModel(stationId: viewModel.bikeRentalStations[$0].stationId))
+                    }
+                })
         }
     }
 }

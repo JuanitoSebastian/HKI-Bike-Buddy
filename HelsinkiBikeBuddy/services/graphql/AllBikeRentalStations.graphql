@@ -1,6 +1,12 @@
 query AllBikeRentalStatations {
     bikeRentalStations {
-        name
         stationId
+        name
+        state
+        bikesAvailable
+        spacesAvailable
+        lat
+        lon
+        allowDropoff
     }
 }

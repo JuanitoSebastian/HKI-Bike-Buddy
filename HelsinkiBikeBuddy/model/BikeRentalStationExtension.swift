@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreLocation
 
 enum BikeRentalStationValidation: Error {
     case invalidStationId
@@ -22,6 +23,14 @@ extension BikeRentalStation: Identifiable {
 
     var totalCapacity: Int {
         Int(spacesAvailable + bikesAvailable)
+    }
+
+    var location: CLLocation {
+        return CLLocation(latitude: lat, longitude: lon)
+    }
+
+    func distance(to location: CLLocation) -> CLLocationDistance {
+        return location.distance(from: self.location)
     }
 
     static func validateBikeRentalStation(_ bikeRentalStation: BikeRentalStation) throws {

@@ -1,0 +1,12 @@
+query FetchBikeRentalStationByStationId($stationId: String!) {
+    bikeRentalStation(id: $stationId) {
+        stationId
+        name
+        state
+        bikesAvailable
+        spacesAvailable
+        allowDropoff
+        lat
+        lon
+  }
+}

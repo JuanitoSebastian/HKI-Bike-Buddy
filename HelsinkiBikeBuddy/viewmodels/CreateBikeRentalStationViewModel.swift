@@ -12,6 +12,7 @@ class CreateBikeRentalStationViewModel {
 
     let viewContext: NSManagedObjectContext
     let bikeRentalStationSorage = BikeRentalStationStorage.shared
+    let bikeRentalService = BikeRentalService.shared
 
     init(viewContext: NSManagedObjectContext) {
         self.viewContext = viewContext
@@ -38,7 +39,16 @@ class CreateBikeRentalStationViewModel {
             spacesAvailable: Int.random(in: 0...15),
             bikesAvailable: Int.random(in: 0...15),
             allowDropoff: true,
-            favorite: favorite
+            favorite: favorite,
+            state: true
         )
+    }
+
+    func fetchStop(stationId: String) {
+        bikeRentalService.fetchBikeRentalStation(stationId: stationId)
+    }
+
+    func fetchAll() {
+        bikeRentalService.fetchAll()
     }
 }

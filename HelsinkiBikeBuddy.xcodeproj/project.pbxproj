@@ -32,6 +32,7 @@
 		28335B4B25D3AE3500F447D5 /* CapacityBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28335B4725D3AE3500F447D5 /* CapacityBar.swift */; };
 		28335B5D25D3CAAA00F447D5 /* UserLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28335B5C25D3CAAA00F447D5 /* UserLocationManager.swift */; };
 		28335B6025D3CAAA00F447D5 /* UserLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28335B5C25D3CAAA00F447D5 /* UserLocationManager.swift */; };
+		283D90A225D7E0B30007434E /* FetchBikeRentalStationByStationId.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 283D90A125D7E0B30007434E /* FetchBikeRentalStationByStationId.graphql */; };
 		285525F625D65CBC00098676 /* BikeRentalStationStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285525F525D65CBC00098676 /* BikeRentalStationStorage.swift */; };
 		285525F925D65CC100098676 /* BikeRentalStationStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285525F525D65CBC00098676 /* BikeRentalStationStorage.swift */; };
 		2884BDD025D00D9000747091 /* BikeRentalStation+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2884BDCE25D00D9000747091 /* BikeRentalStation+CoreDataClass.swift */; };
@@ -76,6 +77,7 @@
 		28335AB125D2BBB700F447D5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		28335B4725D3AE3500F447D5 /* CapacityBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapacityBar.swift; sourceTree = "<group>"; };
 		28335B5C25D3CAAA00F447D5 /* UserLocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserLocationManager.swift; sourceTree = "<group>"; };
+		283D90A125D7E0B30007434E /* FetchBikeRentalStationByStationId.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = FetchBikeRentalStationByStationId.graphql; sourceTree = "<group>"; };
 		285525F525D65CBC00098676 /* BikeRentalStationStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BikeRentalStationStorage.swift; sourceTree = "<group>"; };
 		2884BDCE25D00D9000747091 /* BikeRentalStation+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BikeRentalStation+CoreDataClass.swift"; sourceTree = "<group>"; };
 		2884BDCF25D00D9000747091 /* BikeRentalStation+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BikeRentalStation+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -234,6 +236,7 @@
 			children = (
 				28A21C9A25CEEEBC0062C7AC /* schema.json */,
 				28A21C9F25CEEF040062C7AC /* AllBikeRentalStations.graphql */,
+				283D90A125D7E0B30007434E /* FetchBikeRentalStationByStationId.graphql */,
 			);
 			path = graphql;
 			sourceTree = "<group>";
@@ -347,6 +350,7 @@
 				28A21C9B25CEEEBC0062C7AC /* schema.json in Resources */,
 				28A21C5F25CEEA150062C7AC /* Assets.xcassets in Resources */,
 				28A21CA025CEEF040062C7AC /* AllBikeRentalStations.graphql in Resources */,
+				283D90A225D7E0B30007434E /* FetchBikeRentalStationByStationId.graphql in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
