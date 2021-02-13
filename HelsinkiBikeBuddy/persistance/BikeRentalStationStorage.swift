@@ -11,7 +11,7 @@ import Combine
 
 class BikeRentalStationStorage: NSObject, ObservableObject {
 
-    var bikeRentalStations = CurrentValueSubject<[BikeRentalStation], Never>([])
+    var bikeRentalStations = CurrentValueSubject<[String: BikeRentalStation], Never>([:])
     private let bikeRentalStationFetchController: NSFetchedResultsController<BikeRentalStation>
 
     private var moc: NSManagedObjectContext {
@@ -37,12 +37,15 @@ class BikeRentalStationStorage: NSObject, ObservableObject {
 
         do {
             try bikeRentalStationFetchController.performFetch()
-            bikeRentalStations.value = bikeRentalStationFetchController.fetchedObjects ?? []
+            guard let bikeRentalStationsArray = bikeRentalStationFetchController.fetchedObjects else { return }
+            for bikeRentalStation in bikeRentalStationsArray {
+                bikeRentalStations.value[bikeRentalStation.id] = bikeRentalStation
+            }
         } catch {
             Helper.log("Failed to fetch stations from Core Data")
         }
     }
-
+    // swiftlint:disable:next function_parameter_count
     func createBikeRentalStation(
         name: String,
         stationId: String,
@@ -83,8 +86,9 @@ class BikeRentalStationStorage: NSObject, ObservableObject {
 
 extension BikeRentalStationStorage: NSFetchedResultsControllerDelegate {
     public func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        guard let bikeRentalStations = controller.fetchedObjects as? [BikeRentalStation] else { return }
-        Helper.log("Context has changed, reloading")
-        self.bikeRentalStations.value = bikeRentalStations
+        guard let fetchedBikeRentalStations = controller.fetchedObjects as? [BikeRentalStation] else { return }
+        for bikeRentalStation in fetchedBikeRentalStations {
+            bikeRentalStations.value[bikeRentalStation.id] = bikeRentalStation
+        }
     }
 }

@@ -10,11 +10,7 @@ import CoreData
 
 struct BikeRentalStationView: View {
 
-    let viewModel: BikeRentalStationViewModel
-
-    init(bikeRentalStation: BikeRentalStation) {
-        self.viewModel = BikeRentalStationViewModel(bikeRentalStation: bikeRentalStation)
-    }
+    @ObservedObject var viewModel: BikeRentalStationViewModel
 
     var body: some View {
         ZStack {
@@ -22,29 +18,32 @@ struct BikeRentalStationView: View {
                 HStack {
                     Text(viewModel.name)
                         .font(.largeTitle)
+                        .foregroundColor(Color("TextMain"))
                     Spacer()
+                    Text("Last updated at \(viewModel.fetched)")
+                        .font(.caption)
+                        .foregroundColor(Color("TextSub"))
                 }
                 HStack {
                     Text("\(viewModel.distanceInMeters()) away 🚶")
+                        .foregroundColor(Color("TextMain"))
                     Spacer()
                 }
-                HStack {
-                    Text("ID: \(viewModel.stationId)")
-                        .font(.caption)
-
-                    Text("Last updated at \(viewModel.fetched)")
-                        .font(.caption)
-                    Spacer()
+                ZStack {
+                    CapacityBar(bikesAvailable: viewModel.bikes, spacesAvailable: viewModel.spaces)
+                    HStack {
+                        Text("\(viewModel.bikes) bikes")
+                            .font(.headline)
+                        Spacer()
+                        Text("\(viewModel.spaces) spaces")
+                            .font(.headline)
+                    }
+                    .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
                 }
-                CapacityBar(bikesAvailable: viewModel.bikes, spacesAvailable: viewModel.spaces)
             }
-            .padding([.top, .bottom], 10)
-            .padding([.leading, .trailing], 5)
+            .padding([.bottom], 10)
+            .padding([.top, .leading, .trailing], 5)
         }
-        .overlay(
-            RoundedRectangle(cornerRadius: 10)
-                .stroke(Color(.sRGB, red: 150/255, green: 150/255, blue: 150/255, opacity: 0.1), lineWidth: 1)
-        )
         .padding([.top, .horizontal], 10)
         .cornerRadius(10)
     }
@@ -53,14 +52,15 @@ struct BikeRentalStationView: View {
         viewModel.deleteStation()
     }
 }
-
+/*
 struct BikeRentalStationView_Previews: PreviewProvider {
     static var previews: some View {
         let context = PersistenceController.testing.container.viewContext
         let bikeRentalStation = createBikeRentalStation(viewContext: context)
-        BikeRentalStationView(bikeRentalStation: bikeRentalStation)
+        BikeRentalStationView(viewModel: BikeRentalStationViewModel(stationId: "074"))
     }
 }
+*/
 
 func createBikeRentalStation(viewContext: NSManagedObjectContext) -> BikeRentalStation {
     let bikeRentalStation = BikeRentalStation(context: viewContext)

@@ -20,6 +20,10 @@ extension BikeRentalStation: Identifiable {
         stationId
     }
 
+    var totalCapacity: Int {
+        Int(spacesAvailable + bikesAvailable)
+    }
+
     static func validateBikeRentalStation(_ bikeRentalStation: BikeRentalStation) throws {
 
         if bikeRentalStation.stationId.count > 4 || bikeRentalStation.stationId.count < 3 {

@@ -8,43 +8,56 @@
 import Foundation
 import CoreData
 import CoreLocation
+import Combine
 
-class BikeRentalStationViewModel {
+class BikeRentalStationViewModel: ObservableObject {
+
+    @Published var bikeRentalStation: BikeRentalStation? {
+        willSet {
+            Helper.log("Updating stations to: \(newValue!)")
+        }
+    }
 
     let bikeRentalStorage = BikeRentalStationStorage.shared
     let userLocationManager = UserLocationManager.shared
-    let bikeRentalStation: BikeRentalStation
+    private var cancellable: AnyCancellable?
 
-    init(bikeRentalStation: BikeRentalStation) {
-        self.bikeRentalStation = bikeRentalStation
+    init(
+        stationId: String,
+        bikeRentalStationPublisher: AnyPublisher<[String: BikeRentalStation], Never> =
+            BikeRentalStationStorage.shared.bikeRentalStations.eraseToAnyPublisher()
+    ) {
+        cancellable = bikeRentalStationPublisher.sink { bikeRentalStations in
+            self.bikeRentalStation = bikeRentalStations[stationId]
+        }
     }
 
     var name: String {
-        bikeRentalStation.name
+        bikeRentalStation?.name ?? ""
     }
 
     var stationId: String {
-        bikeRentalStation.stationId
+        bikeRentalStation?.stationId ?? ""
     }
 
     var lat: Double {
-        bikeRentalStation.lat
+        bikeRentalStation?.lat ?? -1
     }
 
     var lon: Double {
-        bikeRentalStation.lon
+        bikeRentalStation?.lon ?? -1
     }
 
     var allowDropOff: Bool {
-        bikeRentalStation.allowDropoff
+        bikeRentalStation?.allowDropoff ?? false
     }
 
     var spaces: Int {
-        Int(bikeRentalStation.spacesAvailable)
+        Int(bikeRentalStation!.spacesAvailable)
     }
 
     var bikes: Int {
-        Int(bikeRentalStation.bikesAvailable)
+        Int(bikeRentalStation!.bikesAvailable)
     }
 
     var totalSpaces: Int {
@@ -67,23 +80,22 @@ class BikeRentalStationViewModel {
     var fetched: String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "HH:mm"
-        Helper.log(bikeRentalStation.fetched)
-        return dateFormatter.string(from: bikeRentalStation.fetched)
+        return dateFormatter.string(from: bikeRentalStation!.fetched)
     }
 
     func deleteStation() {
-        bikeRentalStorage.deleteBikeRentalStation(bikeRentalStation)
+        bikeRentalStorage.deleteBikeRentalStation(bikeRentalStation!)
     }
 
     func incrementBikes() {
-        bikeRentalStation.bikesAvailable += 1
-        bikeRentalStation.spacesAvailable -= 1
+        bikeRentalStation?.bikesAvailable += 1
+        bikeRentalStation?.spacesAvailable -= 1
         bikeRentalStorage.saveMoc()
     }
 
     func decrementBikes() {
-        bikeRentalStation.spacesAvailable += 1
-        bikeRentalStation.bikesAvailable -= 1
+        bikeRentalStation?.spacesAvailable += 1
+        bikeRentalStation?.bikesAvailable -= 1
         bikeRentalStorage.saveMoc()
     }
 

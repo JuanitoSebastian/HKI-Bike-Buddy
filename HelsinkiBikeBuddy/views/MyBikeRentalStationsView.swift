@@ -15,11 +15,18 @@ struct MyBikeRentalStationsView: View {
 
     var body: some View {
         VStack {
-            Text("Bike Rental Stations")
             Picker(selection: $selected, label: Text(""), content: {
                 Text("My Stations").tag(0)
+                    .onTapGesture {
+                        selected = 0
+                    }
                 Text("All Stations").tag(1)
-            }).pickerStyle(SegmentedPickerStyle())
+                    .onTapGesture {
+                        selected = 1
+                    }
+            })
+            .pickerStyle(SegmentedPickerStyle())
+            .padding([.top, .leading, .trailing], 5)
             stationList
             Spacer()
         }
@@ -29,11 +36,11 @@ struct MyBikeRentalStationsView: View {
         switch selected {
         case 0:
             return AnyView(ForEach(viewModel.favoriteStations, id: \.id) { bikeRentalStation in
-                BikeRentalStationView(bikeRentalStation: bikeRentalStation)
+                BikeRentalStationView(viewModel: BikeRentalStationViewModel(stationId: bikeRentalStation.stationId))
             })
         default:
             return AnyView(ForEach(viewModel.bikeRentalStations, id: \.id) { bikeRentalStation in
-                BikeRentalStationView(bikeRentalStation: bikeRentalStation)
+                BikeRentalStationView(viewModel: BikeRentalStationViewModel(stationId: bikeRentalStation.stationId))
             })
         }
     }
