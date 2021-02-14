@@ -29,6 +29,7 @@ class BikeRentalService {
 
     func updateStations() {
         for bikeRentalStation in bikeRentalStationStore.bikeRentalStations.value.values {
+            Helper.log("In updateLoop")
             bikeRentalStation.fetched = Date()
 
             let total = Int64(bikeRentalStation.totalCapacity)
@@ -117,12 +118,11 @@ class BikeRentalService {
                     self.createBikeRentalStation(resBikeRentalStop: stationUnwrapped)
 
                 }
-
+                self.bikeRentalStationStore.saveMoc()
             case .failure(let error):
                 Helper.log(error)
             }
         }
-        bikeRentalStationStore.saveMoc()
     }
 
 }

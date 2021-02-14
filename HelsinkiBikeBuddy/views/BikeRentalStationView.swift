@@ -46,6 +46,7 @@ struct BikeRentalStationView: View {
         }
         .padding([.top, .horizontal], 10)
         .cornerRadius(10)
+        .onTapGesture(count: 2, perform: { viewModel.doubleTap() })
     }
 
     func deleteStation() {

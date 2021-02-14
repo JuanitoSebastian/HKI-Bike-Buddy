@@ -29,6 +29,7 @@ class MyBikeRentalStationsViewModel: ObservableObject {
             self.bikeRentalStations.sort(by: {
                 $0.distance(to: self.userLocationManager.userLocation) < $1.distance(to: self.userLocationManager.userLocation)
             })
+            Helper.log("DONE!")
         }
     }
 

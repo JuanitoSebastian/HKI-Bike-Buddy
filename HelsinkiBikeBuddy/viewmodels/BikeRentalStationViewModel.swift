@@ -12,52 +12,40 @@ import Combine
 
 class BikeRentalStationViewModel: ObservableObject {
 
-    @Published var bikeRentalStation: BikeRentalStation? {
-        willSet {
-            Helper.log("Updating stations to: \(newValue!)")
-        }
-    }
-
+    let bikeRentalStation: BikeRentalStation
     let bikeRentalStorage = BikeRentalStationStorage.shared
     let userLocationManager = UserLocationManager.shared
-    private var cancellable: AnyCancellable?
 
-    init(
-        stationId: String,
-        bikeRentalStationPublisher: AnyPublisher<[String: BikeRentalStation], Never> =
-            BikeRentalStationStorage.shared.bikeRentalStations.eraseToAnyPublisher()
-    ) {
-        cancellable = bikeRentalStationPublisher.sink { bikeRentalStations in
-            self.bikeRentalStation = bikeRentalStations[stationId]
-        }
+    init(bikeRentalStation: BikeRentalStation) {
+        self.bikeRentalStation = bikeRentalStation
     }
 
     var name: String {
-        bikeRentalStation?.name ?? ""
+        bikeRentalStation.name
     }
 
     var stationId: String {
-        bikeRentalStation?.stationId ?? ""
+        bikeRentalStation.stationId
     }
 
     var lat: Double {
-        bikeRentalStation?.lat ?? -1
+        bikeRentalStation.lat
     }
 
     var lon: Double {
-        bikeRentalStation?.lon ?? -1
+        bikeRentalStation.lon
     }
 
     var allowDropOff: Bool {
-        bikeRentalStation?.allowDropoff ?? false
+        bikeRentalStation.allowDropoff
     }
 
     var spaces: Int {
-        Int(bikeRentalStation!.spacesAvailable)
+        Int(bikeRentalStation.spacesAvailable)
     }
 
     var bikes: Int {
-        Int(bikeRentalStation!.bikesAvailable)
+        Int(bikeRentalStation.bikesAvailable)
     }
 
     var totalSpaces: Int {
@@ -80,23 +68,15 @@ class BikeRentalStationViewModel: ObservableObject {
     var fetched: String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "HH:mm"
-        return dateFormatter.string(from: bikeRentalStation!.fetched)
+        return dateFormatter.string(from: bikeRentalStation.fetched)
     }
 
     func deleteStation() {
-        bikeRentalStorage.deleteBikeRentalStation(bikeRentalStation!)
+        bikeRentalStorage.deleteBikeRentalStation(bikeRentalStation)
     }
 
-    func incrementBikes() {
-        bikeRentalStation?.bikesAvailable += 1
-        bikeRentalStation?.spacesAvailable -= 1
-        bikeRentalStorage.saveMoc()
-    }
-
-    func decrementBikes() {
-        bikeRentalStation?.spacesAvailable += 1
-        bikeRentalStation?.bikesAvailable -= 1
-        bikeRentalStorage.saveMoc()
+    func doubleTap() {
+        bikeRentalStation.favorite.toggle()
     }
 
 }

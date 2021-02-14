@@ -38,14 +38,14 @@ struct MyBikeRentalStationsView: View {
             return AnyView(
                 ScrollView {
                     ForEach(viewModel.favoriteStations, id: \.id) { bikeRentalStation in
-                        BikeRentalStationView(viewModel: BikeRentalStationViewModel(stationId: bikeRentalStation.stationId))
+                        BikeRentalStationView(viewModel: BikeRentalStationViewModel(bikeRentalStation: bikeRentalStation))
                     }
                 })
         default:
             return AnyView(
                 ScrollView {
                     ForEach(0...10, id: \.self) {
-                        BikeRentalStationView(viewModel: BikeRentalStationViewModel(stationId: viewModel.bikeRentalStations[$0].stationId))
+                        BikeRentalStationView(viewModel: BikeRentalStationViewModel(bikeRentalStation: viewModel.bikeRentalStations[$0]))
                     }
                 })
         }
