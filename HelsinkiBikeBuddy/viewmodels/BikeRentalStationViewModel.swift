@@ -12,11 +12,11 @@ import Combine
 
 class BikeRentalStationViewModel: ObservableObject {
 
-    let bikeRentalStation: BikeRentalStation
+    let bikeRentalStation: RentalStation
     let bikeRentalStorage = BikeRentalStationStorage.shared
     let userLocationManager = UserLocationManager.shared
 
-    init(bikeRentalStation: BikeRentalStation) {
+    init(bikeRentalStation: RentalStation) {
         self.bikeRentalStation = bikeRentalStation
     }
 
@@ -72,11 +72,11 @@ class BikeRentalStationViewModel: ObservableObject {
     }
 
     func deleteStation() {
-        bikeRentalStorage.deleteBikeRentalStation(bikeRentalStation)
+        // bikeRentalStorage.deleteBikeRentalStation(bikeRentalStation)
     }
 
     func doubleTap() {
-        bikeRentalStation.favorite.toggle()
+        // bikeRentalStation.favorite.toggle()
     }
 
 }

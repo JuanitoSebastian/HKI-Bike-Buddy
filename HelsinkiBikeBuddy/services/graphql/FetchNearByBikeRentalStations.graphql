@@ -1,0 +1,21 @@
+query FetchNearByBikeRentalStations($lat: Float!, $lon: Float!, $maxDistance: Int!) {
+    nearest(lat: $lat, lon: $lon, maxDistance: $maxDistance, filterByPlaceTypes: BICYCLE_RENT) {
+    edges {
+      node {
+        place {
+            ...on BikeRentalStation {
+                stationId
+                name
+                bikesAvailable
+                spacesAvailable
+                lat
+                lon
+                allowDropoff
+                state
+            }
+        }
+        distance
+      }
+    }
+  }
+}

@@ -23,12 +23,13 @@ class BikeRentalService {
     }
 
     private let bikeRentalStationStore = BikeRentalStationStorage.shared
+    private let userLocationManager = UserLocationManager.shared
 
     // Singleton
     static let shared = BikeRentalService()
 
     func updateStations() {
-        for bikeRentalStation in bikeRentalStationStore.bikeRentalStations.value.values {
+        for var bikeRentalStation in bikeRentalStationStore.stationsManaged.value {
             Helper.log("In updateLoop")
             bikeRentalStation.fetched = Date()
 
@@ -39,32 +40,6 @@ class BikeRentalService {
 
         }
         bikeRentalStationStore.saveMoc()
-    }
-
-    func fetchBikeRentalStation(stationId: String) {
-        Helper.log("Fetching from API: \(stationId)")
-        Network.shared.apollo.fetch(query: FetchBikeRentalStationByStationIdQuery(stationId: stationId)) { res in
-            switch res {
-            case .success(let graphQlResult):
-                Helper.log("Fetch success")
-                if graphQlResult.data!.bikeRentalStation != nil {
-                    let resBikeRentalStop = graphQlResult.data!.bikeRentalStation
-                    self.bikeRentalStationStore.createBikeRentalStation(
-                        name: resBikeRentalStop!.name,
-                        stationId: resBikeRentalStop!.stationId!,
-                        lat: resBikeRentalStop!.lat!,
-                        lon: resBikeRentalStop!.lon!,
-                        spacesAvailable: Int.random(in: 0...15),
-                        bikesAvailable: Int.random(in: 0...15),
-                        allowDropoff: resBikeRentalStop!.allowDropoff!,
-                        favorite: true,
-                        state: true
-                    )
-                }
-            case .failure(let error):
-                Helper.log("Failed to fetch station info from API: \(error)")
-            }
-        }
     }
 
     func updateStationValues(
@@ -80,49 +55,46 @@ class BikeRentalService {
         bikeRentalStation.state = true
     }
 
-    func createBikeRentalStation(resBikeRentalStop: AllBikeRentalStatationsQuery.Data.BikeRentalStation) {
-        self.bikeRentalStationStore.createBikeRentalStation(
-            name: resBikeRentalStop.name,
-            stationId: resBikeRentalStop.stationId!,
-            lat: resBikeRentalStop.lat!,
-            lon: resBikeRentalStop.lon!,
-            spacesAvailable: Int.random(in: 0...15),
-            bikesAvailable: Int.random(in: 0...15),
-            allowDropoff: resBikeRentalStop.allowDropoff!,
-            favorite: false,
-            state: true
-        )
-    }
-
-    func fetchAll() {
-        Helper.log("Fetching all stations")
-        Network.shared.apollo.fetch(query: AllBikeRentalStatationsQuery()) { res in
-            switch res {
-
-            case .success(let graphQlResults):
-                guard let bikeRentalStations = graphQlResults.data!.bikeRentalStations else { return }
-                for stationOptional in bikeRentalStations {
-                    Helper.log("Loop!")
-                    guard let stationUnwrapped = stationOptional else { continue }
-
-                    if let bikeRentalObj = self.bikeRentalStationStore.bikeRentalStationFromCoreData(
-                        stationId: stationUnwrapped.stationId!
-                    ) { // Station already cached
-                        self.updateStationValues(
-                            bikeRentalStation: bikeRentalObj,
-                            resBikeRentalStop: stationUnwrapped
-                        )
-                        continue
-                    }
-                    // Creation of new station
-                    self.createBikeRentalStation(resBikeRentalStop: stationUnwrapped)
-
+    func fetchNearbyStations() {
+        Network.shared.apollo.fetch(
+            query: FetchNearByBikeRentalStationsQuery(
+                lat: userLocationManager.userLocation.coordinate.latitude,
+                lon: userLocationManager.userLocation.coordinate.longitude,
+                maxDistance: 500
+            )
+        ) { result in
+            switch result {
+            case .success(let graphQLResult):
+                guard let edgesUnwrapped = graphQLResult.data?.nearest?.edges else { return }
+                // Iterating thru the fetched stations
+                for edge in edgesUnwrapped {
+                    guard let stationUnwrapped = self.unwrapGraphQLStationObject(edge?.node?.place?.asBikeRentalStation) else { return }
+                    self.bikeRentalStationStore.createUnmanagedBikeRentalStation(
+                        name: stationUnwrapped.name,
+                        stationId: stationUnwrapped.stationId!,
+                        lat: stationUnwrapped.lat!,
+                        lon: stationUnwrapped.lon!,
+                        spacesAvailable: Int64(stationUnwrapped.spacesAvailable!),
+                        bikesAvailable: Int64(stationUnwrapped.bikesAvailable!),
+                        allowDropoff: stationUnwrapped.allowDropoff!,
+                        favorite: false,
+                        state: true
+                    )
                 }
-                self.bikeRentalStationStore.saveMoc()
             case .failure(let error):
-                Helper.log(error)
+                print("Failure! Error: \(error)")
             }
         }
     }
 
+    private func unwrapGraphQLStationObject(_ wrapped: FetchNearByBikeRentalStationsQuery.Data.Nearest.Edge.Node.Place.AsBikeRentalStation?)
+    -> FetchNearByBikeRentalStationsQuery.Data.Nearest.Edge.Node.Place.AsBikeRentalStation? {
+        guard let stationUnwrapped = wrapped else { return nil }
+        if stationUnwrapped.stationId == nil || stationUnwrapped.lat == nil || stationUnwrapped.lon == nil ||
+            stationUnwrapped.spacesAvailable == nil || stationUnwrapped.spacesAvailable == nil ||
+            stationUnwrapped.state == nil || stationUnwrapped.allowDropoff == nil {
+            return nil
+        }
+        return stationUnwrapped
+    }
 }

@@ -10,8 +10,8 @@ import CoreData
 import Combine
 
 class MyBikeRentalStationsViewModel: ObservableObject {
-    @Published var favoriteStations: [BikeRentalStation] = []
-    @Published var bikeRentalStations: [BikeRentalStation] = [] {
+    @Published var favoriteStations: [RentalStation] = []
+    @Published var bikeRentalStations: [RentalStation] = [] {
         willSet {
             favoriteStations = newValue.filter({ $0.favorite })
         }
@@ -21,11 +21,11 @@ class MyBikeRentalStationsViewModel: ObservableObject {
 
     private let userLocationManager = UserLocationManager.shared
 
-    init(bikeRentalStationPublisher: AnyPublisher<[String: BikeRentalStation], Never> =
-            BikeRentalStationStorage.shared.bikeRentalStations.eraseToAnyPublisher()) {
+    init(bikeRentalStationPublisher: AnyPublisher<[RentalStation], Never> =
+            BikeRentalStationStorage.shared.stationsManaged.eraseToAnyPublisher()) {
         cancellable = bikeRentalStationPublisher.sink { bikeRentalStations in
             Helper.log("Updating stations")
-            self.bikeRentalStations = Array(bikeRentalStations.values)
+            self.bikeRentalStations = bikeRentalStations
             self.bikeRentalStations.sort(by: {
                 $0.distance(to: self.userLocationManager.userLocation) < $1.distance(to: self.userLocationManager.userLocation)
             })

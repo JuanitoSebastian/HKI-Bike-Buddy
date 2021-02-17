@@ -37,6 +37,9 @@
 		285525F925D65CC100098676 /* BikeRentalStationStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285525F525D65CBC00098676 /* BikeRentalStationStorage.swift */; };
 		2884BDD025D00D9000747091 /* BikeRentalStation+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2884BDCE25D00D9000747091 /* BikeRentalStation+CoreDataClass.swift */; };
 		2884BDD125D00D9000747091 /* BikeRentalStation+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2884BDCF25D00D9000747091 /* BikeRentalStation+CoreDataProperties.swift */; };
+		2898613A25D93D5B0007D137 /* FetchNearByBikeRentalStations.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 2898613925D93D5B0007D137 /* FetchNearByBikeRentalStations.graphql */; };
+		2898614125D93F900007D137 /* RentalStation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2898614025D93F900007D137 /* RentalStation.swift */; };
+		2898614925D944C80007D137 /* UnmanagedBikeRentalStation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2898614825D944C80007D137 /* UnmanagedBikeRentalStation.swift */; };
 		28A120A825CEF5DC005CAD77 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A120A725CEF5DC005CAD77 /* API.swift */; };
 		28A21C5B25CEEA140062C7AC /* HelsinkiBikeBuddyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A21C5A25CEEA140062C7AC /* HelsinkiBikeBuddyApp.swift */; };
 		28A21C5D25CEEA140062C7AC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A21C5C25CEEA140062C7AC /* ContentView.swift */; };
@@ -81,6 +84,9 @@
 		285525F525D65CBC00098676 /* BikeRentalStationStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BikeRentalStationStorage.swift; sourceTree = "<group>"; };
 		2884BDCE25D00D9000747091 /* BikeRentalStation+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BikeRentalStation+CoreDataClass.swift"; sourceTree = "<group>"; };
 		2884BDCF25D00D9000747091 /* BikeRentalStation+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BikeRentalStation+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		2898613925D93D5B0007D137 /* FetchNearByBikeRentalStations.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = FetchNearByBikeRentalStations.graphql; sourceTree = "<group>"; };
+		2898614025D93F900007D137 /* RentalStation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RentalStation.swift; sourceTree = "<group>"; };
+		2898614825D944C80007D137 /* UnmanagedBikeRentalStation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnmanagedBikeRentalStation.swift; sourceTree = "<group>"; };
 		28A120A725CEF5DC005CAD77 /* API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		28A21C5725CEEA140062C7AC /* HelsinkiBikeBuddy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelsinkiBikeBuddy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		28A21C5A25CEEA140062C7AC /* HelsinkiBikeBuddyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelsinkiBikeBuddyApp.swift; sourceTree = "<group>"; };
@@ -164,14 +170,23 @@
 			path = components;
 			sourceTree = "<group>";
 		};
-		2884BDCD25D0098300747091 /* model */ = {
+		2884BDCD25D0098300747091 /* models */ = {
 			isa = PBXGroup;
 			children = (
 				2884BDCE25D00D9000747091 /* BikeRentalStation+CoreDataClass.swift */,
 				2884BDCF25D00D9000747091 /* BikeRentalStation+CoreDataProperties.swift */,
 				28CFB61925D1B3DF002E006A /* BikeRentalStationExtension.swift */,
+				2898614825D944C80007D137 /* UnmanagedBikeRentalStation.swift */,
 			);
-			path = model;
+			path = models;
+			sourceTree = "<group>";
+		};
+		2898613F25D93F800007D137 /* protocols */ = {
+			isa = PBXGroup;
+			children = (
+				2898614025D93F900007D137 /* RentalStation.swift */,
+			);
+			path = protocols;
 			sourceTree = "<group>";
 		};
 		28A21C4E25CEEA140062C7AC = {
@@ -199,7 +214,8 @@
 				28CFB61E25D1B6E4002E006A /* persistance */,
 				281C5BB125D01115001502BE /* logic */,
 				281C5BA825D0103B001502BE /* views */,
-				2884BDCD25D0098300747091 /* model */,
+				2884BDCD25D0098300747091 /* models */,
+				2898613F25D93F800007D137 /* protocols */,
 				281C5BA725D0102F001502BE /* viewmodels */,
 				28A21C9625CEEDCD0062C7AC /* services */,
 				28A21C5A25CEEA140062C7AC /* HelsinkiBikeBuddyApp.swift */,
@@ -237,6 +253,7 @@
 				28A21C9A25CEEEBC0062C7AC /* schema.json */,
 				28A21C9F25CEEF040062C7AC /* AllBikeRentalStations.graphql */,
 				283D90A125D7E0B30007434E /* FetchBikeRentalStationByStationId.graphql */,
+				2898613925D93D5B0007D137 /* FetchNearByBikeRentalStations.graphql */,
 			);
 			path = graphql;
 			sourceTree = "<group>";
@@ -349,6 +366,7 @@
 				28A21C6225CEEA150062C7AC /* Preview Assets.xcassets in Resources */,
 				28A21C9B25CEEEBC0062C7AC /* schema.json in Resources */,
 				28A21C5F25CEEA150062C7AC /* Assets.xcassets in Resources */,
+				2898613A25D93D5B0007D137 /* FetchNearByBikeRentalStations.graphql in Resources */,
 				28A21CA025CEEF040062C7AC /* AllBikeRentalStations.graphql in Resources */,
 				283D90A225D7E0B30007434E /* FetchBikeRentalStationByStationId.graphql in Resources */,
 			);
@@ -430,6 +448,7 @@
 				281C5BE925D0294D001502BE /* BikeRentalStationView.swift in Sources */,
 				2884BDD125D00D9000747091 /* BikeRentalStation+CoreDataProperties.swift in Sources */,
 				28CA9DB625D6B6480050380C /* BikeRentalService.swift in Sources */,
+				2898614125D93F900007D137 /* RentalStation.swift in Sources */,
 				28A21C6425CEEA150062C7AC /* Persistence.swift in Sources */,
 				28A21C5D25CEEA140062C7AC /* ContentView.swift in Sources */,
 				28CFB61A25D1B3DF002E006A /* BikeRentalStationExtension.swift in Sources */,
@@ -444,6 +463,7 @@
 				281C5BDE25D0261E001502BE /* BikeRentalStationViewModel.swift in Sources */,
 				28335B4825D3AE3500F447D5 /* CapacityBar.swift in Sources */,
 				28335B5D25D3CAAA00F447D5 /* UserLocationManager.swift in Sources */,
+				2898614925D944C80007D137 /* UnmanagedBikeRentalStation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

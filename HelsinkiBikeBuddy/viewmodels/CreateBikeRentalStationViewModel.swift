@@ -30,25 +30,10 @@ class CreateBikeRentalStationViewModel {
             Helper.log("Failed to create Bike Rental Station: \(error)")
             return
         }
-
-        bikeRentalStationSorage.createBikeRentalStation(
-            name: name,
-            stationId: stationId,
-            lat: latitude,
-            lon: longitude,
-            spacesAvailable: Int.random(in: 0...15),
-            bikesAvailable: Int.random(in: 0...15),
-            allowDropoff: true,
-            favorite: favorite,
-            state: true
-        )
     }
 
-    func fetchStop(stationId: String) {
-        bikeRentalService.fetchBikeRentalStation(stationId: stationId)
+    func fetchNearby() {
+        
     }
 
-    func fetchAll() {
-        bikeRentalService.fetchAll()
-    }
 }

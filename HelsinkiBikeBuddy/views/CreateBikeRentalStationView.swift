@@ -19,19 +19,9 @@ struct CreateBikeRentalStationView: View {
             TextField("", text: $inputStationId)
             Toggle("Favorite", isOn: $inputFav)
             Button {
-                fetchStop()
             } label: {
                 Text("Create station!")
             }
-            Button {
-                viewModel.fetchAll()
-            } label: {
-                Text("Fetch all stations")
-            }
         }
-    }
-
-    func fetchStop() {
-        viewModel.fetchStop(stationId: inputStationId)
     }
 }
