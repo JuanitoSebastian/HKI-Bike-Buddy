@@ -28,6 +28,7 @@ struct BikeRentalStationView: View {
                     Text("\(viewModel.distanceInMeters()) away 🚶")
                         .foregroundColor(Color("TextMain"))
                     Spacer()
+                    Toggle(isOn: $viewModel.favorite) { }
                 }
                 ZStack {
                     CapacityBar(bikesAvailable: viewModel.bikes, spacesAvailable: viewModel.spaces)
@@ -46,22 +47,16 @@ struct BikeRentalStationView: View {
         }
         .padding([.top, .horizontal], 10)
         .cornerRadius(10)
-        .onTapGesture(count: 2, perform: { viewModel.doubleTap() })
-    }
-
-    func deleteStation() {
-        viewModel.deleteStation()
     }
 }
-/*
+
 struct BikeRentalStationView_Previews: PreviewProvider {
     static var previews: some View {
         let context = PersistenceController.testing.container.viewContext
         let bikeRentalStation = createBikeRentalStation(viewContext: context)
-        BikeRentalStationView(viewModel: BikeRentalStationViewModel(stationId: "074"))
+        BikeRentalStationView(viewModel: BikeRentalStationViewModel(bikeRentalStation: bikeRentalStation))
     }
 }
-*/
 
 func createBikeRentalStation(viewContext: NSManagedObjectContext) -> BikeRentalStation {
     let bikeRentalStation = BikeRentalStation(context: viewContext)
@@ -73,5 +68,6 @@ func createBikeRentalStation(viewContext: NSManagedObjectContext) -> BikeRentalS
     bikeRentalStation.spacesAvailable = 4
     bikeRentalStation.bikesAvailable = 5
     bikeRentalStation.fetched = Date()
+    bikeRentalStation.favorite = true
     return bikeRentalStation
 }

@@ -12,7 +12,7 @@ import Combine
 
 class BikeRentalStationViewModel: ObservableObject {
 
-    let bikeRentalStation: RentalStation
+    @Published var bikeRentalStation: RentalStation
     let bikeRentalStorage = BikeRentalStationStorage.shared
     let userLocationManager = UserLocationManager.shared
 
@@ -56,6 +56,24 @@ class BikeRentalStationViewModel: ObservableObject {
         CLLocation(latitude: lat, longitude: lon)
     }
 
+    var favorite: Bool {
+        get {
+            return bikeRentalStation.favorite
+        }
+        set(newVal) {
+            if newVal {
+                guard let managedBikeRentalStation = bikeRentalStorage.toManagedStation(unmanaged: bikeRentalStation) else { return }
+                self.bikeRentalStation = managedBikeRentalStation
+                Helper.log(bikeRentalStation.favorite)
+            } else {
+                guard let unmanagedBikeRentalStation = bikeRentalStorage.toUnmanagedStation(managed: bikeRentalStation) else { return }
+                self.bikeRentalStation = unmanagedBikeRentalStation
+                BikeRentalService.shared.fetchNearbyStations()
+            }
+        }
+
+    }
+
     func distanceInMeters() -> String {
         var distanceDouble = Double(coordinates.distance(from: userLocationManager.userLocation)).rounded()
         if distanceDouble >= 1000 {
@@ -69,14 +87,6 @@ class BikeRentalStationViewModel: ObservableObject {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "HH:mm"
         return dateFormatter.string(from: bikeRentalStation.fetched)
-    }
-
-    func deleteStation() {
-        // bikeRentalStorage.deleteBikeRentalStation(bikeRentalStation)
-    }
-
-    func doubleTap() {
-        // bikeRentalStation.favorite.toggle()
     }
 
 }

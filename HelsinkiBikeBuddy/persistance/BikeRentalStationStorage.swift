@@ -11,8 +11,8 @@ import Combine
 
 class BikeRentalStationStorage: NSObject, ObservableObject {
 
-    var stationsManaged = CurrentValueSubject<[RentalStation], Never>([])
-    var stationsUnmanaged = CurrentValueSubject<[RentalStation], Never>([])
+    var stationsFavorite = CurrentValueSubject<[RentalStation], Never>([])
+    var stationsNearby = CurrentValueSubject<[RentalStation], Never>([])
     private let bikeRentalStationFetchController: NSFetchedResultsController<BikeRentalStation>
 
     private var moc: NSManagedObjectContext {
@@ -39,7 +39,7 @@ class BikeRentalStationStorage: NSObject, ObservableObject {
         do {
             try bikeRentalStationFetchController.performFetch()
             guard let bikeRentalStationsArray = bikeRentalStationFetchController.fetchedObjects else { return }
-            self.stationsManaged.value = bikeRentalStationsArray
+            self.stationsFavorite.value = bikeRentalStationsArray
         } catch {
             Helper.log("Failed to fetch stations from Core Data")
         }
@@ -54,8 +54,9 @@ class BikeRentalStationStorage: NSObject, ObservableObject {
         bikesAvailable: Int64,
         allowDropoff: Bool,
         favorite: Bool,
-        state: Bool
-    ) {
+        state: Bool,
+        fetched: Date
+    ) -> BikeRentalStation {
         let managedBikeRentalStation = BikeRentalStation(context: moc)
         managedBikeRentalStation.stationId = stationId
         managedBikeRentalStation.name = name
@@ -65,8 +66,9 @@ class BikeRentalStationStorage: NSObject, ObservableObject {
         managedBikeRentalStation.spacesAvailable = spacesAvailable
         managedBikeRentalStation.allowDropoff = allowDropoff
         managedBikeRentalStation.favorite = favorite
-        managedBikeRentalStation.fetched = Date()
+        managedBikeRentalStation.fetched = fetched
         managedBikeRentalStation.state = state
+        return managedBikeRentalStation
     }
 
     // swiftlint:disable:next function_parameter_count
@@ -79,21 +81,22 @@ class BikeRentalStationStorage: NSObject, ObservableObject {
         bikesAvailable: Int64,
         allowDropoff: Bool,
         favorite: Bool,
-        state: Bool
-    ) {
+        state: Bool,
+        fetched: Date
+    ) -> UnmanagedBikeRentalStation {
         let unmanagedBikeRentalStation = UnmanagedBikeRentalStation(
             stationId: stationId,
             name: name,
             allowDropoff: allowDropoff,
             bikesAvailable: bikesAvailable,
             favorite: false,
-            fetched: Date(),
+            fetched: fetched,
             lat: lat,
             lon: lon,
             spacesAvailable: spacesAvailable,
             state: state
         )
-        stationsUnmanaged.value.append(unmanagedBikeRentalStation)
+        return unmanagedBikeRentalStation
     }
 
     func bikeRentalStationFromCoreData(stationId: String) -> BikeRentalStation? {
@@ -113,18 +116,47 @@ class BikeRentalStationStorage: NSObject, ObservableObject {
 
     }
 
-    func toManagedStation(unmanaged: UnmanagedBikeRentalStation) {
-        createManagedBikeRentalStation(
-            name: unmanaged.name,
-            stationId: unmanaged.id,
-            lat: unmanaged.lat,
-            lon: unmanaged.lon,
-            spacesAvailable: unmanaged.spacesAvailable,
-            bikesAvailable: unmanaged.bikesAvailable,
-            allowDropoff: unmanaged.allowDropoff,
-            favorite: unmanaged.favorite,
-            state: unmanaged.state
-        )
+    func toManagedStation(unmanaged: RentalStation) -> BikeRentalStation? {
+        if unmanaged is UnmanagedBikeRentalStation {
+            let managedBikeRentalStation = createManagedBikeRentalStation(
+                name: unmanaged.name,
+                stationId: unmanaged.id,
+                lat: unmanaged.lat,
+                lon: unmanaged.lon,
+                spacesAvailable: unmanaged.spacesAvailable,
+                bikesAvailable: unmanaged.bikesAvailable,
+                allowDropoff: unmanaged.allowDropoff,
+                favorite: true,
+                state: unmanaged.state,
+                fetched: unmanaged.fetched
+            )
+            saveMoc()
+            return managedBikeRentalStation
+        }
+        return nil
+    }
+
+    func toUnmanagedStation(managed: RentalStation) -> UnmanagedBikeRentalStation? {
+        if managed is BikeRentalStation {
+            let unmanagedBikeRentalStation = createUnmanagedBikeRentalStation(
+                name: managed.name,
+                stationId: managed.stationId,
+                lat: managed.lat,
+                lon: managed.lon,
+                spacesAvailable: managed.spacesAvailable,
+                bikesAvailable: managed.bikesAvailable,
+                allowDropoff: managed.allowDropoff,
+                favorite: false,
+                state: managed.state,
+                fetched: managed.fetched
+            )
+            // swiftlint:disable force_cast
+            deleteBikeRentalStation(managed as! BikeRentalStation)
+            // swiftlint:enable force_cast
+            stationsNearby.value.append(unmanagedBikeRentalStation)
+            return unmanagedBikeRentalStation
+        }
+        return nil
     }
 
     func deleteBikeRentalStation(_ bikeRentalStationToDelete: BikeRentalStation) {
@@ -145,6 +177,6 @@ class BikeRentalStationStorage: NSObject, ObservableObject {
 extension BikeRentalStationStorage: NSFetchedResultsControllerDelegate {
     public func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         guard let fetchedBikeRentalStations = controller.fetchedObjects as? [BikeRentalStation] else { return }
-        self.stationsManaged.value = fetchedBikeRentalStations
+        self.stationsFavorite.value = fetchedBikeRentalStations
     }
 }

@@ -33,7 +33,7 @@ class CreateBikeRentalStationViewModel {
     }
 
     func fetchNearby() {
-        
+        bikeRentalService.fetchNearbyStations()
     }
 
 }

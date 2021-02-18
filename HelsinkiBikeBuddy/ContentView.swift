@@ -17,7 +17,7 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             TabView(selection: $selectedTab) {
-                MyBikeRentalStationsView()
+                BikeRentalStationsView()
                     .onTapGesture {
                         selectedTab = "view"
                     }
@@ -39,7 +39,7 @@ struct ContentView: View {
                 .tag("add")
             }
             .navigationBarTitle("Helsinki Bike Buddy", displayMode: .inline)
-            .navigationBarItems(trailing: Button(action: { bikeRentalService.updateStations() }, label: {
+            .navigationBarItems(trailing: Button(action: { bikeRentalService.fetchNearbyStations() }, label: {
                 Image(systemName: "arrow.clockwise").imageScale(.large)
             }))
         }

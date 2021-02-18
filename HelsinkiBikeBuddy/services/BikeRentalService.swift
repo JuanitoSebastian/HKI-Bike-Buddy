@@ -29,8 +29,7 @@ class BikeRentalService {
     static let shared = BikeRentalService()
 
     func updateStations() {
-        for var bikeRentalStation in bikeRentalStationStore.stationsManaged.value {
-            Helper.log("In updateLoop")
+        for var bikeRentalStation in bikeRentalStationStore.stationsFavorite.value {
             bikeRentalStation.fetched = Date()
 
             let total = Int64(bikeRentalStation.totalCapacity)
@@ -60,26 +59,36 @@ class BikeRentalService {
             query: FetchNearByBikeRentalStationsQuery(
                 lat: userLocationManager.userLocation.coordinate.latitude,
                 lon: userLocationManager.userLocation.coordinate.longitude,
-                maxDistance: 500
+                maxDistance: 1000
             )
         ) { result in
             switch result {
             case .success(let graphQLResult):
                 guard let edgesUnwrapped = graphQLResult.data?.nearest?.edges else { return }
                 // Iterating thru the fetched stations
+                var nearbyStationFetched: [RentalStation] = []
                 for edge in edgesUnwrapped {
                     guard let stationUnwrapped = self.unwrapGraphQLStationObject(edge?.node?.place?.asBikeRentalStation) else { return }
-                    self.bikeRentalStationStore.createUnmanagedBikeRentalStation(
-                        name: stationUnwrapped.name,
-                        stationId: stationUnwrapped.stationId!,
-                        lat: stationUnwrapped.lat!,
-                        lon: stationUnwrapped.lon!,
-                        spacesAvailable: Int64(stationUnwrapped.spacesAvailable!),
-                        bikesAvailable: Int64(stationUnwrapped.bikesAvailable!),
-                        allowDropoff: stationUnwrapped.allowDropoff!,
-                        favorite: false,
-                        state: true
-                    )
+                    if let bikeRentalStationCoreData = self.bikeRentalStationStore.bikeRentalStationFromCoreData(
+                        stationId: stationUnwrapped.stationId!
+                    ) {
+                        nearbyStationFetched.append(bikeRentalStationCoreData)
+                    } else {
+                        let bikeRentalStationUnmanaged = UnmanagedBikeRentalStation(
+                            stationId: stationUnwrapped.stationId!,
+                            name: stationUnwrapped.name,
+                            allowDropoff: stationUnwrapped.allowDropoff!,
+                            bikesAvailable: Int64.random(in: 0...15),
+                            favorite: false,
+                            fetched: Date(),
+                            lat: stationUnwrapped.lat!,
+                            lon: stationUnwrapped.lon!,
+                            spacesAvailable: Int64.random(in: 0...15),
+                            state: self.parseStateString(stationUnwrapped.state!)
+                        )
+                        nearbyStationFetched.append(bikeRentalStationUnmanaged)
+                    }
+                    self.bikeRentalStationStore.stationsNearby.value = nearbyStationFetched
                 }
             case .failure(let error):
                 print("Failure! Error: \(error)")
@@ -96,5 +105,10 @@ class BikeRentalService {
             return nil
         }
         return stationUnwrapped
+    }
+
+    private func parseStateString(_ state: String) -> Bool {
+        if state.contains("off") { return false }
+        return true
     }
 }
