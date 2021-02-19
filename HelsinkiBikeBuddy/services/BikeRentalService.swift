@@ -24,11 +24,26 @@ class BikeRentalService {
 
     private let bikeRentalStationStore = BikeRentalStationStorage.shared
     private let userLocationManager = UserLocationManager.shared
+    private var timer: Timer?
 
     // Singleton
     static let shared = BikeRentalService()
 
-    func updateStations() {
+    private init() {
+        self.timer = nil
+    }
+
+    func setTimer() {
+        self.timer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(updateAll), userInfo: nil, repeats: true)
+    }
+
+    @objc
+    func updateAll() {
+        updateFavorites()
+        fetchNearbyStations()
+    }
+
+    func updateFavorites() {
         for var bikeRentalStation in bikeRentalStationStore.stationsFavorite.value {
             bikeRentalStation.fetched = Date()
 

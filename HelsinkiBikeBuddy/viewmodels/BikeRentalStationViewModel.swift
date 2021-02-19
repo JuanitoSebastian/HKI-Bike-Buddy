@@ -64,7 +64,7 @@ class BikeRentalStationViewModel: ObservableObject {
             if newVal {
                 guard let managedBikeRentalStation = bikeRentalStorage.toManagedStation(unmanaged: bikeRentalStation) else { return }
                 self.bikeRentalStation = managedBikeRentalStation
-                Helper.log(bikeRentalStation.favorite)
+                BikeRentalService.shared.fetchNearbyStations()
             } else {
                 guard let unmanagedBikeRentalStation = bikeRentalStorage.toUnmanagedStation(managed: bikeRentalStation) else { return }
                 self.bikeRentalStation = unmanagedBikeRentalStation

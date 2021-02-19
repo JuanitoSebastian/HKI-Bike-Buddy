@@ -10,36 +10,45 @@ import CoreData
 
 struct ContentView: View {
 
-    @Environment(\.managedObjectContext) private var viewContext
-    @State private var selectedTab = "view"
-    let bikeRentalService = BikeRentalService()
+    @ObservedObject var viewModel = ContentViewModel.shared
 
     var body: some View {
         NavigationView {
-            TabView(selection: $selectedTab) {
-                BikeRentalStationsView()
+            TabView(selection: $viewModel.viewSelection) {
+                NearbyBikeRentalStationsListView()
                     .onTapGesture {
-                        selectedTab = "view"
+                        viewModel.viewSelection = MainViewContent.nearbyStations
                     }
                     .tabItem {
-                        Image(systemName: "star")
-                        Text("My Bike Rental Stations")
+                        Image(systemName: "bicycle")
+                        Text("Neaby Stations")
                     }
-                    .tag("view")
+                    .tag(MainViewContent.nearbyStations)
+
+                FavoriteBikeRentalStationsListView()
+                    .onTapGesture {
+                        viewModel.viewSelection = MainViewContent.myStations
+                    }
+                    .tabItem {
+                        Image(systemName: "heart")
+                        Text("My Stations")
+                    }
+                    .tag(MainViewContent.myStations)
+
                 CreateBikeRentalStationView(
-                    viewModel: CreateBikeRentalStationViewModel(viewContext: viewContext)
+                    viewModel: CreateBikeRentalStationViewModel()
                 )
                 .onTapGesture {
-                    selectedTab = "add"
+                    viewModel.viewSelection = MainViewContent.map
                 }
                 .tabItem {
-                    Image(systemName: "plus")
-                    Text("Add Bike Rental Station")
+                    Image(systemName: "map")
+                    Text("Map")
                 }
-                .tag("add")
+                .tag(MainViewContent.map)
             }
-            .navigationBarTitle("Helsinki Bike Buddy", displayMode: .inline)
-            .navigationBarItems(trailing: Button(action: { bikeRentalService.fetchNearbyStations() }, label: {
+            .navigationBarTitle(Text(viewModel.navBarTitle), displayMode: .large)
+            .navigationBarItems(trailing: Button(action: { BikeRentalService.shared.fetchNearbyStations() }, label: {
                 Image(systemName: "arrow.clockwise").imageScale(.large)
             }))
         }

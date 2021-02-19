@@ -17,35 +17,40 @@ struct BikeRentalStationView: View {
             VStack {
                 HStack {
                     Text(viewModel.name)
-                        .font(.largeTitle)
+                        .font(.title)
+                        .fontWeight(.bold)
                         .foregroundColor(Color("TextMain"))
                     Spacer()
-                    Text("Last updated at \(viewModel.fetched)")
-                        .font(.caption)
-                        .foregroundColor(Color("TextSub"))
+                    FavoriteMarker(isFavorite: viewModel.favorite)
+                        .onTapGesture {
+                            viewModel.favorite = !viewModel.favorite
+                        }
                 }
+                .padding([.leading, .trailing], 20)
                 HStack {
                     Text("\(viewModel.distanceInMeters()) away 🚶")
                         .foregroundColor(Color("TextMain"))
                     Spacer()
-                    Toggle(isOn: $viewModel.favorite) { }
+
                 }
-                ZStack {
-                    CapacityBar(bikesAvailable: viewModel.bikes, spacesAvailable: viewModel.spaces)
-                    HStack {
-                        Text("\(viewModel.bikes) bikes")
-                            .font(.headline)
-                        Spacer()
-                        Text("\(viewModel.spaces) spaces")
-                            .font(.headline)
-                    }
-                    .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
+                .padding([.leading, .trailing], 20)
+                .padding([.bottom], 5)
+                HStack {
+                    Text("\(viewModel.bikes) bikes")
+                        .font(.headline)
+                        .foregroundColor(Color("TextMain"))
+                    Spacer()
+                    Text("\(viewModel.spaces) spaces")
+                        .font(.headline)
+                        .foregroundColor(Color("TextMain"))
                 }
+                .padding([.leading, .trailing], 20)
+                CapacityBar(bikesAvailable: viewModel.bikes, spacesAvailable: viewModel.spaces)
+
             }
-            .padding([.bottom], 10)
-            .padding([.top, .leading, .trailing], 5)
+
         }
-        .padding([.top, .horizontal], 10)
+        .padding([.top, .bottom], 10)
         .cornerRadius(10)
     }
 }

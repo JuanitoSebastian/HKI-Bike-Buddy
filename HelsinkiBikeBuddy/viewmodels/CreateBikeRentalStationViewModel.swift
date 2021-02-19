@@ -10,13 +10,8 @@ import CoreData
 
 class CreateBikeRentalStationViewModel {
 
-    let viewContext: NSManagedObjectContext
     let bikeRentalStationSorage = BikeRentalStationStorage.shared
     let bikeRentalService = BikeRentalService.shared
-
-    init(viewContext: NSManagedObjectContext) {
-        self.viewContext = viewContext
-    }
 
     func createBikeRentalStop(name: String, stationId: String, lat: String, lon: String, favorite: Bool) {
 

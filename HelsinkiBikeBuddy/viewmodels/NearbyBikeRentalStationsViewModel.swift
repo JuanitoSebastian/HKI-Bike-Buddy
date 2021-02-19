@@ -14,13 +14,16 @@ class NeabyBikeRentalStationsViewModel: ObservableObject {
 
     private var cancellable: AnyCancellable?
 
+    public static let shared = NeabyBikeRentalStationsViewModel()
+
     init(nearbyBikeRentalStationPublisher: AnyPublisher<[RentalStation], Never>
             = BikeRentalStationStorage.shared.stationsNearby.eraseToAnyPublisher()) {
-        cancellable = nearbyBikeRentalStationPublisher.sink { fetched in
+        cancellable = BikeRentalStationStorage.shared.stationsNearby.sink { fetched in
             self.nearbyBikeRentalStations = fetched
             self.nearbyBikeRentalStations.sort( by: {
                 $0.distance(to: UserLocationManager.shared.userLocation) < $1.distance(to: UserLocationManager.shared.userLocation)
             })
         }
     }
+
 }

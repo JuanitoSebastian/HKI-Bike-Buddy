@@ -9,13 +9,17 @@ import SwiftUI
 
 struct FavoriteBikeRentalStationsListView: View {
 
-    @ObservedObject var viewModel = FavoriteBikeRentalStationViewModel()
+    @ObservedObject var viewModel = FavoriteBikeRentalStationViewModel.shared
 
     var body: some View {
-        ScrollView {
-            ForEach(viewModel.favoriteBikeRentalStations, id: \.id) { bikeRentalStation in
-                BikeRentalStationView(viewModel: BikeRentalStationViewModel(bikeRentalStation: bikeRentalStation))
+        VStack {
+            ScrollView {
+                ForEach(viewModel.favoriteBikeRentalStations, id: \.id) { bikeRentalStation in
+                    BikeRentalStationView(viewModel: BikeRentalStationViewModel(bikeRentalStation: bikeRentalStation))
+                    Divider()
+                }
             }
+            Spacer()
         }
     }
 }

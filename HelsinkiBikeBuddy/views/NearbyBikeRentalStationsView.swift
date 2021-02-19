@@ -9,13 +9,17 @@ import SwiftUI
 
 struct NearbyBikeRentalStationsListView: View {
 
-    @ObservedObject var viewModel = NeabyBikeRentalStationsViewModel()
+    @ObservedObject var viewModel = NeabyBikeRentalStationsViewModel.shared
 
     var body: some View {
-        ScrollView {
-            ForEach(0..<viewModel.nearbyBikeRentalStations.count, id: \.self) {
-                BikeRentalStationView(viewModel: BikeRentalStationViewModel(bikeRentalStation: viewModel.nearbyBikeRentalStations[$0]))
+        VStack {
+            ScrollView {
+                ForEach(0..<viewModel.nearbyBikeRentalStations.count, id: \.self) {
+                    BikeRentalStationView(viewModel: BikeRentalStationViewModel(bikeRentalStation: viewModel.nearbyBikeRentalStations[$0]))
+                    Divider()
+                }
             }
+            Spacer()
         }
     }
 }
