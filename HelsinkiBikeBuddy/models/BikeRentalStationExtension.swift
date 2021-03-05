@@ -29,6 +29,10 @@ extension BikeRentalStation: Identifiable {
         return CLLocation(latitude: lat, longitude: lon)
     }
 
+    var coordinate: CLLocationCoordinate2D {
+        return CLLocationCoordinate2D(latitude: lat, longitude: lon)
+    }
+
     func distance(to location: CLLocation) -> CLLocationDistance {
         return location.distance(from: self.location)
     }

@@ -6,20 +6,39 @@
 //
 
 import SwiftUI
-
+// FIX tässä on j oku ongelma viewmodelin kanssa
 struct NearbyBikeRentalStationsListView: View {
 
-    @ObservedObject var viewModel = NeabyBikeRentalStationsViewModel.shared
-
+    @ObservedObject var viewModel = NearbyBikeRentalStationsListViewModel.shared
     var body: some View {
-        VStack {
-            ScrollView {
-                ForEach(0..<viewModel.nearbyBikeRentalStations.count, id: \.self) {
-                    BikeRentalStationView(viewModel: BikeRentalStationViewModel(bikeRentalStation: viewModel.nearbyBikeRentalStations[$0]))
-                    Divider()
+       VStack {
+            content
+        }
+
+    }
+
+    var content: AnyView {
+        switch viewModel.state {
+        case .nearbyStations:
+            return AnyView(
+                VStack {
+                    ScrollView {
+                        ForEach(viewModel.nearbyBikeRentalStations, id: \.id) { stationNearby in
+                            BikeRentalStationView(viewModel: BikeRentalStationViewModel(bikeRentalStation: stationNearby))
+                            Divider()
+                        }
+                    }
+                    Spacer()
                 }
-            }
-            Spacer()
+            )
+        default:
+            return AnyView(
+                VStack {
+                    Spacer()
+                    Text("No bike rental stations nearby... ☹️")
+                    Spacer()
+                }
+            )
         }
     }
 }

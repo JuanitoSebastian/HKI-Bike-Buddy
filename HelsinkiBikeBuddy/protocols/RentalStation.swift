@@ -24,6 +24,7 @@ protocol RentalStation {
     var location: CLLocation { get }
     var totalCapacity: Int { get }
     var id: String { get }
+    var coordinate: CLLocationCoordinate2D { get }
 
     func distance(to location: CLLocation) -> CLLocationDistance
 

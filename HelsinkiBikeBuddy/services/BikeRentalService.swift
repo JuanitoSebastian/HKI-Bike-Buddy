@@ -15,30 +15,55 @@ class Network {
     private(set) lazy var apollo = ApolloClient(url: URL(string: url)!)
 }
 
-class BikeRentalService {
+enum ApiState {
+    case allGood
+    case setup
+    case error
+}
 
-    enum ApiError: Error {
-        case invalidResponse
-        case connectionFailure
-    }
+// TODO: Handle errors in networking
+// TODO: UserSettings -> Nearby length
+
+class BikeRentalService: ObservableObject, ReachabilityObserverDelegate {
 
     private let bikeRentalStationStore = BikeRentalStationStorage.shared
     private let userLocationManager = UserLocationManager.shared
     private var timer: Timer?
+    @Published var apiState: ApiState
 
     // Singleton
     static let shared = BikeRentalService()
 
     private init() {
         self.timer = nil
+        self.apiState = .setup
+        try? addReachabilityObserver()
+    }
+
+    deinit {
+        removeReachabilityObserver()
+    }
+
+    func reachabilityChanged(_ isReachable: Bool) {
+        if isReachable {
+            setState(.allGood)
+            return
+        }
+        setState(.error)
     }
 
     func setTimer() {
-        self.timer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(updateAll), userInfo: nil, repeats: true)
+        self.timer = Timer.scheduledTimer(
+            timeInterval: 30,
+            target: self,
+            selector: #selector(updateAll),
+            userInfo: nil,
+            repeats: true
+        )
     }
 
     @objc
-    func updateAll() {
+    func updateAll() {
         updateFavorites()
         fetchNearbyStations()
     }
@@ -70,6 +95,7 @@ class BikeRentalService {
     }
 
     func fetchNearbyStations() {
+        if apiState == .error { return }
         Network.shared.apollo.fetch(
             query: FetchNearByBikeRentalStationsQuery(
                 lat: userLocationManager.userLocation.coordinate.latitude,
@@ -83,7 +109,9 @@ class BikeRentalService {
                 // Iterating thru the fetched stations
                 var nearbyStationFetched: [RentalStation] = []
                 for edge in edgesUnwrapped {
-                    guard let stationUnwrapped = self.unwrapGraphQLStationObject(edge?.node?.place?.asBikeRentalStation) else { return }
+                    guard let stationUnwrapped = self.unwrapGraphQLStationObject(edge?.node?.place?.asBikeRentalStation) else {
+                        return
+                    }
                     if let bikeRentalStationCoreData = self.bikeRentalStationStore.bikeRentalStationFromCoreData(
                         stationId: stationUnwrapped.stationId!
                     ) {
@@ -106,7 +134,7 @@ class BikeRentalService {
                     self.bikeRentalStationStore.stationsNearby.value = nearbyStationFetched
                 }
             case .failure(let error):
-                print("Failure! Error: \(error)")
+                Helper.log("API Fecth failed: \(error)")
             }
         }
     }
@@ -125,5 +153,11 @@ class BikeRentalService {
     private func parseStateString(_ state: String) -> Bool {
         if state.contains("off") { return false }
         return true
+    }
+
+    private func setState(_ newApiState: ApiState) {
+        if apiState != newApiState {
+            apiState = newApiState
+        }
     }
 }

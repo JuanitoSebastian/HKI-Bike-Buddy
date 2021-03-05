@@ -16,14 +16,25 @@ class FavoriteBikeRentalStationViewModel: ObservableObject {
 
     public static let shared = FavoriteBikeRentalStationViewModel()
 
+    var state: FavoriteBikeRentalStationsState {
+        if favoriteBikeRentalStations.isEmpty {
+            return .noFavorites
+        }
+        return .favoriteBikeRentalStations
+    }
+
     init(favoriteBikeRentalStationPublisher: AnyPublisher<[RentalStation], Never> = BikeRentalStationStorage.shared.stationsFavorite.eraseToAnyPublisher()) {
         cancellable = BikeRentalStationStorage.shared.stationsFavorite.sink { fetched in
             self.favoriteBikeRentalStations = fetched
             self.favoriteBikeRentalStations.sort(by: {
-                $0.distance(
-                    to: UserLocationManager.shared.userLocation) < $1.distance(to: UserLocationManager.shared.userLocation)
+                $0.distance(to: UserLocationManager.shared.userLocation) < $1.distance(to: UserLocationManager.shared.userLocation)
             })
         }
     }
 
+}
+
+enum FavoriteBikeRentalStationsState {
+    case favoriteBikeRentalStations
+    case noFavorites
 }

@@ -13,46 +13,99 @@ struct BikeRentalStationView: View {
     @ObservedObject var viewModel: BikeRentalStationViewModel
 
     var body: some View {
-        ZStack {
-            VStack {
-                HStack {
-                    Text(viewModel.name)
-                        .font(.title)
-                        .fontWeight(.bold)
-                        .foregroundColor(Color("TextMain"))
-                    Spacer()
-                    FavoriteMarker(isFavorite: viewModel.favorite)
-                        .onTapGesture {
-                            viewModel.favorite = !viewModel.favorite
-                        }
-                }
-                .padding([.leading, .trailing], 20)
-                HStack {
-                    Text("\(viewModel.distanceInMeters()) away 🚶")
-                        .foregroundColor(Color("TextMain"))
-                    Spacer()
-
-                }
-                .padding([.leading, .trailing], 20)
-                .padding([.bottom], 5)
-                HStack {
-                    Text("\(viewModel.bikes) bikes")
-                        .font(.headline)
-                        .foregroundColor(Color("TextMain"))
-                    Spacer()
-                    Text("\(viewModel.spaces) spaces")
-                        .font(.headline)
-                        .foregroundColor(Color("TextMain"))
-                }
-                .padding([.leading, .trailing], 20)
-                CapacityBar(bikesAvailable: viewModel.bikes, spacesAvailable: viewModel.spaces)
-
-            }
-
-        }
+        content
         .padding([.top, .bottom], 10)
         .cornerRadius(10)
     }
+
+    var content: AnyView {
+        switch viewModel.state {
+        case BikeRentalStationViewState.normal:
+            return AnyView(
+                ZStack {
+                    VStack {
+                        HStack {
+                            Text(viewModel.name)
+                                .font(.title)
+                                .fontWeight(.bold)
+                                .foregroundColor(Color("TextMain"))
+                            Spacer()
+                            FavoriteMarker(isFavorite: viewModel.favorite)
+                                .onTapGesture {
+                                    viewModel.favorite = !viewModel.favorite
+                                }
+                        }
+                        .padding([.leading, .trailing], 20)
+                        HStack {
+                            Text("\(viewModel.distanceInMeters()) away 🚶")
+                                .foregroundColor(Color("TextMain"))
+                            Spacer()
+
+                        }
+                        .padding([.leading, .trailing], 20)
+                        .padding([.bottom], 5)
+                        HStack {
+                            Text("\(viewModel.bikes) bikes")
+                                .font(.headline)
+                                .foregroundColor(Color("TextMain"))
+                            Spacer()
+                            Text("\(viewModel.spaces) spaces")
+                                .font(.headline)
+                                .foregroundColor(Color("TextMain"))
+                        }
+                        .padding([.leading, .trailing], 20)
+                        CapacityBar(bikesAvailable: viewModel.bikes, spacesAvailable: viewModel.spaces)
+
+                    }
+                }.onTapGesture {
+                    withAnimation {
+                        DetailedBikeRentalStationViewModel.shared.bikeRentalStation = viewModel.bikeRentalStation
+                        ContentViewModel.shared.mainViewContent = .detailedStationView
+                    }
+                }
+            )
+        case .unavailable:
+            return AnyView(
+                ZStack {
+                    VStack {
+                        HStack {
+                            Text(viewModel.name)
+                                .font(.title)
+                                .fontWeight(.bold)
+                                .foregroundColor(Color("TextMain"))
+                            Spacer()
+                            FavoriteMarker(isFavorite: viewModel.favorite)
+                                .onTapGesture {
+                                    viewModel.favorite = !viewModel.favorite
+                                }
+                        }
+                        .padding([.leading, .trailing], 20)
+                        HStack {
+                            Text("\(viewModel.distanceInMeters()) away 🚶")
+                                .foregroundColor(Color("TextMain"))
+                            Spacer()
+
+                        }
+                        .padding([.leading, .trailing], 20)
+                        .padding([.bottom], 5)
+                        HStack {
+                            Text("\(viewModel.bikes) bikes")
+                                .font(.headline)
+                                .foregroundColor(Color("TextMain"))
+                            Spacer()
+                            Text("\(viewModel.spaces) spaces")
+                                .font(.headline)
+                                .foregroundColor(Color("TextMain"))
+                        }
+                        .padding([.leading, .trailing], 20)
+                        CapacityBar(bikesAvailable: viewModel.bikes, spacesAvailable: viewModel.spaces)
+
+                    }
+                }
+            )
+        }
+    }
+
 }
 
 struct BikeRentalStationView_Previews: PreviewProvider {

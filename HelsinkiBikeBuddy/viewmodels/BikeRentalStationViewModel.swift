@@ -13,6 +13,9 @@ import Combine
 class BikeRentalStationViewModel: ObservableObject {
 
     @Published var bikeRentalStation: RentalStation
+    @Published var walkingTime: String?
+    @Published var state: BikeRentalStationViewState = BikeRentalStationViewState.normal
+
     let bikeRentalStorage = BikeRentalStationStorage.shared
     let userLocationManager = UserLocationManager.shared
 
@@ -62,16 +65,17 @@ class BikeRentalStationViewModel: ObservableObject {
         }
         set(newVal) {
             if newVal {
-                guard let managedBikeRentalStation = bikeRentalStorage.toManagedStation(unmanaged: bikeRentalStation) else { return }
+                guard let managedBikeRentalStation
+                        = bikeRentalStorage.toManagedStation(unmanaged: bikeRentalStation) else { return }
                 self.bikeRentalStation = managedBikeRentalStation
                 BikeRentalService.shared.fetchNearbyStations()
             } else {
-                guard let unmanagedBikeRentalStation = bikeRentalStorage.toUnmanagedStation(managed: bikeRentalStation) else { return }
+                guard let unmanagedBikeRentalStation
+                        = bikeRentalStorage.toUnmanagedStation(managed: bikeRentalStation) else { return }
                 self.bikeRentalStation = unmanagedBikeRentalStation
                 BikeRentalService.shared.fetchNearbyStations()
             }
         }
-
     }
 
     func distanceInMeters() -> String {
@@ -89,4 +93,24 @@ class BikeRentalStationViewModel: ObservableObject {
         return dateFormatter.string(from: bikeRentalStation.fetched)
     }
 
+    func getWalkingTime() {
+        userLocationManager.getTravelTimeFromUserLocation(destinationLat: lat, destinationLon: lon, completition: { res in
+            guard let res = res else { return }
+            DispatchQueue.main.async {
+                self.walkingTime = String(res)
+            }
+        })
+    }
+
+    var distanceToShow: String {
+        if walkingTime == nil {
+            return "\(distanceInMeters()) away 🚶"
+        }
+        return "\(walkingTime!) second walk away 🚶"
+    }
+}
+
+enum BikeRentalStationViewState {
+    case normal
+    case unavailable
 }

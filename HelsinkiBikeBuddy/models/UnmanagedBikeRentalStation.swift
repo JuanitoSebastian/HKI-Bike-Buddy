@@ -49,6 +49,10 @@ class UnmanagedBikeRentalStation: RentalStation {
         return CLLocation(latitude: lat, longitude: lon)
     }
 
+    var coordinate: CLLocationCoordinate2D {
+        return CLLocationCoordinate2D(latitude: lat, longitude: lon)
+    }
+
     var totalCapacity: Int {
         Int(spacesAvailable + bikesAvailable)
     }

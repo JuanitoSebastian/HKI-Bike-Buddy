@@ -16,17 +16,12 @@ class Helper {
         #endif
     }
 
-    static func saveViewContext(_ viewContext: NSManagedObjectContext) {
-        if !viewContext.hasChanges { return }
-        do {
-            try viewContext.save()
-        } catch {
-            Helper.log("Failed to save ViewContext")
-            Helper.log("Because of error: \(error.localizedDescription)")
+    static func timeIntervalToString(_ timeInverval: TimeInterval) -> String {
+        if timeInverval < 60 {
+            return "\(timeInverval) second"
         }
-    }
-
-    static func removeBikeRentalStation(bikeRentalStation: BikeRentalStation, viewContext: NSManagedObjectContext) {
-        viewContext.delete(bikeRentalStation)
+        var formatted = timeInverval / 60
+        formatted.round(.toNearestOrEven)
+        return "\(formatted) minute"
     }
 }
