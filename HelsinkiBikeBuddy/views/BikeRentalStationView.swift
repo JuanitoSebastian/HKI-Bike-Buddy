@@ -14,8 +14,9 @@ struct BikeRentalStationView: View {
 
     var body: some View {
         content
-        .padding([.top, .bottom], 10)
-        .cornerRadius(10)
+            .padding([.top, .bottom], 10)
+            .padding([.leading, .trailing], 5)
+            .shadow(color: Color("StationCardShadow"), radius: 3, x: 0, y: 3)
     }
 
     var content: AnyView {
@@ -26,23 +27,20 @@ struct BikeRentalStationView: View {
                     VStack {
                         HStack {
                             Text(viewModel.name)
-                                .font(.title)
-                                .fontWeight(.bold)
-                                .foregroundColor(Color("TextMain"))
+                                .font(.custom("Helvetica Neue Condensed Bold", size: 35))
+                                .foregroundColor(Color("TextTitle"))
                             Spacer()
                             FavoriteMarker(isFavorite: viewModel.favorite)
                                 .onTapGesture {
                                     viewModel.favorite = !viewModel.favorite
                                 }
                         }
-                        .padding([.leading, .trailing], 20)
                         HStack {
                             Text("\(viewModel.distanceInMeters()) away 🚶")
                                 .foregroundColor(Color("TextMain"))
                             Spacer()
 
                         }
-                        .padding([.leading, .trailing], 20)
                         .padding([.bottom], 5)
                         HStack {
                             Text("\(viewModel.bikes) bikes")
@@ -53,14 +51,21 @@ struct BikeRentalStationView: View {
                                 .font(.headline)
                                 .foregroundColor(Color("TextMain"))
                         }
-                        .padding([.leading, .trailing], 20)
                         CapacityBar(bikesAvailable: viewModel.bikes, spacesAvailable: viewModel.spaces)
-
                     }
-                }.onTapGesture {
+                    .padding([.leading, .trailing], 15)
+                    .padding([.top], 5)
+                    .padding([.bottom], 10)
+                }
+
+                .background(Color("StationCardBg"))
+                .cornerRadius(10)
+                .padding([.leading, .trailing], 10)
+                .onTapGesture {
                     withAnimation {
                         DetailedBikeRentalStationViewModel.shared.bikeRentalStation = viewModel.bikeRentalStation
-                        ContentViewModel.shared.mainViewContent = .detailedStationView
+                        ContentViewModel.shared.mainViewContent = .overlayContent
+                        OverlayContentViewController.shared.viewState = .detailedStation
                     }
                 }
             )

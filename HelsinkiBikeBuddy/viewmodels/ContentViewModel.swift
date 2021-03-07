@@ -33,7 +33,7 @@ class ContentViewModel: ObservableObject {
 
     var blurAmount: CGFloat {
         switch mainViewContent {
-        case .detailedStationView:
+        case .overlayContent:
             return 2
         default:
             return 0
@@ -42,7 +42,7 @@ class ContentViewModel: ObservableObject {
 
     var brightnessAmount: Double {
         switch mainViewContent {
-        case .detailedStationView:
+        case .overlayContent:
             return -0.2
         default:
             return 0
@@ -59,5 +59,6 @@ enum MainViewNavigation: Int, Codable {
 enum MainViewContent {
     case navigationView
     case detailedStationView
+    case overlayContent
     case loading
 }

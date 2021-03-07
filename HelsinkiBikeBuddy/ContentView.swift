@@ -15,6 +15,7 @@ struct ContentView: View {
 
     var body: some View {
         contentToDisplay
+
     }
 
     var contentToDisplay: AnyView {
@@ -68,15 +69,16 @@ struct ContentView: View {
                         }
                         .tag(MainViewNavigation.map)
                     }
-                    .navigationBarTitle(Text(viewModel.navBarTitle), displayMode: .large)
-                    .navigationBarItems(trailing: Button(action: { BikeRentalService.shared.fetchNearbyStations() }, label: {
-                        Image(systemName: "arrow.clockwise").imageScale(.large)
+                    .navigationBarHidden(true)
+                    .navigationBarItems(
+                        trailing: Button(action: { BikeRentalService.shared.fetchNearbyStations() }, label: {
+                        Image(systemName: "gear").imageScale(.large)
                     }))
                 }
                 .blur(radius: viewModel.blurAmount)
                 .brightness(viewModel.brightnessAmount)
-                if viewModel.mainViewContent == .detailedStationView {
-                    DetailedBikeRentalStationView()
+                if viewModel.mainViewContent == MainViewContent.overlayContent {
+                    OverlayContentView()
                         .transition(.opacity)
                         .animation(.easeIn)
                 }
@@ -102,7 +104,7 @@ struct ContentView: View {
         AnyView(
             VStack {
                 Spacer()
-                Text("There seems to be a network error 🤭")
+                Text("No Internet connection 😬")
                 Spacer()
             }
         )

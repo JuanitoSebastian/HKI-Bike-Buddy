@@ -67,6 +67,7 @@ struct MapView: UIViewRepresentable {
         mapView.isRotateEnabled = false
         mapView.isPitchEnabled = false
         mapView.mapType = .hybrid
+        mapView.layer.cornerRadius = 10
         return mapView
     }
 

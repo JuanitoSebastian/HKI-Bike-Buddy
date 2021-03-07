@@ -100,7 +100,7 @@ class BikeRentalService: ObservableObject, ReachabilityObserverDelegate {
             query: FetchNearByBikeRentalStationsQuery(
                 lat: userLocationManager.userLocation.coordinate.latitude,
                 lon: userLocationManager.userLocation.coordinate.longitude,
-                maxDistance: 1000
+                maxDistance: UserSettingsManager.shared.nearbyDistance
             )
         ) { result in
             switch result {

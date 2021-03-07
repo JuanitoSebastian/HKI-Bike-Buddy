@@ -12,48 +12,44 @@ struct DetailedBikeRentalStationView: View {
     @ObservedObject var viewModel = DetailedBikeRentalStationViewModel.shared
 
     var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 20)
-                .foregroundColor(.white)
-                .shadow(radius: 5)
-            VStack {
-                HStack {
-                    Text(viewModel.name)
-                        .font(.title)
-                        .fontWeight(.bold)
-                        .foregroundColor(Color("TextMain"))
-                    Spacer()
-                    FavoriteMarker(isFavorite: viewModel.favorite)
-                        .onTapGesture {
-                            viewModel.favorite = !viewModel.favorite
-                        }
-                }
-                .padding([.leading, .trailing], 20)
-                HStack {
-                    Text(viewModel.distanceToShow)
-                        .foregroundColor(Color("TextMain"))
-                    Spacer()
-
-                }
-                .padding([.leading, .trailing], 20)
-                .padding([.bottom], 5)
-                HStack {
-                    Text("\(viewModel.bikes) bikes")
-                        .font(.headline)
-                        .foregroundColor(Color("TextMain"))
-                    Spacer()
-                    Text("\(viewModel.spaces) spaces")
-                        .font(.headline)
-                        .foregroundColor(Color("TextMain"))
-                }
-                .padding([.leading, .trailing], 20)
-                CapacityBar(bikesAvailable: viewModel.bikes, spacesAvailable: viewModel.spaces)
-                MapView(rentalStation: viewModel.bikeRentalStation!)
+        VStack {
+            HStack {
+                Text(viewModel.name)
+                    .font(.title)
+                    .fontWeight(.bold)
+                    .foregroundColor(Color("TextMain"))
                 Spacer()
+                FavoriteMarker(isFavorite: viewModel.favorite)
+                    .onTapGesture {
+                        viewModel.favorite = !viewModel.favorite
+                    }
             }
-            .padding([.top, .bottom], 10)
+            .padding([.leading, .trailing], 20)
+            HStack {
+                Text(viewModel.distanceToShow)
+                    .foregroundColor(Color("TextMain"))
+                Spacer()
+
+            }
+            .padding([.leading, .trailing], 20)
+            .padding([.bottom], 5)
+            HStack {
+                Text("\(viewModel.bikes) bikes")
+                    .font(.headline)
+                    .foregroundColor(Color("TextMain"))
+                Spacer()
+                Text("\(viewModel.spaces) spaces")
+                    .font(.headline)
+                    .foregroundColor(Color("TextMain"))
+            }
+            .padding([.leading, .trailing], 20)
+            CapacityBar(bikesAvailable: viewModel.bikes, spacesAvailable: viewModel.spaces)
+            MapView(rentalStation: viewModel.bikeRentalStation!)
+                .padding([.leading, .trailing], 20)
+                .padding([.top], 10)
+            Spacer()
         }
-        .padding(40)
+        .padding([.top, .bottom], 10)
         .onTapGesture {
             withAnimation {
                 ContentViewModel.shared.mainViewContent = .navigationView

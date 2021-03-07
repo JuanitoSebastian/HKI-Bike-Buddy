@@ -13,39 +13,79 @@ struct CapacityBar: View {
     let spacesAvailable: Int
 
     var body: some View {
-        GeometryReader { geometry in
-            ZStack(alignment: .leading) {
-                Rectangle()
-                    .foregroundColor(Color("CapacityBarBackground"))
-                    .frame(width: geometry.size.width, height: geometry.size.height)
+        barToDisplay
+        .frame(height: 30)
+        .overlay(
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(Color("CapacityBarBorder"), lineWidth: 1)
+        )
+    }
 
-                Rectangle().frame(width: progressWidth(fullWidth: geometry.size.width), height: geometry.size.height)
-                    .foregroundColor(progressColor)
-                    .animation(.easeInOut)
-            }
+    var barToDisplay: AnyView {
+        if bikesAvailable > 0 {
+            return bikesAreAvailableBar
         }
-        .frame(height: 20)
+        return noBikesAreAvailableBar
+    }
+
+    var noBikesAreAvailableBar: AnyView {
+        AnyView(
+            GeometryReader { geometry in
+                ZStack(alignment: .leading) {
+                    Rectangle()
+                        .foregroundColor(Color("CapacityBarBg"))
+                        .frame(width: geometry.size.width, height: geometry.size.height)
+                        .cornerRadius(10)
+                    HStack {
+                        Spacer()
+                        Text("No bikes available")
+                            .font(.caption)
+                            .fontWeight(.medium)
+                            .foregroundColor(Color("TextMain"))
+                        Spacer()
+                    }
+                }
+            }
+        )
+    }
+
+    var bikesAreAvailableBar: AnyView {
+        AnyView(
+            GeometryReader { geometry in
+                ZStack(alignment: .leading) {
+                    Rectangle()
+                        .foregroundColor(Color("CapacityBarBg"))
+                        .frame(width: geometry.size.width, height: geometry.size.height)
+                        .cornerRadius(10)
+
+                    Rectangle().frame(
+                        width: progressWidth(fullWidth: geometry.size.width),
+                        height: geometry.size.height
+                    )
+                        .foregroundColor(capacityColor)
+                        .animation(.easeInOut)
+                        .cornerRadius(10)
+                }
+            }
+        )
     }
 
     func progressWidth(fullWidth: CGFloat) -> CGFloat {
         return fullWidth * CGFloat(factor)
     }
 
-    var progressColor: Color {
-        return Color("TextMain")
+    var capacityColor: Color {
+        return Color("CapacityBarBikesNormal")
     }
 
     var factor: Double {
-        Double(bikesAvailable) / Double(spacesAvailable + bikesAvailable)
+        return Double(bikesAvailable) / Double(spacesAvailable + bikesAvailable)
     }
 
-    var factorInvert: Double {
-        Double(spacesAvailable) / Double(spacesAvailable + bikesAvailable)
-    }
 }
 
 struct CapacityBar_Previews: PreviewProvider {
     static var previews: some View {
-        CapacityBar(bikesAvailable: 4, spacesAvailable: 6)
+        CapacityBar(bikesAvailable: 0, spacesAvailable: 0)
     }
 }
