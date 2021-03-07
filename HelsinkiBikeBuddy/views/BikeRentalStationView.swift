@@ -17,10 +17,13 @@ struct BikeRentalStationView: View {
             .padding([.top, .bottom], 10)
             .padding([.leading, .trailing], 5)
             .shadow(color: Color("StationCardShadow"), radius: 3, x: 0, y: 3)
+            .blendMode(.softLight)
     }
 
     var content: AnyView {
         switch viewModel.state {
+
+        // MARK: - - STATION AVAILABLE
         case BikeRentalStationViewState.normal:
             return AnyView(
                 ZStack {
@@ -32,7 +35,7 @@ struct BikeRentalStationView: View {
                             Spacer()
                             FavoriteMarker(isFavorite: viewModel.favorite)
                                 .onTapGesture {
-                                    viewModel.favorite = !viewModel.favorite
+                                    viewModel.toggleFav()
                                 }
                         }
                         HStack {
@@ -69,6 +72,8 @@ struct BikeRentalStationView: View {
                     }
                 }
             )
+
+        // MARK: - - STATION UNAVAILABLE
         case .unavailable:
             return AnyView(
                 ZStack {

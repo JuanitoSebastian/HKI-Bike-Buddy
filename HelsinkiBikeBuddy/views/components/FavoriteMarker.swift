@@ -14,10 +14,12 @@ struct FavoriteMarker: View {
     var body: some View {
         if isFavorite {
             Image(systemName: "heart.fill")
-                .foregroundColor(Color("Yellow"))
+                .foregroundColor(Color("FavoriteHeart"))
+                .font(.system(size: 28))
         } else {
             Image(systemName: "heart")
-                .foregroundColor(Color("TextSub"))
+                .foregroundColor(Color("UnFavoriteHeart"))
+                .font(.system(size: 28))
         }
     }
 }

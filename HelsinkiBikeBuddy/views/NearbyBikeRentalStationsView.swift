@@ -33,7 +33,13 @@ struct NearbyBikeRentalStationsListView: View {
                     }
                     Spacer()
                 }
-                .background(Color("AppBackground"))
+                .background(
+                    Image("mainBgImg")
+                        .resizable()
+                        .scaledToFill()
+                        .background(Color("AppBackground"))
+
+                )
             )
         default:
             return AnyView(

@@ -22,13 +22,24 @@ struct FavoriteBikeRentalStationsListView: View {
             return AnyView(
                 VStack {
                     ScrollView {
+                        Text("My Stations")
+                            .font(.custom("Helvetica Neue Condensed Bold", size: 55))
+                            .foregroundColor(Color("TextTitle"))
+                            .padding([.top, .bottom], 10)
+
                         ForEach(viewModel.favoriteBikeRentalStations, id: \.id) { bikeRentalStation in
                             BikeRentalStationView(viewModel: BikeRentalStationViewModel(bikeRentalStation: bikeRentalStation))
-                            Divider()
                         }
                     }
                     Spacer()
                 }
+                .background(
+                    Image("mainBgImg")
+                        .resizable()
+                        .scaledToFill()
+                        .background(Color("AppBackground"))
+
+                )
             )
 
         case FavoriteBikeRentalStationsState.noFavorites:

@@ -9,6 +9,7 @@ import Foundation
 import CoreData
 import CoreLocation
 import Combine
+import UIKit
 
 class BikeRentalStationViewModel: ObservableObject {
 
@@ -76,6 +77,12 @@ class BikeRentalStationViewModel: ObservableObject {
                 BikeRentalService.shared.fetchNearbyStations()
             }
         }
+    }
+
+    func toggleFav() {
+        let generator = UIImpactFeedbackGenerator(style: .light)
+        generator.impactOccurred()
+        favorite = !favorite
     }
 
     func distanceInMeters() -> String {
