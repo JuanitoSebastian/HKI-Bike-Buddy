@@ -12,7 +12,17 @@ struct FavoriteBikeRentalStationsListView: View {
     @ObservedObject var viewModel = FavoriteBikeRentalStationViewModel.shared
 
     var body: some View {
-        content
+        VStack {
+             content
+         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(
+            Image("mainBgImg")
+                .resizable()
+                .scaledToFill()
+                .background(Color("AppBackground"))
+
+        )
     }
 
     var content: AnyView {
@@ -33,18 +43,15 @@ struct FavoriteBikeRentalStationsListView: View {
                     }
                     Spacer()
                 }
-                .background(
-                    Image("mainBgImg")
-                        .resizable()
-                        .scaledToFill()
-                        .background(Color("AppBackground"))
-
-                )
             )
 
         case FavoriteBikeRentalStationsState.noFavorites:
             return AnyView(
                 VStack {
+                    Text("My Stations")
+                        .font(.custom("Helvetica Neue Condensed Bold", size: 55))
+                        .foregroundColor(Color("TextTitle"))
+                        .padding([.top, .bottom], 10)
                     Spacer()
                     Text("🚴‍♀️")
                         .padding(5)

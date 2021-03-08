@@ -69,6 +69,8 @@ struct ContentView: View {
                         }
                         .tag(MainViewNavigation.map)
                     }
+                    .background(Color("NavBarBg"))
+                    .accentColor(Color("NavBarIconActive"))
                     .navigationBarHidden(true)
                     .navigationBarItems(
                         trailing: Button(action: { BikeRentalService.shared.fetchNearbyStations() }, label: {

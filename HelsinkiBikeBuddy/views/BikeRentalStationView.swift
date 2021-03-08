@@ -64,6 +64,9 @@ struct BikeRentalStationView: View {
                 .background(Color("StationCardBg"))
                 .cornerRadius(10)
                 .padding([.leading, .trailing], 10)
+                .onTapGesture(count: 2) {
+                    viewModel.toggleFav()
+                }
                 .onTapGesture {
                     withAnimation {
                         DetailedBikeRentalStationViewModel.shared.bikeRentalStation = viewModel.bikeRentalStation

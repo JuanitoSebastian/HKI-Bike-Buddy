@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-// FIX tässä on j oku ongelma viewmodelin kanssa
+// TODO: Pull to refrseh!
 struct NearbyBikeRentalStationsListView: View {
 
     @ObservedObject var viewModel = NearbyBikeRentalStationsListViewModel.shared
@@ -14,6 +14,14 @@ struct NearbyBikeRentalStationsListView: View {
        VStack {
             content
         }
+       .frame(maxWidth: .infinity, maxHeight: .infinity)
+       .background(
+           Image("mainBgImg")
+               .resizable()
+               .scaledToFill()
+               .background(Color("AppBackground"))
+
+       )
 
     }
 
@@ -33,13 +41,6 @@ struct NearbyBikeRentalStationsListView: View {
                     }
                     Spacer()
                 }
-                .background(
-                    Image("mainBgImg")
-                        .resizable()
-                        .scaledToFill()
-                        .background(Color("AppBackground"))
-
-                )
             )
         default:
             return AnyView(

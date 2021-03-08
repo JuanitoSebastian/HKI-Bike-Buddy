@@ -9,7 +9,8 @@ import Foundation
 import CoreLocation
 import MapKit
 
-// TODO: Error handling for situatuions when locations cannot be gotten
+// TODO: Error handling for locations
+// TODO: Handling inaccurate locations
 
 class UserLocationManager: ObservableObject {
 
