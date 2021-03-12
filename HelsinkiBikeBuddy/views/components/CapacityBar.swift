@@ -14,11 +14,8 @@ struct CapacityBar: View {
 
     var body: some View {
         barToDisplay
-        .frame(height: 30)
-        .overlay(
-            RoundedRectangle(cornerRadius: 10)
-                .stroke(Color("CapacityBarBorder"), lineWidth: 1)
-        )
+        .frame(height: 15)
+
     }
 
     var barToDisplay: AnyView {
@@ -36,14 +33,6 @@ struct CapacityBar: View {
                         .foregroundColor(Color("CapacityBarBg"))
                         .frame(width: geometry.size.width, height: geometry.size.height)
                         .cornerRadius(10)
-                    HStack {
-                        Spacer()
-                        Text("No bikes available")
-                            .font(.caption)
-                            .fontWeight(.medium)
-                            .foregroundColor(Color("TextMain"))
-                        Spacer()
-                    }
                 }
             }
         )

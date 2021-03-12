@@ -8,6 +8,7 @@
 import WidgetKit
 import SwiftUI
 import Intents
+import CoreLocation
 
 struct Provider: IntentTimelineProvider {
     func placeholder(in context: Context) -> BikeRentalStationWidgetEntry {
@@ -73,6 +74,16 @@ struct BikeRentalStationWidgetEntry: TimelineEntry {
 struct BikeBuddyWidgetEntryView: View {
     var entry: Provider.Entry
 
+    func distanceInMeters() -> String {
+        let location = CLLocation(latitude: entry.bikeRentalStation!.lat, longitude: entry.bikeRentalStation!.lon)
+        var distanceDouble = Double(location.distance(from: UserLocationManager.shared.userLocation)).rounded()
+        if distanceDouble >= 1000 {
+            distanceDouble /= 1000
+            return "\(String(distanceDouble))km"
+        }
+        return "\(String(distanceDouble))m"
+    }
+
     var body: some View {
         content
     }
@@ -80,7 +91,7 @@ struct BikeBuddyWidgetEntryView: View {
     var content: AnyView {
         if entry.bikeRentalStation == nil {
             return AnyView(
-                Text("Choose a station")
+                Text("Start by choosing the station!")
             )
         }
         return AnyView(
@@ -89,23 +100,36 @@ struct BikeBuddyWidgetEntryView: View {
                     HStack {
                         Text(entry.bikeRentalStation!.name)
                             .font(.custom("Helvetica Neue Condensed Bold", size: 35))
+                            .foregroundColor(Color("TextTitle"))
                         Spacer()
                     }
-                    Spacer()
-                    CapacityBar(bikesAvailable: Int(entry.bikeRentalStation!.bikesAvailable), spacesAvailable: Int(entry.bikeRentalStation!.spacesAvailable))
                     HStack {
-                        Text("\(entry.bikeRentalStation!.bikesAvailable) bikes")
-                            .font(.headline)
+                        Text("\(distanceInMeters()) away 🚶")
                             .foregroundColor(Color("TextMain"))
                         Spacer()
-                        Text("\(entry.bikeRentalStation!.spacesAvailable) spaces")
-                            .font(.headline)
-                            .foregroundColor(Color("TextMain"))
+
                     }
+                    VStack {
+                        CapacityBar(bikesAvailable: Int(entry.bikeRentalStation!.bikesAvailable), spacesAvailable: Int(entry.bikeRentalStation!.spacesAvailable))
+                            .shadow(color: Color("StationCardShadow"), radius: 3, x: 0, y: 3)
+                        HStack {
+                            Text("\(entry.bikeRentalStation!.bikesAvailable) bikes")
+                                .font(.headline)
+                                .foregroundColor(Color("TextMain"))
+                            Spacer()
+                            Text("\(entry.bikeRentalStation!.spacesAvailable) spaces")
+                                .font(.headline)
+                                .foregroundColor(Color("TextMain"))
+                        }
+                        .padding([.leading, .trailing, .bottom], 10)
+                    }
+                    .background(Color("StationInfoBg"))
+                    .cornerRadius(10)
                 }
                 .padding([.leading, .trailing], 15)
-                .padding([.bottom, .top], 10)
             }
+            .padding([.bottom], 20)
+            .padding([.top], 10)
         )
     }
 }
@@ -118,8 +142,8 @@ struct BikeBuddyWidget: Widget {
         IntentConfiguration(kind: kind, intent: ConfigurationIntent.self, provider: Provider()) { entry in
             BikeBuddyWidgetEntryView(entry: entry)
         }
-        .configurationDisplayName("My Widget")
-        .description("This is an example widget.")
+        .configurationDisplayName("Bike Rental Station")
+        .description("View the current status of a favorited bike rental station.")
         .supportedFamilies([.systemMedium])
     }
 }

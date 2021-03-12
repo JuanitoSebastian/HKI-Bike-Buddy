@@ -22,7 +22,7 @@ enum ApiState {
 }
 
 // TODO: Handle errors in networking
-// TODO: UserSettings -> Nearby length
+// TODO: Handle upddating of saved stations
 
 class BikeRentalService: ObservableObject, ReachabilityObserverDelegate {
 
@@ -70,11 +70,6 @@ class BikeRentalService: ObservableObject, ReachabilityObserverDelegate {
     func updateFavorites() {
         for var bikeRentalStation in BikeRentalStationStorage.shared.stationsFavorite.value {
             bikeRentalStation.fetched = Date()
-
-            let total = Int64(bikeRentalStation.totalCapacity)
-
-            bikeRentalStation.bikesAvailable = Int64.random(in: 0...total)
-            bikeRentalStation.spacesAvailable = total - bikeRentalStation.bikesAvailable
 
         }
         BikeRentalStationStorage.shared.saveMoc()

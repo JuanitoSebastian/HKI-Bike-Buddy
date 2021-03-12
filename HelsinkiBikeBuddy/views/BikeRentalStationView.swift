@@ -45,16 +45,23 @@ struct BikeRentalStationView: View {
 
                         }
                         .padding([.bottom], 5)
-                        HStack {
-                            Text("\(viewModel.bikes) bikes")
-                                .font(.headline)
-                                .foregroundColor(Color("TextMain"))
-                            Spacer()
-                            Text("\(viewModel.spaces) spaces")
-                                .font(.headline)
-                                .foregroundColor(Color("TextMain"))
+                        VStack {
+                            CapacityBar(bikesAvailable: viewModel.bikes, spacesAvailable: viewModel.spaces)
+                                .shadow(color: Color("StationCardShadow"), radius: 3, x: 0, y: 3)
+                            HStack {
+                                Text("\(viewModel.bikes) bikes")
+                                    .font(.headline)
+                                    .foregroundColor(Color("TextMain"))
+                                Spacer()
+                                Text("\(viewModel.spaces) spaces")
+                                    .font(.headline)
+                                    .foregroundColor(Color("TextMain"))
+                            }
+                            .padding([.leading, .trailing, .bottom], 10)
                         }
-                        CapacityBar(bikesAvailable: viewModel.bikes, spacesAvailable: viewModel.spaces)
+                        .background(Color("StationInfoBg"))
+                        .cornerRadius(10)
+
                     }
                     .padding([.leading, .trailing], 15)
                     .padding([.top], 5)
