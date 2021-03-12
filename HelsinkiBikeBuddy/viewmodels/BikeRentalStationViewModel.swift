@@ -15,7 +15,6 @@ class BikeRentalStationViewModel: ObservableObject {
 
     @Published var bikeRentalStation: RentalStation
     @Published var walkingTime: String?
-    @Published var state: BikeRentalStationViewState = BikeRentalStationViewState.normal
 
     let bikeRentalStorage = BikeRentalStationStorage.shared
     let userLocationManager = UserLocationManager.shared
@@ -79,8 +78,26 @@ class BikeRentalStationViewModel: ObservableObject {
         }
     }
 
+    var state: BikeRentalStationViewState {
+        return bikeRentalStation.state ? .normal : .unavailable
+    }
+
+    var grayScaleAmount: Double {
+        switch state {
+        case .unavailable: return 1
+        default: return 0
+        }
+    }
+
+    var blurAmount: CGFloat {
+        switch state {
+        case .unavailable: return 2
+        default: return 0
+        }
+    }
+
     func toggleFav() {
-        let generator = UIImpactFeedbackGenerator(style: .light)
+        let generator = UIImpactFeedbackGenerator(style: .rigid)
         generator.impactOccurred()
         favorite = !favorite
     }

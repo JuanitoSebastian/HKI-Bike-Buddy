@@ -35,50 +35,42 @@ struct ContentView: View {
     var main: AnyView {
         AnyView(
             ZStack {
-                NavigationView {
-                    TabView(selection: $viewModel.navigationSelection) {
-                        NearbyBikeRentalStationsListView()
-                            .onTapGesture {
-                                viewModel.navigationSelection = MainViewNavigation.nearbyStations
-                            }
-                            .tabItem {
-                                Image(systemName: "bicycle")
-                                Text("Neaby Stations")
-                            }
-                            .tag(MainViewNavigation.nearbyStations)
-
-                        FavoriteBikeRentalStationsListView()
-                            .onTapGesture {
-                                viewModel.navigationSelection = MainViewNavigation.myStations
-                            }
-                            .tabItem {
-                                Image(systemName: "heart")
-                                Text("My Stations")
-                            }
-                            .tag(MainViewNavigation.myStations)
-
-                        CreateBikeRentalStationView(
-                            viewModel: CreateBikeRentalStationViewModel()
-                        )
+                TabView(selection: $viewModel.navigationSelection) {
+                    NearbyBikeRentalStationsListView()
                         .onTapGesture {
-                            viewModel.navigationSelection = MainViewNavigation.map
+                            viewModel.navigationSelection = MainViewNavigation.nearbyStations
                         }
                         .tabItem {
-                            Image(systemName: "map")
-                            Text("Map")
+                            Image(systemName: "bicycle")
+                            Text("Neaby Stations")
                         }
-                        .tag(MainViewNavigation.map)
-                    }
-                    .background(Color("NavBarBg"))
-                    .accentColor(Color("NavBarIconActive"))
-                    .navigationBarHidden(true)
-                    .navigationBarItems(
-                        trailing: Button(action: { BikeRentalService.shared.fetchNearbyStations() }, label: {
-                        Image(systemName: "gear").imageScale(.large)
-                    }))
+                        .tag(MainViewNavigation.nearbyStations)
+
+                    FavoriteBikeRentalStationsListView()
+                        .onTapGesture {
+                            viewModel.navigationSelection = MainViewNavigation.myStations
+                        }
+                        .tabItem {
+                            Image(systemName: "heart.fill")
+                            Text("My Stations")
+                        }
+                        .tag(MainViewNavigation.myStations)
+
+                    SettingsView()
+                        .onTapGesture {
+                            viewModel.navigationSelection = MainViewNavigation.settings
+                        }
+                        .tabItem {
+                            Image(systemName: "eye")
+                            Text("Settings")
+                        }
+                        .tag(MainViewNavigation.settings)
                 }
+                .background(Color("NavBarBg"))
+                .accentColor(Color("NavBarIconActive"))
                 .blur(radius: viewModel.blurAmount)
                 .brightness(viewModel.brightnessAmount)
+
                 if viewModel.mainViewContent == MainViewContent.overlayContent {
                     OverlayContentView()
                         .transition(.opacity)

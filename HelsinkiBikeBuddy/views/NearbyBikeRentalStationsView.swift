@@ -11,17 +11,16 @@ struct NearbyBikeRentalStationsListView: View {
 
     @ObservedObject var viewModel = NearbyBikeRentalStationsListViewModel.shared
     var body: some View {
-       VStack {
+        VStack {
             content
         }
-       .frame(maxWidth: .infinity, maxHeight: .infinity)
-       .background(
-           Image("mainBgImg")
-               .resizable()
-               .scaledToFill()
-               .background(Color("AppBackground"))
-
-       )
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(
+            Image("mainBgImg")
+                .resizable()
+                .scaledToFill()
+                .background(Color("AppBackground"))
+        )
 
     }
 

@@ -14,7 +14,7 @@ struct PersistenceController {
     let container: NSPersistentContainer
 
     init(inMemory: Bool) {
-        container = NSPersistentContainer(name: "HelsinkiBikeBuddy")
+        container = NSCustomPersistentContainer(name: "HelsinkiBikeBuddy")
         if inMemory {
             let description = NSPersistentStoreDescription()
             description.url = URL(fileURLWithPath: "/dev/null")
@@ -37,4 +37,15 @@ struct PersistenceController {
             }
         })
     }
+}
+
+
+class NSCustomPersistentContainer: NSPersistentContainer {
+
+    override open class func defaultDirectoryURL() -> URL {
+        var storeURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.HelsinkiBikeBuddy")
+        storeURL = storeURL?.appendingPathComponent("HelsinkiBikeBuddy.sqlite")
+        return storeURL!
+    }
+
 }

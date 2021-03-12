@@ -83,37 +83,40 @@ struct BikeRentalStationView: View {
                     VStack {
                         HStack {
                             Text(viewModel.name)
-                                .font(.title)
-                                .fontWeight(.bold)
-                                .foregroundColor(Color("TextMain"))
+                                .font(.custom("Helvetica Neue Condensed Bold", size: 35))
+                                .foregroundColor(Color("TextTitle"))
                             Spacer()
                             FavoriteMarker(isFavorite: viewModel.favorite)
                                 .onTapGesture {
-                                    viewModel.favorite = !viewModel.favorite
+                                    viewModel.toggleFav()
                                 }
                         }
-                        .padding([.leading, .trailing], 20)
+
                         HStack {
                             Text("\(viewModel.distanceInMeters()) away 🚶")
                                 .foregroundColor(Color("TextMain"))
                             Spacer()
 
                         }
-                        .padding([.leading, .trailing], 20)
                         .padding([.bottom], 5)
+
                         HStack {
-                            Text("\(viewModel.bikes) bikes")
-                                .font(.headline)
-                                .foregroundColor(Color("TextMain"))
                             Spacer()
-                            Text("\(viewModel.spaces) spaces")
-                                .font(.headline)
-                                .foregroundColor(Color("TextMain"))
+                            Text("Station not in use 🚳")
+                            Spacer()
                         }
-                        .padding([.leading, .trailing], 20)
-                        CapacityBar(bikesAvailable: viewModel.bikes, spacesAvailable: viewModel.spaces)
 
                     }
+                    .padding([.leading, .trailing], 15)
+                    .padding([.top], 5)
+                    .padding([.bottom], 10)
+                }
+
+                .background(Color("StationCardBg"))
+                .cornerRadius(10)
+                .padding([.leading, .trailing], 10)
+                .onTapGesture(count: 2) {
+                    viewModel.toggleFav()
                 }
             )
         }
@@ -140,5 +143,6 @@ func createBikeRentalStation(viewContext: NSManagedObjectContext) -> BikeRentalS
     bikeRentalStation.bikesAvailable = 5
     bikeRentalStation.fetched = Date()
     bikeRentalStation.favorite = true
+    bikeRentalStation.state = true
     return bikeRentalStation
 }

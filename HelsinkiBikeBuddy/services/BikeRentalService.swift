@@ -26,10 +26,9 @@ enum ApiState {
 
 class BikeRentalService: ObservableObject, ReachabilityObserverDelegate {
 
-    private let bikeRentalStationStore = BikeRentalStationStorage.shared
-    private let userLocationManager = UserLocationManager.shared
     private var timer: Timer?
     @Published var apiState: ApiState
+    var lastFetchAccurate: Bool?
 
     // Singleton
     static let shared = BikeRentalService()
@@ -69,7 +68,7 @@ class BikeRentalService: ObservableObject, ReachabilityObserverDelegate {
     }
 
     func updateFavorites() {
-        for var bikeRentalStation in bikeRentalStationStore.stationsFavorite.value {
+        for var bikeRentalStation in BikeRentalStationStorage.shared.stationsFavorite.value {
             bikeRentalStation.fetched = Date()
 
             let total = Int64(bikeRentalStation.totalCapacity)
@@ -78,28 +77,30 @@ class BikeRentalService: ObservableObject, ReachabilityObserverDelegate {
             bikeRentalStation.spacesAvailable = total - bikeRentalStation.bikesAvailable
 
         }
-        bikeRentalStationStore.saveMoc()
+        BikeRentalStationStorage.shared.saveMoc()
     }
 
     func updateStationValues(
         bikeRentalStation: BikeRentalStation,
-        resBikeRentalStop: AllBikeRentalStatationsQuery.Data.BikeRentalStation
+        resBikeRentalStop: FetchNearByBikeRentalStationsQuery.Data.Nearest.Edge.Node.Place.AsBikeRentalStation
     ) {
         bikeRentalStation.lat = resBikeRentalStop.lat!
         bikeRentalStation.lon = resBikeRentalStop.lon!
-        bikeRentalStation.spacesAvailable = Int64.random(in: 0...15)
-        bikeRentalStation.bikesAvailable = Int64.random(in: 0...15)
+        bikeRentalStation.spacesAvailable = Int64(resBikeRentalStop.spacesAvailable!)
+        bikeRentalStation.bikesAvailable = Int64(resBikeRentalStop.bikesAvailable!)
         bikeRentalStation.allowDropoff = resBikeRentalStop.allowDropoff!
-        bikeRentalStation.favorite = false
-        bikeRentalStation.state = true
+        bikeRentalStation.state = parseStateString(resBikeRentalStop.state!)
     }
 
     func fetchNearbyStations() {
+        guard let userLocation = UserLocationManager.shared.userLocationObj else { return }
         if apiState == .error { return }
+
+        lastFetchAccurate = UserLocationManager.shared.isLocationAccurate
         Network.shared.apollo.fetch(
             query: FetchNearByBikeRentalStationsQuery(
-                lat: userLocationManager.userLocation.coordinate.latitude,
-                lon: userLocationManager.userLocation.coordinate.longitude,
+                lat: userLocation.coordinate.latitude,
+                lon: userLocation.coordinate.longitude,
                 maxDistance: UserSettingsManager.shared.nearbyDistance
             )
         ) { result in
@@ -112,29 +113,62 @@ class BikeRentalService: ObservableObject, ReachabilityObserverDelegate {
                     guard let stationUnwrapped = self.unwrapGraphQLStationObject(edge?.node?.place?.asBikeRentalStation) else {
                         return
                     }
-                    if let bikeRentalStationCoreData = self.bikeRentalStationStore.bikeRentalStationFromCoreData(
+                    if let bikeRentalStationCoreData = BikeRentalStationStorage.shared.bikeRentalStationFromCoreData(
                         stationId: stationUnwrapped.stationId!
                     ) {
+                        self.updateStationValues(
+                            bikeRentalStation: bikeRentalStationCoreData,
+                            resBikeRentalStop: stationUnwrapped
+                        )
                         nearbyStationFetched.append(bikeRentalStationCoreData)
                     } else {
                         let bikeRentalStationUnmanaged = UnmanagedBikeRentalStation(
                             stationId: stationUnwrapped.stationId!,
                             name: stationUnwrapped.name,
                             allowDropoff: stationUnwrapped.allowDropoff!,
-                            bikesAvailable: Int64.random(in: 0...15),
+                            bikesAvailable: Int64(stationUnwrapped.bikesAvailable!),
                             favorite: false,
                             fetched: Date(),
                             lat: stationUnwrapped.lat!,
                             lon: stationUnwrapped.lon!,
-                            spacesAvailable: Int64.random(in: 0...15),
+                            spacesAvailable: Int64(stationUnwrapped.spacesAvailable!),
                             state: self.parseStateString(stationUnwrapped.state!)
                         )
                         nearbyStationFetched.append(bikeRentalStationUnmanaged)
                     }
-                    self.bikeRentalStationStore.stationsNearby.value = nearbyStationFetched
+                    BikeRentalStationStorage.shared.stationsNearby.value = nearbyStationFetched
                 }
             case .failure(let error):
                 Helper.log("API Fecth failed: \(error)")
+            }
+        }
+    }
+
+    func fetchBikeRentalStation(stationId: String, completition: @escaping (_ rentalStation: UnmanagedBikeRentalStation?) -> Void) {
+        Network.shared.apollo.fetch(query: FetchBikeRentalStationByStationIdQuery(stationId: stationId)) { result in
+            switch result {
+            case .success(let graphQlResults):
+                guard let stationUnwrapped = graphQlResults.data?.bikeRentalStation else { return }
+
+                let bikeRentalStationUnmanaged = UnmanagedBikeRentalStation(
+                    stationId: stationUnwrapped.stationId!,
+                    name: stationUnwrapped.name,
+                    allowDropoff: stationUnwrapped.allowDropoff!,
+                    bikesAvailable: Int64(stationUnwrapped.bikesAvailable!),
+                    favorite: false,
+                    fetched: Date(),
+                    lat: stationUnwrapped.lat!,
+                    lon: stationUnwrapped.lon!,
+                    spacesAvailable: Int64(stationUnwrapped.spacesAvailable!),
+                    state: self.parseStateString(stationUnwrapped.state!)
+                )
+
+                completition(bikeRentalStationUnmanaged)
+
+                Helper.log("Success!")
+            case .failure(let error):
+                Helper.log("AI Fetch failed: \(error)")
+                completition(nil)
             }
         }
     }

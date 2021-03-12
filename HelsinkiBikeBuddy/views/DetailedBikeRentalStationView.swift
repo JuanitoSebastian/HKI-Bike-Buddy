@@ -24,14 +24,12 @@ struct DetailedBikeRentalStationView: View {
                         viewModel.favorite = !viewModel.favorite
                     }
             }
-            .padding([.leading, .trailing], 20)
             HStack {
                 Text(viewModel.distanceToShow)
                     .foregroundColor(Color("TextMain"))
                 Spacer()
 
             }
-            .padding([.leading, .trailing], 20)
             .padding([.bottom], 5)
             HStack {
                 Text("\(viewModel.bikes) bikes")
@@ -42,13 +40,13 @@ struct DetailedBikeRentalStationView: View {
                     .font(.headline)
                     .foregroundColor(Color("TextMain"))
             }
-            .padding([.leading, .trailing], 20)
+
             CapacityBar(bikesAvailable: viewModel.bikes, spacesAvailable: viewModel.spaces)
             MapView(rentalStation: viewModel.bikeRentalStation!)
-                .padding([.leading, .trailing], 20)
                 .padding([.top], 10)
             Spacer()
         }
+        .padding([.leading, .trailing], 20)
         .padding([.top, .bottom], 10)
         .onTapGesture {
             withAnimation {

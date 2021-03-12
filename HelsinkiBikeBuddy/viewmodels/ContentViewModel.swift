@@ -13,17 +13,6 @@ class ContentViewModel: ObservableObject {
     @Published var navigationSelection = MainViewNavigation.myStations
     @Published var mainViewContent = MainViewContent.navigationView
 
-    var navBarTitle: String {
-        switch navigationSelection {
-        case .nearbyStations:
-            return "Nearby Stations."
-        case .myStations:
-            return "My Stations."
-        case .map:
-            return "Map."
-        }
-    }
-
     public static let shared = ContentViewModel()
 
     private init() {
@@ -53,7 +42,7 @@ class ContentViewModel: ObservableObject {
 enum MainViewNavigation: Int, Codable {
     case nearbyStations
     case myStations
-    case map
+    case settings
 }
 
 enum MainViewContent {

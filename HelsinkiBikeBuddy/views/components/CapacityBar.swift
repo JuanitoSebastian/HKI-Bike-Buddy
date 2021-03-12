@@ -75,6 +75,7 @@ struct CapacityBar: View {
     }
 
     var capacityColor: Color {
+        if factor < 0.3 { return Color("CapacityBarBikesLow") }
         return Color("CapacityBarBikesNormal")
     }
 
@@ -86,6 +87,6 @@ struct CapacityBar: View {
 
 struct CapacityBar_Previews: PreviewProvider {
     static var previews: some View {
-        CapacityBar(bikesAvailable: 0, spacesAvailable: 0)
+        CapacityBar(bikesAvailable: 2, spacesAvailable: 8)
     }
 }

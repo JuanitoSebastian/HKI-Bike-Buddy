@@ -12,18 +12,22 @@ import MapKit
 // TODO: Error handling for locations
 // TODO: Handling inaccurate locations
 
-class UserLocationManager: ObservableObject {
+class UserLocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
 
     static let shared: UserLocationManager = UserLocationManager()
     private let manager: CLLocationManager
 
-    private init() {
+    @Published var userLocationObj: CLLocation?
+    @Published var isLocationAccurate: Bool = false
+
+    override private init() {
         manager = CLLocationManager()
+        super.init()
+        manager.delegate = self
         requestPermissions()
     }
 
     func requestPermissions() {
-        manager.requestAlwaysAuthorization()
         manager.requestWhenInUseAuthorization()
     }
 
@@ -36,6 +40,30 @@ class UserLocationManager: ObservableObject {
             latitude: manager.location?.coordinate.latitude ?? 60.192059,
             longitude: manager.location?.coordinate.longitude ?? 24.945831
         )
+    }
+
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        switch manager.authorizationStatus {
+
+        case .restricted, .denied, .notDetermined:
+            Helper.log("Location access is not permitted")
+
+        default:
+            Helper.log("Location access permitted!")
+            manager.startUpdatingLocation()
+
+        }
+    }
+
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if let locationObj = locations.last {
+            Helper.log(locationObj.horizontalAccuracy)
+            userLocationObj = locationObj
+            isLocationAccurate = locationObj.horizontalAccuracy < 500
+            if BikeRentalService.shared.lastFetchAccurate == nil || !BikeRentalService.shared.lastFetchAccurate! && isLocationAccurate {
+                BikeRentalService.shared.fetchNearbyStations()
+            }
+        }
     }
 
     func getTravelTimeFromUserLocation(destinationLat: Double, destinationLon: Double, completition: @escaping (_ time: TimeInterval?) -> Void) {
