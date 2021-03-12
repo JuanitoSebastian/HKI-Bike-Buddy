@@ -13,46 +13,69 @@ struct DetailedBikeRentalStationView: View {
 
     var body: some View {
         VStack {
-            HStack {
-                Text(viewModel.name)
-                    .font(.title)
-                    .fontWeight(.bold)
-                    .foregroundColor(Color("TextMain"))
-                Spacer()
-                FavoriteMarker(isFavorite: viewModel.favorite)
-                    .onTapGesture {
-                        viewModel.favorite = !viewModel.favorite
+            ZStack {
+                VStack {
+                    HStack {
+                        Text(viewModel.name)
+                            .font(.custom("Helvetica Neue Condensed Bold", size: 35))
+                            .foregroundColor(Color("TextTitle"))
+                        Spacer()
+                        FavoriteMarker(isFavorite: viewModel.favorite)
+                            .onTapGesture {
+
+                            }
                     }
-            }
-            HStack {
-                Text(viewModel.distanceToShow)
-                    .foregroundColor(Color("TextMain"))
-                Spacer()
+                    HStack {
+                        Text("\(viewModel.distanceInMeters()) away 🚶")
+                            .foregroundColor(Color("TextMain"))
+                        Spacer()
 
-            }
-            .padding([.bottom], 5)
-            HStack {
-                Text("\(viewModel.bikes) bikes")
-                    .font(.headline)
-                    .foregroundColor(Color("TextMain"))
-                Spacer()
-                Text("\(viewModel.spaces) spaces")
-                    .font(.headline)
-                    .foregroundColor(Color("TextMain"))
-            }
+                    }
+                    .padding([.bottom], 5)
+                    VStack {
+                        CapacityBar(bikesAvailable: viewModel.bikes, spacesAvailable: viewModel.spaces)
+                            .shadow(color: Color("StationCardShadow"), radius: 3, x: 0, y: 3)
+                        HStack {
+                            Text("\(viewModel.bikes) bikes")
+                                .font(.headline)
+                                .foregroundColor(Color("TextMain"))
+                            Spacer()
+                            Text("\(viewModel.spaces) spaces")
+                                .font(.headline)
+                                .foregroundColor(Color("TextMain"))
+                        }
+                        .padding([.leading, .trailing, .bottom], 10)
+                    }
+                    .background(Color("StationInfoBg"))
+                    .cornerRadius(10)
 
-            CapacityBar(bikesAvailable: viewModel.bikes, spacesAvailable: viewModel.spaces)
-            MapView(rentalStation: viewModel.bikeRentalStation!)
-                .padding([.top], 10)
-            Spacer()
-        }
-        .padding([.leading, .trailing], 20)
-        .padding([.top, .bottom], 10)
-        .onTapGesture {
-            withAnimation {
-                ContentViewModel.shared.mainViewContent = .navigationView
+                }
+                .padding([.leading, .trailing], 15)
+                .padding([.top], 5)
+                .padding([.bottom], 10)
             }
+            .background(Color("StationCardBg"))
+            .cornerRadius(10)
+
+            ZStack {
+                MapView(rentalStation: viewModel.bikeRentalStation!)
+                    .padding([.leading, .trailing], 15)
+                    .padding([.top, .bottom], 10)
+            }
+            .background(Color("StationCardBg"))
+            .cornerRadius(10)
+
+            ZStack {
+                PrettyButton(textToDisplay: "←", perform: { withAnimation { ContentViewModel.shared.mainViewContent = .navigationView }})
+                    .padding([.leading, .trailing], 15)
+                    .padding([.top, .bottom], 10)
+            }
+            .background(Color("StationCardBg"))
+            .cornerRadius(10)
         }
+        .padding([.leading, .trailing], 15)
+        .padding([.top, .bottom], 40)
+        .shadow(color: Color("StationCardShadow"), radius: 3, x: 0, y: 3)
 
     }
 }

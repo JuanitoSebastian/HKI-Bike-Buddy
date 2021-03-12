@@ -23,7 +23,7 @@ class ContentViewModel: ObservableObject {
     var blurAmount: CGFloat {
         switch mainViewContent {
         case .overlayContent:
-            return 2
+            return 10
         default:
             return 0
         }
@@ -32,7 +32,7 @@ class ContentViewModel: ObservableObject {
     var brightnessAmount: Double {
         switch mainViewContent {
         case .overlayContent:
-            return -0.2
+            return -0.01
         default:
             return 0
         }

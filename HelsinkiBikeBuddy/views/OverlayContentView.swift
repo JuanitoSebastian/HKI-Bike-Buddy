@@ -12,13 +12,7 @@ struct OverlayContentView: View {
     @ObservedObject var viewModel = OverlayContentViewController.shared
 
     var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 20)
-                .foregroundColor(.white)
-                .shadow(radius: 5)
-            content
-        }
-        .padding(40)
+        content
     }
 
     var content: AnyView {
