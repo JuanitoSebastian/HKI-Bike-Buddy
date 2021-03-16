@@ -17,11 +17,7 @@ struct FavoriteBikeRentalStationsListView: View {
          }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
-            Image("mainBgImg")
-                .resizable()
-                .scaledToFill()
-                .background(Color("AppBackground"))
-
+            Color("AppBackground")
         )
     }
 
@@ -32,11 +28,6 @@ struct FavoriteBikeRentalStationsListView: View {
             return AnyView(
                 VStack {
                     ScrollView {
-                        Text("My Stations")
-                            .font(.custom("Helvetica Neue Condensed Bold", size: 55))
-                            .foregroundColor(Color("TextTitle"))
-                            .padding([.top, .bottom], 10)
-
                         ForEach(viewModel.favoriteBikeRentalStations, id: \.id) { bikeRentalStation in
                             BikeRentalStationView(viewModel: BikeRentalStationViewModel(bikeRentalStation: bikeRentalStation))
                         }
@@ -48,10 +39,6 @@ struct FavoriteBikeRentalStationsListView: View {
         case FavoriteBikeRentalStationsState.noFavorites:
             return AnyView(
                 VStack {
-                    Text("My Stations")
-                        .font(.custom("Helvetica Neue Condensed Bold", size: 55))
-                        .foregroundColor(Color("TextTitle"))
-                        .padding([.top, .bottom], 10)
                     Spacer()
                     Text("🚴‍♀️")
                         .padding(5)

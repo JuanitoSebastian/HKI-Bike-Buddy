@@ -20,6 +20,14 @@ class ContentViewModel: ObservableObject {
         BikeRentalService.shared.setTimer()
     }
 
+    var title: String {
+        switch navigationSelection {
+        case .nearbyStations: return "Nearby Stations"
+        case .myStations: return "My Stations"
+        case .settings: return "Settings"
+        }
+    }
+
     var blurAmount: CGFloat {
         switch appState {
         case .overlayContent:

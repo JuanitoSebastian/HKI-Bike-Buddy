@@ -16,7 +16,8 @@ struct BikeRentalStationView: View {
         content
             .padding([.top, .bottom], 10)
             .padding([.leading, .trailing], 5)
-            .shadow(color: Color("StationCardShadow"), radius: 3, x: 0, y: 3)
+            .shadow(color: Color("StationCardShadow"), radius: 3, x: 5, y: 5)
+            .shadow(color: Color("StationCardShadow"), radius: 3, x: -5, y: -5)
     }
 
     var content: AnyView {
@@ -29,7 +30,7 @@ struct BikeRentalStationView: View {
                     VStack {
                         HStack {
                             Text(viewModel.name)
-                                .font(.custom("Helvetica Neue Condensed Bold", size: 35))
+                                .font(.custom("Helvetica Neue Medium", size: 24))
                                 .foregroundColor(Color("TextTitle"))
                             Spacer()
                             FavoriteMarker(isFavorite: viewModel.favorite)

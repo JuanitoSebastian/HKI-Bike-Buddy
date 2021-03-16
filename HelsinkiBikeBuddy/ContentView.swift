@@ -38,44 +38,51 @@ struct ContentView: View {
 
     // MARK: - Main Appplication view
     var main: AnyView {
-        AnyView(
+        return AnyView(
             ZStack {
-                TabView(selection: $viewModel.navigationSelection) {
-                    NearbyBikeRentalStationsListView()
-                        .onTapGesture {
-                            viewModel.navigationSelection = MainViewNavigation.nearbyStations
-                        }
-                        .tabItem {
-                            Image(systemName: "bicycle")
-                            Text("Neaby Stations")
-                        }
-                        .tag(MainViewNavigation.nearbyStations)
+                NavigationView {
+                    TabView(selection: $viewModel.navigationSelection) {
+                        NearbyBikeRentalStationsListView()
+                            .onTapGesture {
+                                viewModel.navigationSelection = MainViewNavigation.nearbyStations
+                            }
+                            .tabItem {
+                                Image(systemName: "bicycle")
+                                Text("Neaby Stations")
+                            }
+                            .tag(MainViewNavigation.nearbyStations)
 
-                    FavoriteBikeRentalStationsListView()
-                        .onTapGesture {
-                            viewModel.navigationSelection = MainViewNavigation.myStations
-                        }
-                        .tabItem {
-                            Image(systemName: "heart.fill")
-                            Text("My Stations")
-                        }
-                        .tag(MainViewNavigation.myStations)
+                        FavoriteBikeRentalStationsListView()
+                            .onTapGesture {
+                                viewModel.navigationSelection = MainViewNavigation.myStations
+                            }
+                            .tabItem {
+                                Image(systemName: "heart.fill")
+                                Text("My Stations")
+                            }
+                            .tag(MainViewNavigation.myStations)
 
-                    SettingsView()
-                        .onTapGesture {
-                            viewModel.navigationSelection = MainViewNavigation.settings
+                    }
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbar {
+                        ToolbarItem(placement: ToolbarItemPlacement.navigationBarLeading) {
+                            Text(viewModel.title)
+                                .font(.custom("Helvetica Neue Bold", size: 20))
+                                .foregroundColor(Color("TextTitle"))
                         }
-                        .tabItem {
-                            Image(systemName: "eye")
-                            Text("Settings")
+
+                        ToolbarItem(placement: ToolbarItemPlacement.navigationBarTrailing) {
+                            Image(systemName: "gearshape.fill")
+                                .foregroundColor(Color("TextTitle"))
+                                .font(.system(size: 20))
                         }
-                        .tag(MainViewNavigation.settings)
+                    }
+                    .background(Color("NavBarBg"))
+                    .accentColor(Color("NavBarIconActive"))
+                    .blur(radius: viewModel.blurAmount)
+                    .brightness(viewModel.brightnessAmount)
+
                 }
-                .background(Color("NavBarBg"))
-                .accentColor(Color("NavBarIconActive"))
-                .blur(radius: viewModel.blurAmount)
-                .brightness(viewModel.brightnessAmount)
-
                 if case MainViewContent.overlayContent = viewModel.appState {
                     OverlayContentView()
                         .transition(.opacity)

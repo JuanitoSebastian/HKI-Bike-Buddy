@@ -15,7 +15,7 @@ struct PermissionsPromptView: View {
 
     var body: some View {
         ZStack {
-            Color("AppBackgroundNew").ignoresSafeArea()
+            Color("AppBackground").ignoresSafeArea()
 
             VStack {
                 VStack {
@@ -36,7 +36,8 @@ struct PermissionsPromptView: View {
             .background(Color("StationCardBg"))
             .cornerRadius(10)
             .padding([.leading, .trailing], 15)
-            .shadow(color: Color("StationCardShadow"), radius: 3, x: 0, y: 3)
+            .shadow(color: Color("StationCardShadow"), radius: 3, x: 5, y: 5)
+            .shadow(color: Color("StationCardShadow"), radius: 3, x: -5, y: -5)
 
         }
     }

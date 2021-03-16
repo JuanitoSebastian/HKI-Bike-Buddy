@@ -16,10 +16,7 @@ struct NearbyBikeRentalStationsListView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
-            Image("mainBgImg")
-                .resizable()
-                .scaledToFill()
-                .background(Color("AppBackground"))
+            Color("AppBackground")
         )
 
     }
@@ -30,10 +27,6 @@ struct NearbyBikeRentalStationsListView: View {
             return AnyView(
                 VStack {
                     ScrollView {
-                        Text("Nearby Stations")
-                            .font(.custom("Helvetica Neue Condensed Bold", size: 55))
-                            .foregroundColor(Color("TextTitle"))
-                            .padding([.top, .bottom], 10)
                         ForEach(viewModel.nearbyBikeRentalStations, id: \.id) { stationNearby in
                             BikeRentalStationView(viewModel: BikeRentalStationViewModel(bikeRentalStation: stationNearby))
                         }
