@@ -66,7 +66,6 @@ struct BikeRentalStationView: View {
                     .padding([.top], 5)
                     .padding([.bottom], 10)
                 }
-
                 .background(Color("StationCardBg"))
                 .cornerRadius(10)
                 .padding([.leading, .trailing], 10)
@@ -76,7 +75,7 @@ struct BikeRentalStationView: View {
                 .onTapGesture {
                     withAnimation {
                         DetailedBikeRentalStationViewModel.shared.bikeRentalStation = viewModel.bikeRentalStation
-                        ContentViewModel.shared.mainViewContent = .overlayContent
+                        ContentViewModel.shared.appState = .overlayContent
                         OverlayContentViewController.shared.viewState = .detailedStation
                     }
                 }

@@ -12,6 +12,7 @@ struct ContentView: View {
 
     @ObservedObject var viewModel = ContentViewModel.shared
     @ObservedObject var bikeRentalService = BikeRentalService.shared
+    @ObservedObject var userLocationManager = UserLocationManager.shared
 
     var body: some View {
         contentToDisplay
@@ -19,11 +20,15 @@ struct ContentView: View {
     }
 
     var contentToDisplay: AnyView {
+        if userLocationManager.locationAuthorization == .denied {
+            return AnyView(PermissionsPromptView())
+        }
+
         if bikeRentalService.apiState == .error {
             return error
         }
 
-        switch viewModel.mainViewContent {
+        switch viewModel.appState {
         case .loading:
             return loading
         default:
@@ -71,7 +76,7 @@ struct ContentView: View {
                 .blur(radius: viewModel.blurAmount)
                 .brightness(viewModel.brightnessAmount)
 
-                if viewModel.mainViewContent == MainViewContent.overlayContent {
+                if case MainViewContent.overlayContent = viewModel.appState {
                     OverlayContentView()
                         .transition(.opacity)
                         .animation(.easeIn)

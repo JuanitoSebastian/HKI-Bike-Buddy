@@ -13,13 +13,13 @@ class BikeRentalStationStorage: NSObject, ObservableObject {
 
     var stationsFavorite = CurrentValueSubject<[RentalStation], Never>([])
     var stationsNearby = CurrentValueSubject<[RentalStation], Never>([])
-    private let bikeRentalStationFetchController: NSFetchedResultsController<BikeRentalStation>
 
+    private let bikeRentalStationFetchController: NSFetchedResultsController<BikeRentalStation>
     private var moc: NSManagedObjectContext {
         PersistenceController.shared.container.viewContext
     }
 
-    // Singleton
+    // A singleton instance of the class
     static let shared: BikeRentalStationStorage = BikeRentalStationStorage()
 
     private override init() {
@@ -44,6 +44,20 @@ class BikeRentalStationStorage: NSObject, ObservableObject {
             Helper.log("Failed to fetch stations from Core Data")
         }
     }
+
+}
+
+// MARK: - Creation / Editing / Deletition of Stations
+extension BikeRentalStationStorage {
+
+    func saveMoc() {
+        do {
+            try PersistenceController.shared.container.viewContext.save()
+        } catch {
+            Helper.log("Failed to save MOC: \(error)")
+        }
+    }
+
     // swiftlint:disable:next function_parameter_count
     func createManagedBikeRentalStation(
         name: String,
@@ -164,19 +178,14 @@ class BikeRentalStationStorage: NSObject, ObservableObject {
         saveMoc()
     }
 
-    func saveMoc() {
-        do {
-            try PersistenceController.shared.container.viewContext.save()
-        } catch {
-            Helper.log("Failed to save MOC: \(error)")
-        }
-    }
-
 }
 
+// MARK: - NSFetchedResultsControllerDelegate
 extension BikeRentalStationStorage: NSFetchedResultsControllerDelegate {
+
     public func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         guard let fetchedBikeRentalStations = controller.fetchedObjects as? [BikeRentalStation] else { return }
         self.stationsFavorite.value = fetchedBikeRentalStations
     }
+
 }

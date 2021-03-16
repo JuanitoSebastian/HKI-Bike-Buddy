@@ -16,7 +16,7 @@ struct PrettyButton: View {
         Button { perform() } label: {
             Text(textToDisplay)
                 .font(.headline)
-                .foregroundColor(Color("TextMain"))
+                .foregroundColor(Color("PrettyButtonTxt"))
                 .frame(maxWidth: .infinity, maxHeight: 40)
                 .background(
                     Color("PrettyButtonBg")

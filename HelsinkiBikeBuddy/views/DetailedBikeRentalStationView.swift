@@ -66,7 +66,7 @@ struct DetailedBikeRentalStationView: View {
             .cornerRadius(10)
 
             ZStack {
-                PrettyButton(textToDisplay: "←", perform: { withAnimation { ContentViewModel.shared.mainViewContent = .navigationView }})
+                PrettyButton(textToDisplay: "←", perform: { withAnimation { ContentViewModel.shared.appState = .navigationView }})
                     .padding([.leading, .trailing], 15)
                     .padding([.top, .bottom], 10)
             }

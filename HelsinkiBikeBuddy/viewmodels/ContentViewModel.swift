@@ -11,7 +11,7 @@ import SwiftUI
 class ContentViewModel: ObservableObject {
 
     @Published var navigationSelection = MainViewNavigation.myStations
-    @Published var mainViewContent = MainViewContent.navigationView
+    @Published var appState = MainViewContent.navigationView
 
     public static let shared = ContentViewModel()
 
@@ -21,7 +21,7 @@ class ContentViewModel: ObservableObject {
     }
 
     var blurAmount: CGFloat {
-        switch mainViewContent {
+        switch appState {
         case .overlayContent:
             return 10
         default:
@@ -30,7 +30,7 @@ class ContentViewModel: ObservableObject {
     }
 
     var brightnessAmount: Double {
-        switch mainViewContent {
+        switch appState {
         case .overlayContent:
             return -0.01
         default:
@@ -50,4 +50,5 @@ enum MainViewContent {
     case detailedStationView
     case overlayContent
     case loading
+    case error(String)
 }

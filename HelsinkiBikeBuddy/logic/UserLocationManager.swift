@@ -19,12 +19,12 @@ class UserLocationManager: NSObject, ObservableObject, CLLocationManagerDelegate
 
     @Published var userLocationObj: CLLocation?
     @Published var isLocationAccurate: Bool = false
+    @Published var locationAuthorization: LocationAuthorizationStatus = LocationAuthorizationStatus.denied
 
     override private init() {
         manager = CLLocationManager()
         super.init()
         manager.delegate = self
-        requestPermissions()
     }
 
     func requestPermissions() {
@@ -47,9 +47,11 @@ class UserLocationManager: NSObject, ObservableObject, CLLocationManagerDelegate
 
         case .restricted, .denied, .notDetermined:
             Helper.log("Location access is not permitted")
+            locationAuthorization = .denied
 
         default:
             Helper.log("Location access permitted!")
+            locationAuthorization = .success
             manager.startUpdatingLocation()
 
         }
@@ -96,4 +98,9 @@ class UserLocationManager: NSObject, ObservableObject, CLLocationManagerDelegate
             longitude: lon
         )
     }
+}
+
+enum LocationAuthorizationStatus {
+    case success
+    case denied
 }
