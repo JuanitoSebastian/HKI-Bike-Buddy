@@ -6,10 +6,10 @@
 //
 
 import SwiftUI
-// TODO: Pull to refrseh!
-struct NearbyBikeRentalStationsListView: View {
+struct BikeRentalStationsListView: View {
 
-    @ObservedObject var viewModel = NearbyBikeRentalStationsListViewModel.shared
+    @ObservedObject var viewModel: BikeRentalStationsListViewModel
+
     var body: some View {
         VStack {
             content
@@ -23,12 +23,15 @@ struct NearbyBikeRentalStationsListView: View {
 
     var content: AnyView {
         switch viewModel.state {
-        case .nearbyStations:
+        case .stationsLoaded:
             return AnyView(
                 VStack {
                     ScrollView {
-                        ForEach(viewModel.nearbyBikeRentalStations, id: \.id) { stationNearby in
-                            BikeRentalStationView(viewModel: BikeRentalStationViewModel(bikeRentalStation: stationNearby))
+                        ForEach(viewModel.bikeRentalStations, id: \.id) { bikeRentalStation in
+                            BikeRentalStationView(
+                                viewModel: BikeRentalStationViewModel(bikeRentalStation: bikeRentalStation
+                                )
+                            )
                         }
                     }
                     Spacer()
@@ -38,7 +41,7 @@ struct NearbyBikeRentalStationsListView: View {
             return AnyView(
                 VStack {
                     Spacer()
-                    Text("No bike rental stations nearby... ☹️")
+                    ProgressView()
                     Spacer()
                 }
             )

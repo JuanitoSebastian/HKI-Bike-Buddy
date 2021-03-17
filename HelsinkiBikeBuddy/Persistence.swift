@@ -43,8 +43,7 @@ struct PersistenceController {
 class NSCustomPersistentContainer: NSPersistentContainer {
 
     override open class func defaultDirectoryURL() -> URL {
-        var storeURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.HelsinkiBikeBuddy")
-        storeURL = storeURL?.appendingPathComponent("HelsinkiBikeBuddy.sqlite")
+        let storeURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.HelsinkiBikeBuddy")
         return storeURL!
     }
 

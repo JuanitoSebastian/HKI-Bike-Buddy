@@ -14,6 +14,7 @@ struct BikeRentalStationView: View {
 
     var body: some View {
         content
+            .animation(.spring())
             .padding([.top, .bottom], 10)
             .padding([.leading, .trailing], 5)
             .shadow(color: Color("StationCardShadow"), radius: 3, x: 5, y: 5)
@@ -33,13 +34,15 @@ struct BikeRentalStationView: View {
                                 .font(.custom("Helvetica Neue Medium", size: 24))
                                 .foregroundColor(Color("TextTitle"))
                             Spacer()
-                            FavoriteMarker(isFavorite: viewModel.favorite)
+                            FavoriteMarker(isFavorite: viewModel.favoriteStatus)
                                 .onTapGesture {
-                                    viewModel.toggleFav()
+                                    withAnimation {
+                                        viewModel.toggleFav()
+                                    }
                                 }
                         }
                         HStack {
-                            Text("\(viewModel.distanceInMeters()) away 🚶")
+                            Text("\(viewModel.distanceInMeters()) away")
                                 .foregroundColor(Color("TextMain"))
                             Spacer()
 
@@ -71,7 +74,9 @@ struct BikeRentalStationView: View {
                 .cornerRadius(10)
                 .padding([.leading, .trailing], 10)
                 .onTapGesture(count: 2) {
-                    viewModel.toggleFav()
+                    withAnimation {
+                        viewModel.toggleFav()
+                    }
                 }
                 .onTapGesture {
                     withAnimation {
@@ -89,41 +94,50 @@ struct BikeRentalStationView: View {
                     VStack {
                         HStack {
                             Text(viewModel.name)
-                                .font(.custom("Helvetica Neue Condensed Bold", size: 35))
+                                .font(.custom("Helvetica Neue Medium", size: 24))
                                 .foregroundColor(Color("TextTitle"))
                             Spacer()
-                            FavoriteMarker(isFavorite: viewModel.favorite)
+                            FavoriteMarker(isFavorite: viewModel.favoriteStatus)
                                 .onTapGesture {
-                                    viewModel.toggleFav()
+                                    withAnimation {
+                                        viewModel.toggleFav()
+                                    }
                                 }
                         }
-
                         HStack {
-                            Text("\(viewModel.distanceInMeters()) away 🚶")
+                            Text("\(viewModel.distanceInMeters()) away")
                                 .foregroundColor(Color("TextMain"))
                             Spacer()
 
                         }
                         .padding([.bottom], 5)
-
-                        HStack {
-                            Spacer()
-                            Text("Station not in use 🚳")
-                            Spacer()
+                        VStack {
+                            HStack {
+                                Spacer()
+                                Text("Station is not in use")
+                                    .font(.headline)
+                                    .foregroundColor(Color("TextMain"))
+                                Spacer()
+                            }
+                            .padding(10)
                         }
+                        .background(Color("StationInfoBg"))
+                        .cornerRadius(10)
 
                     }
                     .padding([.leading, .trailing], 15)
                     .padding([.top], 5)
                     .padding([.bottom], 10)
                 }
-
                 .background(Color("StationCardBg"))
                 .cornerRadius(10)
                 .padding([.leading, .trailing], 10)
                 .onTapGesture(count: 2) {
-                    viewModel.toggleFav()
+                    withAnimation {
+                        viewModel.toggleFav()
+                    }
                 }
+
             )
         }
     }

@@ -52,7 +52,6 @@ struct CapacityBar: View {
                         height: geometry.size.height
                     )
                         .foregroundColor(capacityColor)
-                        .animation(.easeInOut)
                         .cornerRadius(10)
                 }
             }
@@ -64,7 +63,7 @@ struct CapacityBar: View {
     }
 
     var capacityColor: Color {
-        if factor < 0.3 { return Color("CapacityBarBikesLow") }
+        // if factor < 0.3 { return Color("CapacityBarBikesLow") }
         return Color("CapacityBarBikesNormal")
     }
 

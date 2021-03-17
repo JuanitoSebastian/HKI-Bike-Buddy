@@ -10,7 +10,8 @@ import SwiftUI
 
 class ContentViewModel: ObservableObject {
 
-    @Published var navigationSelection = MainViewNavigation.myStations
+    @Published var navigationSelection = BikeRentalStationStorage.shared.stationsFavorite.value.isEmpty ?
+        MainViewNavigation.nearbyStations : MainViewNavigation.myStations
     @Published var appState = MainViewContent.navigationView
 
     public static let shared = ContentViewModel()
@@ -45,6 +46,7 @@ class ContentViewModel: ObservableObject {
             return 0
         }
     }
+
 }
 
 enum MainViewNavigation: Int, Codable {

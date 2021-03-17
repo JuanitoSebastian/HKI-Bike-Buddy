@@ -40,8 +40,6 @@ struct FavoriteBikeRentalStationsListView: View {
             return AnyView(
                 VStack {
                     Spacer()
-                    Text("🚴‍♀️")
-                        .padding(5)
                     Text("Nothing here yet...")
                         .font(.caption)
                         .foregroundColor(Color("TextMain"))

@@ -10,36 +10,63 @@ import SwiftUI
 struct PermissionsPromptView: View {
 
     let locationPromptText =
-    "Helsinki Bike Buddy uses the location information of your device to determine the nearest bike rental stations." +
-    " To start using this application you have to grant it access to the location services."
+        "HKI Bike Buddy uses the location information of your device to determine the nearest bike rental stations." +
+        " To start using this application you have to grant it access to the location services."
+
+    let locationPromptTextFromSettings =
+        "HKI Bike Buddy uses the location information of your device to determine the nearest bike rental stations." +
+        " To start using this application you have to grant it access to the location services. \n \n To to this you have to go to Settings -> Privacy -> Location Services -> Helsinki Bike Buddy"
 
     var body: some View {
         ZStack {
             Color("AppBackground").ignoresSafeArea()
 
-            VStack {
-                VStack {
-                    HStack {
+            content
+                .padding([.leading, .trailing], 15)
+
+        }
+    }
+
+    var content: AnyView {
+        if UserSettingsManager.shared.locationServicesPromptDisplayed {
+            return AnyView(
+                Group {
+                    VStack {
                         Text("Before you start,")
                             .font(.custom("Helvetica Neue Bold", size: 35))
                             .foregroundColor(Color("TextTitle"))
+                            .multilineTextAlignment(.leading)
                             .padding([.bottom], 5)
-                        Spacer()
+
+                        Text(locationPromptTextFromSettings)
+                            .multilineTextAlignment(.leading)
+                            .padding([.bottom], 10)
+
                     }
+                    .padding(15)
+                }
+            )
+        }
+
+        return AnyView(
+            VStack {
+                VStack(alignment: .leading) {
+                    Text("Before you start,")
+                        .font(.custom("Helvetica Neue Bold", size: 35))
+                        .foregroundColor(Color("TextTitle"))
+                        .padding([.bottom], 5)
                     Text(locationPromptText)
                         .multilineTextAlignment(.leading)
                         .padding([.bottom], 10)
-                    PrettyButton(textToDisplay: "Enable location services", perform: { UserLocationManager.shared.requestPermissions() })
+                    PrettyButton(textToDisplay: "Enable location services", perform: {
+                        UserLocationManager.shared.requestPermissions()
+                        UserSettingsManager.shared.locationServicesPromptDisplayed = true
+
+                    })
                 }
                 .padding(15)
             }
-            .background(Color("StationCardBg"))
-            .cornerRadius(10)
-            .padding([.leading, .trailing], 15)
-            .shadow(color: Color("StationCardShadow"), radius: 3, x: 5, y: 5)
-            .shadow(color: Color("StationCardShadow"), radius: 3, x: -5, y: -5)
-
-        }
+        )
     }
 }
 

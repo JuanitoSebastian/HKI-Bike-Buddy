@@ -16,6 +16,7 @@ struct FavoriteMarker: View {
             Image(systemName: "heart.fill")
                 .foregroundColor(Color("FavoriteHeart"))
                 .font(.system(size: 28))
+                .shadow(color: Color("FavoriteHeartGlow"), radius: 5)
         } else {
             Image(systemName: "heart")
                 .foregroundColor(Color("UnFavoriteHeart"))

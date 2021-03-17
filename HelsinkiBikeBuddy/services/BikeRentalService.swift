@@ -19,6 +19,7 @@ enum ApiState {
     case allGood
     case setup
     case error
+    case loading
 }
 
 // TODO: Handle errors in networking

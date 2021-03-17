@@ -42,7 +42,11 @@ struct ContentView: View {
             ZStack {
                 NavigationView {
                     TabView(selection: $viewModel.navigationSelection) {
-                        NearbyBikeRentalStationsListView()
+                        BikeRentalStationsListView(
+                            viewModel: BikeRentalStationsListViewModel(
+                                publisher: BikeRentalStationStorage.shared.stationsNearby.eraseToAnyPublisher()
+                            )
+                        )
                             .onTapGesture {
                                 viewModel.navigationSelection = MainViewNavigation.nearbyStations
                             }
@@ -52,7 +56,11 @@ struct ContentView: View {
                             }
                             .tag(MainViewNavigation.nearbyStations)
 
-                        FavoriteBikeRentalStationsListView()
+                        BikeRentalStationsListView(
+                            viewModel: BikeRentalStationsListViewModel(
+                                publisher: BikeRentalStationStorage.shared.stationsFavorite.eraseToAnyPublisher()
+                            )
+                        )
                             .onTapGesture {
                                 viewModel.navigationSelection = MainViewNavigation.myStations
                             }
@@ -72,17 +80,19 @@ struct ContentView: View {
                         }
 
                         ToolbarItem(placement: ToolbarItemPlacement.navigationBarTrailing) {
-                            Image(systemName: "gearshape.fill")
-                                .foregroundColor(Color("TextTitle"))
-                                .font(.system(size: 20))
+                            NavigationLink(destination: SettingsView()) {
+                                Image(systemName: "gearshape.fill")
+                                    .font(.system(size: 20))
+                            }
+                            .buttonStyle(PlainButtonStyle())
                         }
                     }
-                    .background(Color("NavBarBg"))
                     .accentColor(Color("NavBarIconActive"))
                     .blur(radius: viewModel.blurAmount)
                     .brightness(viewModel.brightnessAmount)
 
                 }
+                .accentColor(Color("NavBarIconActive"))
                 if case MainViewContent.overlayContent = viewModel.appState {
                     OverlayContentView()
                         .transition(.opacity)

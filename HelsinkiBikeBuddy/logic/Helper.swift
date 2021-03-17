@@ -24,4 +24,8 @@ class Helper {
         formatted.round(.toNearestOrEven)
         return "\(formatted) minute"
     }
+
+    static func roundToNearest(_ value: Double, toNearest: Double) -> Double {
+      return round(value / toNearest) * toNearest
+    }
 }

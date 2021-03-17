@@ -13,11 +13,6 @@ struct SettingsView: View {
 
     var body: some View {
         VStack {
-            Text("Settings")
-                .font(.custom("Helvetica Neue Condensed Bold", size: 55))
-                .foregroundColor(Color("TextTitle"))
-                .padding([.top, .bottom], 10)
-
             ZStack {
                 VStack {
                     Text("Maximum distance to a nearby station:")
@@ -41,16 +36,14 @@ struct SettingsView: View {
             }
             .background(Color("StationCardBg"))
             .cornerRadius(10)
-            .padding([.leading, .trailing], 10)
-            .shadow(color: Color("StationCardShadow"), radius: 3, x: 0, y: 3)
+            .padding([.leading, .trailing, .top], 10)
+            .shadow(color: Color("StationCardShadow"), radius: 3, x: 5, y: 5)
+            .shadow(color: Color("StationCardShadow"), radius: 3, x: -5, y: -5)
             Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
-            Image("mainBgImg")
-                .resizable()
-                .scaledToFill()
-                .background(Color("AppBackground"))
+            Color("AppBackground")
         )
     }
 }
