@@ -9,13 +9,15 @@ import Foundation
 import CoreData
 import Combine
 
+// MARK: - Initiation of class
 class BikeRentalStationStorage: NSObject, ObservableObject {
 
     var stationsFavorite = CurrentValueSubject<[RentalStation], Never>([])
     var stationsNearby = CurrentValueSubject<[RentalStation], Never>([])
 
     private let bikeRentalStationFetchController: NSFetchedResultsController<BikeRentalStation>
-    private var moc: NSManagedObjectContext {
+
+    var moc: NSManagedObjectContext {
         PersistenceController.shared.container.viewContext
     }
 
@@ -47,7 +49,7 @@ class BikeRentalStationStorage: NSObject, ObservableObject {
 
 }
 
-// MARK: - Creation / Editing / Deletition of Stations
+// MARK: - Creation / Editing of Rental Stations
 extension BikeRentalStationStorage {
 
     func saveMoc() {
@@ -58,8 +60,16 @@ extension BikeRentalStationStorage {
         }
     }
 
+    private func removeFromMoc(_ bikeRentalStationToDelete: BikeRentalStation) {
+        moc.delete(bikeRentalStationToDelete)
+    }
+
+    /**
+     Creates a ManagedBikeRentalStation and returns it
+     - Returns: The ManagedBikeRentalStation created from the parameters
+     */
     // swiftlint:disable:next function_parameter_count
-    func createManagedBikeRentalStation(
+    private func createManagedBikeRentalStation(
         name: String,
         stationId: String,
         lat: Double,
@@ -67,7 +77,7 @@ extension BikeRentalStationStorage {
         spacesAvailable: Int64,
         bikesAvailable: Int64,
         allowDropoff: Bool,
-        favorite: Bool,
+        favourite: Bool,
         state: Bool,
         fetched: Date
     ) -> BikeRentalStation {
@@ -79,14 +89,18 @@ extension BikeRentalStationStorage {
         managedBikeRentalStation.bikesAvailable = bikesAvailable
         managedBikeRentalStation.spacesAvailable = spacesAvailable
         managedBikeRentalStation.allowDropoff = allowDropoff
-        managedBikeRentalStation.favorite = favorite
+        managedBikeRentalStation.favorite = favourite
         managedBikeRentalStation.fetched = fetched
         managedBikeRentalStation.state = state
         return managedBikeRentalStation
     }
 
+    /**
+     Creates an UnmanagedBikeRentalStation.
+     - Returns: The UnmanagedBikeRentalStation created from the parameters
+     */
     // swiftlint:disable:next function_parameter_count
-    func createUnmanagedBikeRentalStation(
+    private func createUnmanagedBikeRentalStation(
         name: String,
         stationId: String,
         lat: Double,
@@ -94,7 +108,7 @@ extension BikeRentalStationStorage {
         spacesAvailable: Int64,
         bikesAvailable: Int64,
         allowDropoff: Bool,
-        favorite: Bool,
+        favourite: Bool,
         state: Bool,
         fetched: Date
     ) -> UnmanagedBikeRentalStation {
@@ -113,6 +127,12 @@ extension BikeRentalStationStorage {
         return unmanagedBikeRentalStation
     }
 
+    /**
+     Fetches a BikeRentalStation from the MOC.
+     - Parameter stationId: The StationId of the BikeRentalStation that will be retrieved.
+     - Returns: The BikeRentalStation corresponding to the provided stationId.
+     If a station is not found nil is returned.
+     */
     func bikeRentalStationFromCoreData(stationId: String) -> BikeRentalStation? {
         let fetchRequest: NSFetchRequest<BikeRentalStation> = NSFetchRequest(entityName: "BikeRentalStation")
         fetchRequest.predicate = NSPredicate(format: "stationId = %@", stationId)
@@ -125,57 +145,82 @@ extension BikeRentalStationStorage {
         } catch {
             Helper.log("Failed to fetch from MOC: \(error)")
         }
-
         return nil
-
     }
 
-    func toManagedStation(unmanaged: RentalStation) -> BikeRentalStation? {
-        if unmanaged is UnmanagedBikeRentalStation {
-            let managedBikeRentalStation = createManagedBikeRentalStation(
-                name: unmanaged.name,
-                stationId: unmanaged.id,
-                lat: unmanaged.lat,
-                lon: unmanaged.lon,
-                spacesAvailable: unmanaged.spacesAvailable,
-                bikesAvailable: unmanaged.bikesAvailable,
-                allowDropoff: unmanaged.allowDropoff,
-                favorite: true,
-                state: unmanaged.state,
-                fetched: unmanaged.fetched
+    /**
+     Converts an UnmanagedBikeRentalStation to a ManagedBikeRentalStation (marking it as a favourite & adding it to MOC)
+     and replaces the Unmanaged object in stationsNearby with the new managed one.
+     - Parameter rentalStation: The RentalStation to favourite
+     */
+    func favouriteStation(rentalStation: RentalStation) {
+        if rentalStation is UnmanagedBikeRentalStation {
+            var stationsNearbyEdited = removeStationFromList(
+                stationToRemove: rentalStation,
+                stations: stationsNearby.value
             )
+            let managedStation = createManagedBikeRentalStation(
+                name: rentalStation.name,
+                stationId: rentalStation.stationId,
+                lat: rentalStation.lat,
+                lon: rentalStation.lon,
+                spacesAvailable: rentalStation.spacesAvailable,
+                bikesAvailable: rentalStation.bikesAvailable,
+                allowDropoff: rentalStation.allowDropoff,
+                favourite: true,
+                state: rentalStation.state,
+                fetched: rentalStation.fetched
+            )
+            stationsNearbyEdited.append(managedStation)
+            stationsNearby.value = stationsNearbyEdited
             saveMoc()
-            return managedBikeRentalStation
         }
-        return nil
     }
 
-    func toUnmanagedStation(managed: RentalStation) -> UnmanagedBikeRentalStation? {
-        if managed is BikeRentalStation {
-            let unmanagedBikeRentalStation = createUnmanagedBikeRentalStation(
-                name: managed.name,
-                stationId: managed.stationId,
-                lat: managed.lat,
-                lon: managed.lon,
-                spacesAvailable: managed.spacesAvailable,
-                bikesAvailable: managed.bikesAvailable,
-                allowDropoff: managed.allowDropoff,
-                favorite: false,
-                state: managed.state,
-                fetched: managed.fetched
+    /**
+     Unfavourites a RentalStation (removing it from MOC).
+     If the station is nearby it is converted to an UnmanagedBikeRentalStations and added to stationsNearby
+     - Parameter rentalStation: The RentalStation to unfavourite
+     */
+    func unfavouriteStation(rentalStation: RentalStation) {
+        let distance = rentalStation.distance(to: UserLocationManager.shared.userLocation)
+
+        if distance <= Double(UserSettingsManager.shared.nearbyDistance) {
+            var stationsEdited = removeStationFromList(stationToRemove: rentalStation, stations: stationsNearby.value)
+            let unmanaged = createUnmanagedBikeRentalStation(
+                name: rentalStation.name,
+                stationId: rentalStation.stationId,
+                lat: rentalStation.lat,
+                lon: rentalStation.lon,
+                spacesAvailable: rentalStation.spacesAvailable,
+                bikesAvailable: rentalStation.bikesAvailable,
+                allowDropoff: rentalStation.allowDropoff,
+                favourite: false,
+                state: rentalStation.state,
+                fetched: rentalStation.fetched
             )
-            // swiftlint:disable force_cast
-            deleteBikeRentalStation(managed as! BikeRentalStation)
-            // swiftlint:enable force_cast
-            stationsNearby.value.append(unmanagedBikeRentalStation)
-            return unmanagedBikeRentalStation
+            stationsEdited.append(unmanaged)
+            stationsNearby.value = stationsEdited
         }
-        return nil
-    }
-
-    func deleteBikeRentalStation(_ bikeRentalStationToDelete: BikeRentalStation) {
-        moc.delete(bikeRentalStationToDelete)
+        // swiftlint:disable force_cast
+        removeFromMoc(rentalStation as! BikeRentalStation)
+        // swiftlint:enable force_cast
         saveMoc()
+    }
+    /**
+     Removes a RentalStation from a list of RentalStations.
+     If stationToRemove is not found in stations it is returned untouched.
+     - Parameter stationToRemove: The RentalStation that should be be removed.
+     - Parameter stations: The list which will be edited
+     - Returns: An edited list of the provided RentalStations.
+     */
+    private func removeStationFromList(stationToRemove: RentalStation, stations: [RentalStation]) -> [RentalStation] {
+        var stationsEdited = stations
+        for (index, rentalStation) in stationsEdited.enumerated()
+        where rentalStation.stationId == stationToRemove.stationId {
+            stationsEdited.remove(at: index)
+        }
+        return stationsEdited
     }
 
 }
@@ -183,8 +228,9 @@ extension BikeRentalStationStorage {
 // MARK: - NSFetchedResultsControllerDelegate
 extension BikeRentalStationStorage: NSFetchedResultsControllerDelegate {
 
+    // When content in the MOC changes the value of stationsFavourite is updated (overwritten) with new values from MOC.
     public func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        guard let fetchedBikeRentalStations = controller.fetchedObjects as? [BikeRentalStation] else { return }
+        guard let fetchedBikeRentalStations = controller.fetchedObjects as? [RentalStation] else { return }
         self.stationsFavorite.value = fetchedBikeRentalStations
     }
 

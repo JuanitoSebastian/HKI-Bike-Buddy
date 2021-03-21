@@ -28,16 +28,32 @@ struct BikeRentalStationsListView: View {
                 VStack {
                     ScrollView {
                         ForEach(viewModel.bikeRentalStations, id: \.id) { bikeRentalStation in
-                            BikeRentalStationView(
-                                viewModel: BikeRentalStationViewModel(bikeRentalStation: bikeRentalStation
+                            NavigationLink(destination: DetailedBikeRentalStationView(viewModel: DetailedBikeRentalStationViewModel(bikeRentalStation: bikeRentalStation))) {
+
+                                BikeRentalStationView(
+                                    viewModel: BikeRentalStationViewModel(bikeRentalStation: bikeRentalStation
+                                    )
                                 )
-                            )
+                            }
+                            .buttonStyle(PlainButtonStyle())
+
                         }
                     }
                     Spacer()
                 }
             )
-        default:
+        case .empty:
+            return AnyView(
+                VStack {
+                    Spacer()
+                    Text(viewModel.listEmptyText)
+                        .foregroundColor(Color("TextMain"))
+                        .font(.caption)
+                    Spacer()
+                }
+            )
+
+        case .loading:
             return AnyView(
                 VStack {
                     Spacer()

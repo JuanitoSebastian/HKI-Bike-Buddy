@@ -32,7 +32,7 @@ class UserLocationManager: NSObject, ObservableObject, CLLocationManagerDelegate
     }
 
     var userLocation: CLLocation {
-        manager.location ?? CLLocation(latitude: 60.192059, longitude: 24.945831)
+        manager.location!
     }
 
     var userLocation2D: CLLocationCoordinate2D {
@@ -52,7 +52,6 @@ class UserLocationManager: NSObject, ObservableObject, CLLocationManagerDelegate
         default:
             Helper.log("Location access permitted!")
             locationAuthorization = .success
-            manager.startUpdatingLocation()
 
         }
     }
@@ -63,7 +62,7 @@ class UserLocationManager: NSObject, ObservableObject, CLLocationManagerDelegate
             userLocationObj = locationObj
             isLocationAccurate = locationObj.horizontalAccuracy < 500
             if BikeRentalService.shared.lastFetchAccurate == nil || !BikeRentalService.shared.lastFetchAccurate! && isLocationAccurate {
-                BikeRentalService.shared.fetchNearbyStations()
+                BikeRentalService.shared.updateAll()
             }
         }
     }

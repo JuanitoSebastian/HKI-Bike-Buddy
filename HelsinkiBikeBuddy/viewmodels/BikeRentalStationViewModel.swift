@@ -15,6 +15,7 @@ class BikeRentalStationViewModel: ObservableObject {
 
     @Published var bikeRentalStation: RentalStation
     @Published var favoriteStatus: Bool
+    private var toggleTriggered: Bool
 
     let bikeRentalStorage = BikeRentalStationStorage.shared
     let userLocationManager = UserLocationManager.shared
@@ -22,6 +23,7 @@ class BikeRentalStationViewModel: ObservableObject {
     init(bikeRentalStation: RentalStation) {
         self.bikeRentalStation = bikeRentalStation
         self.favoriteStatus = bikeRentalStation.favorite
+        self.toggleTriggered = false
     }
 
     var name: String {
@@ -60,66 +62,49 @@ class BikeRentalStationViewModel: ObservableObject {
         CLLocation(latitude: lat, longitude: lon)
     }
 
-    var favorite: Bool {
-        get {
-            return bikeRentalStation.favorite
-        }
-        set(newVal) {
-            if newVal {
-                guard let managedBikeRentalStation
-                        = bikeRentalStorage.toManagedStation(unmanaged: bikeRentalStation) else { return }
-                self.bikeRentalStation = managedBikeRentalStation
-                BikeRentalService.shared.fetchNearbyStations()
-            } else {
-                guard let unmanagedBikeRentalStation
-                        = bikeRentalStorage.toUnmanagedStation(managed: bikeRentalStation) else { return }
-                self.bikeRentalStation = unmanagedBikeRentalStation
-                BikeRentalService.shared.fetchNearbyStations()
-            }
-        }
-    }
-
     var state: BikeRentalStationViewState {
         return bikeRentalStation.state ? .normal : .unavailable
     }
 
-    var grayScaleAmount: Double {
-        switch state {
-        case .unavailable: return 1
-        default: return 0
-        }
-    }
+    /**
+     Toggles the favourite state of the bikeRentalStation
+     */
+    func toggleFavourite() {
+        if toggleTriggered { return }
+        toggleTriggered = true
 
-    var blurAmount: CGFloat {
-        switch state {
-        case .unavailable: return 2
-        default: return 0
-        }
-    }
+        favoriteStatus.toggle()
 
-    func toggleFav() {
-        let generator = UIImpactFeedbackGenerator(style: .rigid)
-        generator.impactOccurred()
-        favoriteStatus = !favoriteStatus
+        // Delay added for more natural feeling haptic feedback
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .milliseconds(200)) {
+            let generator = UIImpactFeedbackGenerator(style: .rigid)
+            generator.impactOccurred()
+        }
+
         if bikeRentalStation.favorite {
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .milliseconds(500)) {
-                guard let unmanagedBikeRentalStation = self.bikeRentalStorage.toUnmanagedStation(managed: self.bikeRentalStation) else { return }
-                self.bikeRentalStation = unmanagedBikeRentalStation
-                BikeRentalService.shared.fetchNearbyStations()
+            // Wait for the heart to turn grey
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .milliseconds(200)) {
+                BikeRentalStationStorage.shared.unfavouriteStation(rentalStation: self.bikeRentalStation)
+                self.toggleTriggered = false
             }
         } else {
-            guard let managedBikeRentalStation = self.bikeRentalStorage.toManagedStation(unmanaged: self.bikeRentalStation) else { return }
-            self.bikeRentalStation = managedBikeRentalStation
-            BikeRentalService.shared.fetchNearbyStations()
+            BikeRentalStationStorage.shared.favouriteStation(rentalStation: bikeRentalStation)
+            toggleTriggered = false
         }
     }
 
     func distanceInMeters() -> String {
-        var distanceDouble = Int(Helper.roundToNearest(coordinates.distance(from: userLocationManager.userLocation), toNearest: 20))
+        var distanceDouble = Int(
+            Helper.roundToNearest(
+                coordinates.distance(from: userLocationManager.userLocation), toNearest: 20
+            )
+        )
+
         if distanceDouble >= 1000 {
             distanceDouble /= 1000
             return "\(String(distanceDouble)) km"
         }
+
         return "\(String(distanceDouble)) m"
     }
 

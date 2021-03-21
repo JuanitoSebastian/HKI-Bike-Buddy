@@ -11,40 +11,60 @@ struct SettingsView: View {
 
     @ObservedObject var viewModel = SettingsViewModel.shared
 
+    init() {
+        UITableView.appearance().backgroundColor = .clear
+    }
+
     var body: some View {
         VStack {
-            ZStack {
-                VStack {
-                    Text("Maximum distance to a nearby station:")
-                        .font(.headline)
-                        .foregroundColor(Color("TextMain"))
-                    Slider(
-                        value: $viewModel.nearbyRange,
-                        in: 250...5000,
-                        step: 250,
-                        onEditingChanged: { editing in
-                            viewModel.nearbyRangeEditing = editing
-                        }
-                    )
-                    Text("\(viewModel.nearbyRangeInt) meters")
-                        .foregroundColor(Color("TextMain"))
-                    PrettyButton(textToDisplay: "Save settings!", perform: { viewModel.saveSettings() })
-                        .padding([.top, .bottom], 5)
+            Form {
+                Section(header: Text("BIKE RENTAL STATIONS")) {
+                    VStack {
+                        Text("Maximum distance to a nearby station:")
+                            .font(.headline)
+                            .foregroundColor(Color("TextMain"))
+                        Slider(
+                            value: $viewModel.nearbyRange,
+                            in: 250...5000,
+                            step: 250,
+                            onEditingChanged: { editing in
+                                if editing { return }
+                                viewModel.saveSettings()
+                            }
+                        )
+                        Text("\(viewModel.nearbyRangeInt) meters")
+                            .foregroundColor(Color("TextMain"))
+                    }
                 }
-                .padding([.leading, .trailing], 15)
-                .padding([.top, .bottom], 10)
+
+                .padding(10)
             }
-            .background(Color("StationCardBg"))
-            .cornerRadius(10)
-            .padding([.leading, .trailing, .top], 10)
-            .shadow(color: Color("StationCardShadow"), radius: 3, x: 5, y: 5)
-            .shadow(color: Color("StationCardShadow"), radius: 3, x: -5, y: -5)
+            .background(
+                Color("AppBackground")
+            )
             Spacer()
+            VStack {
+                HStack(spacing: 0) {
+                    Text("HKI Bike Buddy is developed by ")
+                        .font(.footnote)
+                        .padding([.bottom], 5)
+                    Button { viewModel.openJuanitoHomepage() } label: {
+                        Text("juan.fi")
+                            .font(.footnote)
+                            .fontWeight(.bold)
+                            .padding([.bottom], 5)
+                    }
+                }
+                Text("Data provided by © Helsinki Region Transport \(viewModel.currentYear)")
+                    .font(.footnote)
+            }
         }
+        .padding([.bottom], 10)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
             Color("AppBackground")
         )
+        .navigationTitle(Text("Settings"))
     }
 }
 

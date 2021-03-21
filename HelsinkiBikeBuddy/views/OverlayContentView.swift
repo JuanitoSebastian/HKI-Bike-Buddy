@@ -18,7 +18,7 @@ struct OverlayContentView: View {
     var content: AnyView {
         switch viewModel.viewState {
         case .detailedStation:
-            return AnyView(DetailedBikeRentalStationView())
+            return AnyView(EmptyView())
         case .settings:
             return AnyView(Text("Settings"))
         case .none:

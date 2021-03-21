@@ -16,7 +16,7 @@ struct BikeRentalStationView: View {
         content
             .animation(.spring())
             .padding([.top, .bottom], 10)
-            .padding([.leading, .trailing], 5)
+            .padding([.leading, .trailing], 15)
             .shadow(color: Color("StationCardShadow"), radius: 3, x: 5, y: 5)
             .shadow(color: Color("StationCardShadow"), radius: 3, x: -5, y: -5)
     }
@@ -34,12 +34,12 @@ struct BikeRentalStationView: View {
                                 .font(.custom("Helvetica Neue Medium", size: 24))
                                 .foregroundColor(Color("TextTitle"))
                             Spacer()
-                            FavoriteMarker(isFavorite: viewModel.favoriteStatus)
-                                .onTapGesture {
-                                    withAnimation {
-                                        viewModel.toggleFav()
-                                    }
-                                }
+
+                            Button { viewModel.toggleFavourite() } label: {
+                                FavoriteMarker(isFavorite: viewModel.favoriteStatus)
+                            }
+                            .buttonStyle(StaticHighPriorityButtonStyle())
+
                         }
                         HStack {
                             Text("\(viewModel.distanceInMeters()) away")
@@ -72,17 +72,9 @@ struct BikeRentalStationView: View {
                 }
                 .background(Color("StationCardBg"))
                 .cornerRadius(10)
-                .padding([.leading, .trailing], 10)
                 .onTapGesture(count: 2) {
                     withAnimation {
-                        viewModel.toggleFav()
-                    }
-                }
-                .onTapGesture {
-                    withAnimation {
-                        DetailedBikeRentalStationViewModel.shared.bikeRentalStation = viewModel.bikeRentalStation
-                        ContentViewModel.shared.appState = .overlayContent
-                        OverlayContentViewController.shared.viewState = .detailedStation
+                        viewModel.toggleFavourite()
                     }
                 }
             )
@@ -100,7 +92,7 @@ struct BikeRentalStationView: View {
                             FavoriteMarker(isFavorite: viewModel.favoriteStatus)
                                 .onTapGesture {
                                     withAnimation {
-                                        viewModel.toggleFav()
+                                        viewModel.toggleFavourite()
                                     }
                                 }
                         }
@@ -131,10 +123,9 @@ struct BikeRentalStationView: View {
                 }
                 .background(Color("StationCardBg"))
                 .cornerRadius(10)
-                .padding([.leading, .trailing], 10)
                 .onTapGesture(count: 2) {
                     withAnimation {
-                        viewModel.toggleFav()
+                        viewModel.toggleFavourite()
                     }
                 }
 
@@ -165,4 +156,14 @@ func createBikeRentalStation(viewContext: NSManagedObjectContext) -> BikeRentalS
     bikeRentalStation.favorite = true
     bikeRentalStation.state = true
     return bikeRentalStation
+}
+
+struct StaticHighPriorityButtonStyle: PrimitiveButtonStyle {
+    func makeBody(configuration: PrimitiveButtonStyle.Configuration) -> some View {
+        let gesture = TapGesture()
+            .onEnded { _ in configuration.trigger() }
+
+        return configuration.label
+            .highPriorityGesture(gesture)
+    }
 }

@@ -44,36 +44,38 @@ struct ContentView: View {
                     TabView(selection: $viewModel.navigationSelection) {
                         BikeRentalStationsListView(
                             viewModel: BikeRentalStationsListViewModel(
-                                publisher: BikeRentalStationStorage.shared.stationsNearby.eraseToAnyPublisher()
+                                publisher: BikeRentalStationStorage.shared.stationsNearby.eraseToAnyPublisher(),
+                                stationListType: .nearby
                             )
                         )
-                            .onTapGesture {
-                                viewModel.navigationSelection = MainViewNavigation.nearbyStations
-                            }
-                            .tabItem {
-                                Image(systemName: "bicycle")
-                                Text("Neaby Stations")
-                            }
-                            .tag(MainViewNavigation.nearbyStations)
+                        .onTapGesture {
+                            viewModel.navigationSelection = MainViewNavigation.nearbyStations
+                        }
+                        .tabItem {
+                            Image(systemName: "bicycle")
+                            Text("Neaby Stations")
+                        }
+                        .tag(MainViewNavigation.nearbyStations)
 
                         BikeRentalStationsListView(
                             viewModel: BikeRentalStationsListViewModel(
-                                publisher: BikeRentalStationStorage.shared.stationsFavorite.eraseToAnyPublisher()
+                                publisher: BikeRentalStationStorage.shared.stationsFavorite.eraseToAnyPublisher(),
+                                stationListType: .favorite
                             )
                         )
-                            .onTapGesture {
-                                viewModel.navigationSelection = MainViewNavigation.myStations
-                            }
-                            .tabItem {
-                                Image(systemName: "heart.fill")
-                                Text("My Stations")
-                            }
-                            .tag(MainViewNavigation.myStations)
+                        .onTapGesture {
+                            viewModel.navigationSelection = MainViewNavigation.myStations
+                        }
+                        .tabItem {
+                            Image(systemName: "heart.fill")
+                            Text("My Stations")
+                        }
+                        .tag(MainViewNavigation.myStations)
 
                     }
                     .navigationBarTitleDisplayMode(.inline)
                     .toolbar {
-                        ToolbarItem(placement: ToolbarItemPlacement.navigationBarLeading) {
+                        ToolbarItem(placement: ToolbarItemPlacement.navigationBarLeading) {
                             Text(viewModel.title)
                                 .font(.custom("Helvetica Neue Bold", size: 20))
                                 .foregroundColor(Color("TextTitle"))
@@ -93,12 +95,6 @@ struct ContentView: View {
 
                 }
                 .accentColor(Color("NavBarIconActive"))
-                if case MainViewContent.overlayContent = viewModel.appState {
-                    OverlayContentView()
-                        .transition(.opacity)
-                        .animation(.easeIn)
-                }
-
             }
         )
     }

@@ -15,7 +15,9 @@ class DetailedBikeRentalStationViewModel: ObservableObject {
     let bikeRentalStorage = BikeRentalStationStorage.shared
     let userLocationManager = UserLocationManager.shared
 
-    static let shared = DetailedBikeRentalStationViewModel()
+    init(bikeRentalStation: RentalStation) {
+        self.bikeRentalStation = bikeRentalStation
+    }
 
     var name: String {
         bikeRentalStation?.name ?? "Unavailable"
@@ -54,31 +56,22 @@ class DetailedBikeRentalStationViewModel: ObservableObject {
     }
 
     var favorite: Bool {
-        get {
-            return bikeRentalStation?.favorite ?? false
-        }
-        set(newVal) {
-            if newVal {
-                guard let managedBikeRentalStation
-                        = bikeRentalStorage.toManagedStation(unmanaged: bikeRentalStation!) else { return }
-                self.bikeRentalStation = managedBikeRentalStation
-                BikeRentalService.shared.fetchNearbyStations()
-            } else {
-                guard let unmanagedBikeRentalStation
-                        = bikeRentalStorage.toUnmanagedStation(managed: bikeRentalStation!) else { return }
-                self.bikeRentalStation = unmanagedBikeRentalStation
-                BikeRentalService.shared.fetchNearbyStations()
-            }
-        }
+        return true
     }
 
     func distanceInMeters() -> String {
-        var distanceDouble = Double(coordinates.distance(from: userLocationManager.userLocation)).rounded()
+        var distanceDouble = Int(
+            Helper.roundToNearest(
+                coordinates.distance(from: userLocationManager.userLocation), toNearest: 20
+            )
+        )
+
         if distanceDouble >= 1000 {
             distanceDouble /= 1000
-            return "\(String(distanceDouble))km"
+            return "\(String(distanceDouble)) km"
         }
-        return "\(String(distanceDouble))m"
+
+        return "\(String(distanceDouble)) m"
     }
 
     var distanceToShow: String {

@@ -64,8 +64,14 @@ class BikeRentalService: ObservableObject, ReachabilityObserverDelegate {
 
     @objc
     func updateAll() {
+        Helper.log("Service: Performing updateAll()")
+        setState(.loading)
         updateFavorites()
         fetchNearbyStations()
+        if apiState == .loading {
+            setState(.allGood)
+        }
+        Helper.log("Service: Completed updateAll()")
     }
 
     func updateFavorites() {
@@ -88,8 +94,8 @@ class BikeRentalService: ObservableObject, ReachabilityObserverDelegate {
         bikeRentalStation.state = parseStateString(resBikeRentalStop.state!)
     }
 
-    func fetchNearbyStations() {
-        guard let userLocation = UserLocationManager.shared.userLocationObj else { return }
+     func fetchNearbyStations() {
+        let userLocation = UserLocationManager.shared.userLocation
         if apiState == .error { return }
 
         lastFetchAccurate = UserLocationManager.shared.isLocationAccurate

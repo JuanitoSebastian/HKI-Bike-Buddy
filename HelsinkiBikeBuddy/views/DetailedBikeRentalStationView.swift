@@ -9,29 +9,43 @@ import SwiftUI
 
 struct DetailedBikeRentalStationView: View {
 
-    @ObservedObject var viewModel = DetailedBikeRentalStationViewModel.shared
+    @ObservedObject var viewModel: DetailedBikeRentalStationViewModel
 
     var body: some View {
-        VStack {
+        content
+            .animation(.spring())
+            .padding(15)
+            .shadow(color: Color("StationCardShadow"), radius: 3, x: 5, y: 5)
+            .shadow(color: Color("StationCardShadow"), radius: 3, x: -5, y: -5)
+            .background(Color("AppBackground"))
+    }
+
+    var content: AnyView {
+        AnyView(
             ZStack {
                 VStack {
+
                     HStack {
                         Text(viewModel.name)
-                            .font(.custom("Helvetica Neue Condensed Bold", size: 35))
+                            .font(.custom("Helvetica Neue Medium", size: 24))
                             .foregroundColor(Color("TextTitle"))
-                        Spacer()
-                        FavoriteMarker(isFavorite: viewModel.favorite)
-                            .onTapGesture {
 
-                            }
+                        Spacer()
+
+                        Button { } label: {
+                            FavoriteMarker(isFavorite: true)
+                        }
                     }
+                    .padding([.leading, .trailing], 10)
+
                     HStack {
-                        Text("\(viewModel.distanceInMeters()) away 🚶")
+                        Text("\(viewModel.distanceInMeters()) away")
                             .foregroundColor(Color("TextMain"))
                         Spacer()
-
                     }
                     .padding([.bottom], 5)
+                    .padding([.leading, .trailing], 10)
+
                     VStack {
                         CapacityBar(bikesAvailable: viewModel.bikes, spacesAvailable: viewModel.spaces)
                             .shadow(color: Color("StationCardShadow"), radius: 3, x: 0, y: 3)
@@ -48,40 +62,17 @@ struct DetailedBikeRentalStationView: View {
                     }
                     .background(Color("StationInfoBg"))
                     .cornerRadius(10)
+                    .padding([.leading, .trailing], 10)
+
+                    MapView(rentalStation: viewModel.bikeRentalStation!)
+                        .padding([.leading, .trailing], 10)
 
                 }
-                .padding([.leading, .trailing], 15)
-                .padding([.top], 5)
-                .padding([.bottom], 10)
+                .padding([.top, .bottom], 10)
+                .background(Color("StationCardBg"))
+                .cornerRadius(10)
             }
-            .background(Color("StationCardBg"))
-            .cornerRadius(10)
-
-            ZStack {
-                MapView(rentalStation: viewModel.bikeRentalStation!)
-                    .padding([.leading, .trailing], 15)
-                    .padding([.top, .bottom], 10)
-            }
-            .background(Color("StationCardBg"))
-            .cornerRadius(10)
-
-            ZStack {
-                PrettyButton(textToDisplay: "←", perform: { withAnimation { ContentViewModel.shared.appState = .navigationView }})
-                    .padding([.leading, .trailing], 15)
-                    .padding([.top, .bottom], 10)
-            }
-            .background(Color("StationCardBg"))
-            .cornerRadius(10)
-        }
-        .padding([.leading, .trailing], 15)
-        .padding([.top, .bottom], 40)
-        .shadow(color: Color("StationCardShadow"), radius: 3, x: 0, y: 3)
-
+        )
     }
-}
 
-struct DetailedBikeRentalStationView_Previews: PreviewProvider {
-    static var previews: some View {
-        DetailedBikeRentalStationView()
-    }
 }
