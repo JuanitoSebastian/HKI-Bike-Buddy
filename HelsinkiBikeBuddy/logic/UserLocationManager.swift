@@ -16,10 +16,7 @@ class UserLocationManager: NSObject, ObservableObject, CLLocationManagerDelegate
 
     static let shared: UserLocationManager = UserLocationManager()
     private let manager: CLLocationManager
-
-    @Published var userLocationObj: CLLocation?
-    @Published var isLocationAccurate: Bool = false
-    @Published var locationAuthorization: LocationAuthorizationStatus = LocationAuthorizationStatus.denied
+    @Published var locationAuthorization = LocationAuthorizationStatus.denied
 
     override private init() {
         manager = CLLocationManager()
@@ -31,6 +28,7 @@ class UserLocationManager: NSObject, ObservableObject, CLLocationManagerDelegate
         manager.requestWhenInUseAuthorization()
     }
 
+    // FIXME: On first start of app causes crash beacause of nil value.
     var userLocation: CLLocation {
         manager.location!
     }
@@ -56,7 +54,9 @@ class UserLocationManager: NSObject, ObservableObject, CLLocationManagerDelegate
         }
     }
 
+    // TODO: Is this needed?
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        /*
         if let locationObj = locations.last {
             Helper.log(locationObj.horizontalAccuracy)
             userLocationObj = locationObj
@@ -64,33 +64,10 @@ class UserLocationManager: NSObject, ObservableObject, CLLocationManagerDelegate
             if BikeRentalService.shared.lastFetchAccurate == nil || !BikeRentalService.shared.lastFetchAccurate! && isLocationAccurate {
                 BikeRentalService.shared.updateAll()
             }
+
         }
+         */
     }
-
-    func getTravelTimeFromUserLocation(destinationLat: Double, destinationLon: Double, completition: @escaping (_ time: TimeInterval?) -> Void) {
-        let directionsRequest = MKDirections.Request()
-        directionsRequest.source = MKMapItem(placemark: MKPlacemark(coordinate: userLocation2D))
-        directionsRequest.destination = MKMapItem(placemark: MKPlacemark(coordinate: toCoordinate2D(lat: destinationLat, lon: destinationLon)))
-        directionsRequest.transportType = .walking
-        directionsRequest.requestsAlternateRoutes = true
-
-        let directions = MKDirections(request: directionsRequest)
-        directions.calculate {(res, error) -> Void in
-            guard let res = res else {
-                if let error = error {
-                    Helper.log("Error calculating route: \(error)")
-                }
-                return
-            }
-
-            if res.routes.count > 0 {
-                let route = res.routes[0]
-                completition(route.expectedTravelTime)
-            }
-        }
-        completition(nil)
-    }
-
     private func toCoordinate2D(lat: Double, lon: Double) -> CLLocationCoordinate2D {
         return CLLocationCoordinate2D(
             latitude: lat,

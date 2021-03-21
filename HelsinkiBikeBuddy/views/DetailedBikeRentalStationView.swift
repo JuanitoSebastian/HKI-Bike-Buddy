@@ -33,7 +33,7 @@ struct DetailedBikeRentalStationView: View {
                         Spacer()
 
                         Button { } label: {
-                            FavoriteMarker(isFavorite: true)
+                            FavoriteMarker(isFavorite: true, action: {})
                         }
                     }
                     .padding([.leading, .trailing], 10)

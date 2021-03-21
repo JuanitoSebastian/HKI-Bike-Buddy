@@ -49,6 +49,7 @@ struct BikeRentalStationsListView: View {
                     Text(viewModel.listEmptyText)
                         .foregroundColor(Color("TextMain"))
                         .font(.caption)
+                        .multilineTextAlignment(.center)
                     Spacer()
                 }
             )

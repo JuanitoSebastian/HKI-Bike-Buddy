@@ -32,7 +32,7 @@ struct PermissionsPromptView: View {
             return AnyView(
                 Group {
                     VStack {
-                        Text("Before you start,")
+                        Text("Before we start,")
                             .font(.custom("Helvetica Neue Bold", size: 35))
                             .foregroundColor(Color("TextTitle"))
                             .multilineTextAlignment(.leading)

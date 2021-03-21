@@ -96,6 +96,10 @@ struct ContentView: View {
                 }
                 .accentColor(Color("NavBarIconActive"))
             }
+            .onAppear(perform: {
+                viewModel.updateStations()
+                viewModel.startUpdateTimer()
+            })
         )
     }
 

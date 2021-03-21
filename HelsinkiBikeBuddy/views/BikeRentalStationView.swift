@@ -35,10 +35,7 @@ struct BikeRentalStationView: View {
                                 .foregroundColor(Color("TextTitle"))
                             Spacer()
 
-                            Button { viewModel.toggleFavourite() } label: {
-                                FavoriteMarker(isFavorite: viewModel.favoriteStatus)
-                            }
-                            .buttonStyle(StaticHighPriorityButtonStyle())
+                            FavoriteMarker(isFavorite: viewModel.favoriteStatus, action: { viewModel.toggleFavourite() })
 
                         }
                         HStack {
@@ -89,12 +86,7 @@ struct BikeRentalStationView: View {
                                 .font(.custom("Helvetica Neue Medium", size: 24))
                                 .foregroundColor(Color("TextTitle"))
                             Spacer()
-                            FavoriteMarker(isFavorite: viewModel.favoriteStatus)
-                                .onTapGesture {
-                                    withAnimation {
-                                        viewModel.toggleFavourite()
-                                    }
-                                }
+                            FavoriteMarker(isFavorite: viewModel.favoriteStatus, action: { viewModel.toggleFavourite() })
                         }
                         HStack {
                             Text("\(viewModel.distanceInMeters()) away")

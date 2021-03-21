@@ -27,7 +27,6 @@ enum ApiState {
 
 class BikeRentalService: ObservableObject, ReachabilityObserverDelegate {
 
-    private var timer: Timer?
     @Published var apiState: ApiState
     var lastFetchAccurate: Bool?
 
@@ -35,7 +34,6 @@ class BikeRentalService: ObservableObject, ReachabilityObserverDelegate {
     static let shared = BikeRentalService()
 
     private init() {
-        self.timer = nil
         self.apiState = .setup
         try? addReachabilityObserver()
     }
@@ -50,16 +48,6 @@ class BikeRentalService: ObservableObject, ReachabilityObserverDelegate {
             return
         }
         setState(.error)
-    }
-
-    func setTimer() {
-        self.timer = Timer.scheduledTimer(
-            timeInterval: 30,
-            target: self,
-            selector: #selector(updateAll),
-            userInfo: nil,
-            repeats: true
-        )
     }
 
     @objc
@@ -94,11 +82,11 @@ class BikeRentalService: ObservableObject, ReachabilityObserverDelegate {
         bikeRentalStation.state = parseStateString(resBikeRentalStop.state!)
     }
 
+    // FIXME: When changing maximum nearby distance stations are not removed from the list.
      func fetchNearbyStations() {
         let userLocation = UserLocationManager.shared.userLocation
         if apiState == .error { return }
 
-        lastFetchAccurate = UserLocationManager.shared.isLocationAccurate
         Network.shared.apollo.fetch(
             query: FetchNearByBikeRentalStationsQuery(
                 lat: userLocation.coordinate.latitude,
@@ -108,11 +96,15 @@ class BikeRentalService: ObservableObject, ReachabilityObserverDelegate {
         ) { result in
             switch result {
             case .success(let graphQLResult):
-                guard let edgesUnwrapped = graphQLResult.data?.nearest?.edges else { return }
+                guard let edgesUnwrapped = graphQLResult.data?.nearest?.edges else {
+                    return
+                }
                 // Iterating thru the fetched stations
                 var nearbyStationFetched: [RentalStation] = []
+                Helper.log("Entering for loop")
                 for edge in edgesUnwrapped {
                     guard let stationUnwrapped = self.unwrapGraphQLStationObject(edge?.node?.place?.asBikeRentalStation) else {
+                        BikeRentalStationStorage.shared.stationsNearby.value = []
                         return
                     }
                     if let bikeRentalStationCoreData = BikeRentalStationStorage.shared.bikeRentalStationFromCoreData(
@@ -138,6 +130,7 @@ class BikeRentalService: ObservableObject, ReachabilityObserverDelegate {
                         )
                         nearbyStationFetched.append(bikeRentalStationUnmanaged)
                     }
+                    Helper.log("Setting to fetched stations")
                     BikeRentalStationStorage.shared.stationsNearby.value = nearbyStationFetched
                 }
             case .failure(let error):

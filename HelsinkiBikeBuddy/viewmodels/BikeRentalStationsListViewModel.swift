@@ -18,14 +18,11 @@ class BikeRentalStationsListViewModel: ObservableObject {
     var state: BikeRentalStationListViewState {
         if bikeRentalStations.isEmpty {
 
-            if stationListType == .favorite {
-                return .empty
-            }
-
-            if BikeRentalService.shared.apiState == .loading {
+            if BikeRentalService.shared.apiState == .loading && stationListType == .nearby {
                 return .loading
             }
 
+            return .empty
         }
         return .stationsLoaded
     }
@@ -35,7 +32,8 @@ class BikeRentalStationsListViewModel: ObservableObject {
         case .favorite:
             return "Add stations here by tapping the heart 💛"
         case .nearby:
-            return "No bike rental stations nearby.\nYou can try increasing the maximum distance to nearby stations from the settings."
+            return "No bike rental stations nearby.\n" +
+                "You can increase the maximum length to nearby station from settings."
         }
     }
 

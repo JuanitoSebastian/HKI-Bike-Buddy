@@ -13,13 +13,9 @@ class ContentViewModel: ObservableObject {
     @Published var navigationSelection = BikeRentalStationStorage.shared.stationsFavorite.value.isEmpty ?
         MainViewNavigation.nearbyStations : MainViewNavigation.myStations
     @Published var appState = MainViewContent.navigationView
+    var timer: Timer?
 
     public static let shared = ContentViewModel()
-
-    private init() {
-        BikeRentalService.shared.updateAll()
-        BikeRentalService.shared.setTimer()
-    }
 
     var title: String {
         switch navigationSelection {
@@ -44,6 +40,27 @@ class ContentViewModel: ObservableObject {
             return -0.01
         default:
             return 0
+        }
+    }
+
+    func startUpdateTimer() {
+        timer = Timer.scheduledTimer(
+            timeInterval: 30,
+            target: self,
+            selector: #selector(updateStations),
+            userInfo: nil,
+            repeats: true
+        )
+    }
+
+    func stopUpdateTimer() {
+        timer = nil
+    }
+
+    @objc
+    func updateStations() {
+        if UserLocationManager.shared.locationAuthorization == .success {
+            BikeRentalService.shared.updateAll()
         }
     }
 

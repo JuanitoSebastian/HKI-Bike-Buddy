@@ -75,12 +75,6 @@ class BikeRentalStationViewModel: ObservableObject {
 
         favoriteStatus.toggle()
 
-        // Delay added for more natural feeling haptic feedback
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .milliseconds(200)) {
-            let generator = UIImpactFeedbackGenerator(style: .rigid)
-            generator.impactOccurred()
-        }
-
         if bikeRentalStation.favorite {
             // Wait for the heart to turn grey
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .milliseconds(200)) {
