@@ -30,17 +30,16 @@ struct FavoriteMarker: View {
 
         if isFavorite {
             return AnyView(
-                Image(systemName: "heart.fill")
-                    .foregroundColor(Color("FavoriteHeart"))
-                    .font(.system(size: 28))
-                    .shadow(color: Color("FavoriteHeartGlow"), radius: 5)
+                    Image(systemName: "heart.fill")
+                        .foregroundColor(Color("FavoriteHeart"))
+                        .font(.system(size: 20))
             )
         }
 
         return AnyView(
-            Image(systemName: "heart")
-                .foregroundColor(Color("UnFavoriteHeart"))
-                .font(.system(size: 28))
+                Image(systemName: "heart")
+                    .foregroundColor(Color("UnFavoriteHeart"))
+                    .font(.system(size: 20))
         )
 
     }

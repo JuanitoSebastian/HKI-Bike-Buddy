@@ -15,13 +15,14 @@ enum BikeRentalStationValidation: Error {
     case invalidAmount
 }
 
-extension BikeRentalStation: Identifiable {
+// TODO: Are these validations actually needed?
+extension ManagedBikeRentalStation: Identifiable {
 
     public var id: String {
         stationId
     }
 
-    static func validateBikeRentalStation(_ bikeRentalStation: BikeRentalStation) throws {
+    static func validateBikeRentalStation(_ bikeRentalStation: ManagedBikeRentalStation) throws {
 
         if bikeRentalStation.stationId.count > 4 || bikeRentalStation.stationId.count < 3 {
             throw BikeRentalStationValidation.invalidStationId

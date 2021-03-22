@@ -15,7 +15,7 @@ class BikeRentalStationStorage: NSObject, ObservableObject {
     var stationsFavorite = CurrentValueSubject<[RentalStation], Never>([])
     var stationsNearby = CurrentValueSubject<[RentalStation], Never>([])
 
-    private let bikeRentalStationFetchController: NSFetchedResultsController<BikeRentalStation>
+    private let bikeRentalStationFetchController: NSFetchedResultsController<ManagedBikeRentalStation>
 
     var moc: NSManagedObjectContext {
         PersistenceController.shared.container.viewContext
@@ -25,7 +25,7 @@ class BikeRentalStationStorage: NSObject, ObservableObject {
     static let shared: BikeRentalStationStorage = BikeRentalStationStorage()
 
     private override init() {
-        let fetchRequest: NSFetchRequest<BikeRentalStation> = BikeRentalStation.fetchRequest()
+        let fetchRequest: NSFetchRequest<ManagedBikeRentalStation> = ManagedBikeRentalStation.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
         bikeRentalStationFetchController = NSFetchedResultsController(
             fetchRequest: fetchRequest,
@@ -60,7 +60,7 @@ extension BikeRentalStationStorage {
         }
     }
 
-    private func removeFromMoc(_ bikeRentalStationToDelete: BikeRentalStation) {
+    private func removeFromMoc(_ bikeRentalStationToDelete: ManagedBikeRentalStation) {
         moc.delete(bikeRentalStationToDelete)
     }
 
@@ -80,8 +80,8 @@ extension BikeRentalStationStorage {
         favourite: Bool,
         state: Bool,
         fetched: Date
-    ) -> BikeRentalStation {
-        let managedBikeRentalStation = BikeRentalStation(context: moc)
+    ) -> ManagedBikeRentalStation {
+        let managedBikeRentalStation = ManagedBikeRentalStation(context: moc)
         managedBikeRentalStation.stationId = stationId
         managedBikeRentalStation.name = name
         managedBikeRentalStation.lat = lat
@@ -133,8 +133,8 @@ extension BikeRentalStationStorage {
      - Returns: The BikeRentalStation corresponding to the provided stationId.
      If a station is not found nil is returned.
      */
-    func bikeRentalStationFromCoreData(stationId: String) -> BikeRentalStation? {
-        let fetchRequest: NSFetchRequest<BikeRentalStation> = NSFetchRequest(entityName: "BikeRentalStation")
+    func bikeRentalStationFromCoreData(stationId: String) -> ManagedBikeRentalStation? {
+        let fetchRequest: NSFetchRequest<ManagedBikeRentalStation> = ManagedBikeRentalStation.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "stationId = %@", stationId)
 
         do {
@@ -203,7 +203,7 @@ extension BikeRentalStationStorage {
             stationsNearby.value = stationsEdited
         }
         // swiftlint:disable force_cast
-        removeFromMoc(rentalStation as! BikeRentalStation)
+        removeFromMoc(rentalStation as! ManagedBikeRentalStation)
         // swiftlint:enable force_cast
         saveMoc()
     }

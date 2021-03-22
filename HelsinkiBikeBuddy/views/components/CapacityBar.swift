@@ -14,7 +14,7 @@ struct CapacityBar: View {
 
     var body: some View {
         barToDisplay
-        .frame(height: 15)
+            .frame(height: 15)
 
     }
 
@@ -47,12 +47,14 @@ struct CapacityBar: View {
                         .frame(width: geometry.size.width, height: geometry.size.height)
                         .cornerRadius(10)
 
-                    Rectangle().frame(
-                        width: progressWidth(fullWidth: geometry.size.width),
-                        height: geometry.size.height
-                    )
+                    Rectangle()
+                        .frame(
+                            width: progressWidth(fullWidth: geometry.size.width),
+                            height: geometry.size.height - 2
+                        )
+                        .cornerRadius(8)
+                        .padding([.leading], 2)
                         .foregroundColor(capacityColor)
-                        .cornerRadius(10)
                 }
             }
         )

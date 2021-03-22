@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-@objc(BikeRentalStation)
-public class BikeRentalStation: NSManagedObject {
+@objc(ManagedBikeRentalStation)
+public class ManagedBikeRentalStation: NSManagedObject {
 
 }

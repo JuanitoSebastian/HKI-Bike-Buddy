@@ -45,3 +45,9 @@ class UnmanagedBikeRentalStation: RentalStation {
         self.state = state
     }
 }
+
+extension UnmanagedBikeRentalStation: Identifiable {
+    var id: String {
+        stationId
+    }
+}

@@ -21,6 +21,10 @@ struct BikeRentalStationView: View {
             .shadow(color: Color("StationCardShadow"), radius: 3, x: -5, y: -5)
     }
 
+    var stationInfoColor: Color {
+        Color(Color.RGBColorSpace.sRGB, white: 0.5, opacity: 0.1)
+    }
+
     var content: AnyView {
         switch viewModel.state {
 
@@ -35,7 +39,11 @@ struct BikeRentalStationView: View {
                                 .foregroundColor(Color("TextTitle"))
                             Spacer()
 
-                            FavoriteMarker(isFavorite: viewModel.favoriteStatus, action: { viewModel.toggleFavourite() })
+                            FavoriteMarker(isFavorite: viewModel.favoriteStatus, action: {
+                                withAnimation {
+                                    viewModel.toggleFavourite()
+                                }
+                            })
 
                         }
                         HStack {
@@ -48,6 +56,7 @@ struct BikeRentalStationView: View {
                         VStack {
                             CapacityBar(bikesAvailable: viewModel.bikes, spacesAvailable: viewModel.spaces)
                                 .shadow(color: Color("StationCardShadow"), radius: 3, x: 0, y: 3)
+                                .padding([.top], 2)
                             HStack {
                                 Text("\(viewModel.bikes) bikes")
                                     .font(.headline)
@@ -59,7 +68,7 @@ struct BikeRentalStationView: View {
                             }
                             .padding([.leading, .trailing, .bottom], 10)
                         }
-                        .background(Color("StationInfoBg"))
+                        .background(LinearGradient(gradient: Gradient(colors: [.clear, stationInfoColor]), startPoint: .top, endPoint: .bottom))
                         .cornerRadius(10)
 
                     }
@@ -135,8 +144,8 @@ struct BikeRentalStationView_Previews: PreviewProvider {
     }
 }
 
-func createBikeRentalStation(viewContext: NSManagedObjectContext) -> BikeRentalStation {
-    let bikeRentalStation = BikeRentalStation(context: viewContext)
+func createBikeRentalStation(viewContext: NSManagedObjectContext) -> ManagedBikeRentalStation {
+    let bikeRentalStation = ManagedBikeRentalStation(context: viewContext)
     bikeRentalStation.name = "Rajasaarentie"
     bikeRentalStation.stationId = "074"
     bikeRentalStation.lat = 44

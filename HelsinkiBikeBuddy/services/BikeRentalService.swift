@@ -71,7 +71,7 @@ class BikeRentalService: ObservableObject, ReachabilityObserverDelegate {
     }
 
     func updateStationValues(
-        bikeRentalStation: BikeRentalStation,
+        bikeRentalStation: ManagedBikeRentalStation,
         resBikeRentalStop: FetchNearByBikeRentalStationsQuery.Data.Nearest.Edge.Node.Place.AsBikeRentalStation
     ) {
         bikeRentalStation.lat = resBikeRentalStop.lat!

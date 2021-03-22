@@ -9,10 +9,10 @@
 import Foundation
 import CoreData
 
-extension BikeRentalStation: RentalStation {
+extension ManagedBikeRentalStation: RentalStation {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<BikeRentalStation> {
-        return NSFetchRequest<BikeRentalStation>(entityName: "BikeRentalStation")
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<ManagedBikeRentalStation> {
+        return NSFetchRequest<ManagedBikeRentalStation>(entityName: "ManagedBikeRentalStation")
     }
 
     @NSManaged dynamic public var allowDropoff: Bool
