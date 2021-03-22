@@ -56,9 +56,6 @@ class BikeRentalService: ObservableObject, ReachabilityObserverDelegate {
         setState(.loading)
         updateFavorites()
         fetchNearbyStations()
-        if apiState == .loading {
-            setState(.allGood)
-        }
         Helper.log("Service: Completed updateAll()")
     }
 
@@ -127,6 +124,9 @@ class BikeRentalService: ObservableObject, ReachabilityObserverDelegate {
                     }
                 }
                 BikeRentalStationStorage.shared.stationsNearby.value = nearbyStationFetched
+                if self.apiState == .loading {
+                    self.setState(.allGood)
+                }
             case .failure(let error):
                 Helper.log("API Fecth failed: \(error)")
             }

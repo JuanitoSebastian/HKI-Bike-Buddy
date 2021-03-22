@@ -13,14 +13,17 @@ class BikeRentalStationsListViewModel: ObservableObject {
     @Published var bikeRentalStations: [RentalStation] = []
     var stationListType: BikeRentalStationListType
     private var cancellable: AnyCancellable?
+    private var sorting: Bool = false
 
+    // FIXME: Determiation of state. When to display loading and when are there actually no stations nearby?
     var state: BikeRentalStationListViewState {
         if bikeRentalStations.isEmpty {
 
-            if BikeRentalService.shared.apiState == .loading && stationListType == .nearby {
+            if BikeRentalStationStorage.shared.stationsNearby.value.isEmpty && stationListType == .nearby {
+                Helper.log("Return loading!")
                 return .loading
             }
-
+            Helper.log("Return empty!")
             return .empty
         }
         return .stationsLoaded
@@ -47,10 +50,12 @@ class BikeRentalStationsListViewModel: ObservableObject {
         self.cancellable = publisher.sink { fetched in
             self.bikeRentalStations = fetched
             // Sort stations from closest to furthest form user
+            self.sorting = true
             self.bikeRentalStations.sort( by: {
                 $0.distance(to: UserLocationManager.shared.userLocation)
                     < $1.distance(to: UserLocationManager.shared.userLocation)
             })
+            self.sorting = false
         }
     }
 }

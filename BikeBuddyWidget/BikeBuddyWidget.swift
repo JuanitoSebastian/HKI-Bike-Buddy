@@ -110,7 +110,7 @@ struct BikeBuddyWidgetEntryView: View {
 
                     }
                     VStack {
-                        CapacityBar(bikesAvailable: Int(entry.bikeRentalStation!.bikesAvailable), spacesAvailable: Int(entry.bikeRentalStation!.spacesAvailable))
+                        CapacityBar(leftValue: Int(entry.bikeRentalStation!.bikesAvailable), rightValue: Int(entry.bikeRentalStation!.spacesAvailable))
                             .shadow(color: Color("StationCardShadow"), radius: 3, x: 0, y: 3)
                         HStack {
                             Text("\(entry.bikeRentalStation!.bikesAvailable) bikes")

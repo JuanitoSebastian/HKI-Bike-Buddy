@@ -39,7 +39,7 @@ struct BikeRentalStationView: View {
                                 .foregroundColor(Color("TextTitle"))
                             Spacer()
 
-                            FavoriteMarker(isFavorite: viewModel.favoriteStatus, action: {
+                            FavoriteMarker(isActive: viewModel.favoriteStatus, action: {
                                 withAnimation {
                                     viewModel.toggleFavourite()
                                 }
@@ -54,7 +54,7 @@ struct BikeRentalStationView: View {
                         }
                         .padding([.bottom], 5)
                         VStack {
-                            CapacityBar(bikesAvailable: viewModel.bikes, spacesAvailable: viewModel.spaces)
+                            CapacityBar(leftValue: viewModel.bikes, rightValue: viewModel.spaces)
                                 .shadow(color: Color("StationCardShadow"), radius: 3, x: 0, y: 3)
                                 .padding([.top], 2)
                             HStack {
@@ -95,7 +95,7 @@ struct BikeRentalStationView: View {
                                 .font(.custom("Helvetica Neue Medium", size: 24))
                                 .foregroundColor(Color("TextTitle"))
                             Spacer()
-                            FavoriteMarker(isFavorite: viewModel.favoriteStatus, action: { viewModel.toggleFavourite() })
+                            FavoriteMarker(isActive: viewModel.favoriteStatus, action: { viewModel.toggleFavourite() })
                         }
                         HStack {
                             Text("\(viewModel.distanceInMeters()) away")

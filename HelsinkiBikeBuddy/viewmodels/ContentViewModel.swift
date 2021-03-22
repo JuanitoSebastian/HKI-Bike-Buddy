@@ -25,24 +25,6 @@ class ContentViewModel: ObservableObject {
         }
     }
 
-    var blurAmount: CGFloat {
-        switch appState {
-        case .overlayContent:
-            return 10
-        default:
-            return 0
-        }
-    }
-
-    var brightnessAmount: Double {
-        switch appState {
-        case .overlayContent:
-            return -0.01
-        default:
-            return 0
-        }
-    }
-
     func startUpdateTimer() {
         timer = Timer.scheduledTimer(
             timeInterval: 30,

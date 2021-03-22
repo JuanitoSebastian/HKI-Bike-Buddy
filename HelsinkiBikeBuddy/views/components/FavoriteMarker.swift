@@ -6,10 +6,14 @@
 //
 
 import SwiftUI
-
+/**
+ A heart shaped button.
+ - Parameter isActive: Has the heart been tapped?
+ - Parameter action: What is performed on tap.
+ */
 struct FavoriteMarker: View {
 
-    let isFavorite: Bool
+    let isActive: Bool
     let action: () -> Void
 
     var body: some View {
@@ -28,7 +32,7 @@ struct FavoriteMarker: View {
 
     var heart: AnyView {
 
-        if isFavorite {
+        if isActive {
             return AnyView(
                     Image(systemName: "heart.fill")
                         .foregroundColor(Color("FavoriteHeart"))
@@ -47,6 +51,6 @@ struct FavoriteMarker: View {
 
 struct FavoriteMarker_Previews: PreviewProvider {
     static var previews: some View {
-        FavoriteMarker(isFavorite: true, action: { Helper.log("Favorite marker tapped") })
+        FavoriteMarker(isActive: true, action: { Helper.log("Favorite marker tapped") })
     }
 }

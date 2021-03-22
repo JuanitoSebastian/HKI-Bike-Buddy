@@ -90,8 +90,6 @@ struct ContentView: View {
                         }
                     }
                     .accentColor(Color("NavBarIconActive"))
-                    .blur(radius: viewModel.blurAmount)
-                    .brightness(viewModel.brightnessAmount)
 
                 }
                 .accentColor(Color("NavBarIconActive"))

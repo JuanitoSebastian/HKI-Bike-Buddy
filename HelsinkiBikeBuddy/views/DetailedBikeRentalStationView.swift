@@ -33,7 +33,7 @@ struct DetailedBikeRentalStationView: View {
                         Spacer()
 
                         Button { } label: {
-                            FavoriteMarker(isFavorite: true, action: {})
+                            FavoriteMarker(isActive: true, action: {})
                         }
                     }
                     .padding([.leading, .trailing], 10)
@@ -47,7 +47,7 @@ struct DetailedBikeRentalStationView: View {
                     .padding([.leading, .trailing], 10)
 
                     VStack {
-                        CapacityBar(bikesAvailable: viewModel.bikes, spacesAvailable: viewModel.spaces)
+                        CapacityBar(leftValue: viewModel.bikes, rightValue: viewModel.spaces)
                             .shadow(color: Color("StationCardShadow"), radius: 3, x: 0, y: 3)
                         HStack {
                             Text("\(viewModel.bikes) bikes")

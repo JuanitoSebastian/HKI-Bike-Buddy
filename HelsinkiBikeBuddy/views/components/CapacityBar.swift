@@ -6,20 +6,24 @@
 //
 
 import SwiftUI
-
+/**
+ Displays a given amount as a progress bar.
+ - Parameter leftValue: The amount of progress (the value on the left)
+ - Parameter rightValue: The amount on the right
+ */
 struct CapacityBar: View {
 
-    let bikesAvailable: Int
-    let spacesAvailable: Int
+    let leftValue: Int
+    let rightValue: Int
 
-    var body: some View {
-        barToDisplay
-            .frame(height: 15)
-
+    /// The factor value is used to calculate the width of the progress bar
+    private var factor: Double {
+        return Double(leftValue) / Double(rightValue + leftValue)
     }
 
+    /// If bikes are not available a view with only one rectangle is returned. 
     var barToDisplay: AnyView {
-        if bikesAvailable > 0 {
+        if leftValue > 0 {
             return bikesAreAvailableBar
         }
         return noBikesAreAvailableBar
@@ -53,30 +57,28 @@ struct CapacityBar: View {
                             height: geometry.size.height - 2
                         )
                         .cornerRadius(8)
-                        .padding([.leading], 2)
-                        .foregroundColor(capacityColor)
+                        .padding([.leading, .trailing], 1)
+                        .foregroundColor(Color("CapacityBarBikesNormal"))
                 }
             }
         )
     }
 
+    var body: some View {
+        barToDisplay
+            .frame(height: 15)
+
+    }
+
+    /// Calculates the width of the progress bar
     func progressWidth(fullWidth: CGFloat) -> CGFloat {
         return fullWidth * CGFloat(factor)
-    }
-
-    var capacityColor: Color {
-        // if factor < 0.3 { return Color("CapacityBarBikesLow") }
-        return Color("CapacityBarBikesNormal")
-    }
-
-    var factor: Double {
-        return Double(bikesAvailable) / Double(spacesAvailable + bikesAvailable)
     }
 
 }
 
 struct CapacityBar_Previews: PreviewProvider {
     static var previews: some View {
-        CapacityBar(bikesAvailable: 2, spacesAvailable: 8)
+        CapacityBar(leftValue: 2, rightValue: 8)
     }
 }
