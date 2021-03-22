@@ -60,7 +60,7 @@ struct ContentView: View {
                         BikeRentalStationsListView(
                             viewModel: BikeRentalStationsListViewModel(
                                 publisher: BikeRentalStationStorage.shared.stationsFavorite.eraseToAnyPublisher(),
-                                stationListType: .favorite
+                                stationListType: .favourite
                             )
                         )
                         .onTapGesture {

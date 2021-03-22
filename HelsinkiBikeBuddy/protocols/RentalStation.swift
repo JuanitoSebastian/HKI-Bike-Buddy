@@ -29,3 +29,27 @@ protocol RentalStation {
     func distance(to location: CLLocation) -> CLLocationDistance
 
 }
+
+// MARK: - Default implementations of computed variables and functions
+extension RentalStation {
+
+    var location: CLLocation {
+        return CLLocation(latitude: lat, longitude: lon)
+    }
+
+    var coordinate: CLLocationCoordinate2D {
+        return CLLocationCoordinate2D(latitude: lat, longitude: lon)
+    }
+
+    var totalCapacity: Int {
+        Int(spacesAvailable + bikesAvailable)
+    }
+
+    public var id: String {
+        stationId
+    }
+
+    func distance(to location: CLLocation) -> CLLocationDistance {
+        return location.distance(from: self.location)
+    }
+}

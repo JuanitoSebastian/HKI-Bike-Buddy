@@ -82,7 +82,6 @@ class BikeRentalService: ObservableObject, ReachabilityObserverDelegate {
         bikeRentalStation.state = parseStateString(resBikeRentalStop.state!)
     }
 
-    // FIXME: When changing maximum nearby distance stations are not removed from the list.
      func fetchNearbyStations() {
         let userLocation = UserLocationManager.shared.userLocation
         if apiState == .error { return }
@@ -96,15 +95,11 @@ class BikeRentalService: ObservableObject, ReachabilityObserverDelegate {
         ) { result in
             switch result {
             case .success(let graphQLResult):
-                guard let edgesUnwrapped = graphQLResult.data?.nearest?.edges else {
-                    return
-                }
+                guard let edgesUnwrapped = graphQLResult.data?.nearest?.edges else { return }
                 // Iterating thru the fetched stations
                 var nearbyStationFetched: [RentalStation] = []
-                Helper.log("Entering for loop")
                 for edge in edgesUnwrapped {
                     guard let stationUnwrapped = self.unwrapGraphQLStationObject(edge?.node?.place?.asBikeRentalStation) else {
-                        BikeRentalStationStorage.shared.stationsNearby.value = []
                         return
                     }
                     if let bikeRentalStationCoreData = BikeRentalStationStorage.shared.bikeRentalStationFromCoreData(
@@ -130,9 +125,8 @@ class BikeRentalService: ObservableObject, ReachabilityObserverDelegate {
                         )
                         nearbyStationFetched.append(bikeRentalStationUnmanaged)
                     }
-                    Helper.log("Setting to fetched stations")
-                    BikeRentalStationStorage.shared.stationsNearby.value = nearbyStationFetched
                 }
+                BikeRentalStationStorage.shared.stationsNearby.value = nearbyStationFetched
             case .failure(let error):
                 Helper.log("API Fecth failed: \(error)")
             }

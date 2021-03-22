@@ -21,22 +21,6 @@ extension BikeRentalStation: Identifiable {
         stationId
     }
 
-    var totalCapacity: Int {
-        Int(spacesAvailable + bikesAvailable)
-    }
-
-    var location: CLLocation {
-        return CLLocation(latitude: lat, longitude: lon)
-    }
-
-    var coordinate: CLLocationCoordinate2D {
-        return CLLocationCoordinate2D(latitude: lat, longitude: lon)
-    }
-
-    func distance(to location: CLLocation) -> CLLocationDistance {
-        return location.distance(from: self.location)
-    }
-
     static func validateBikeRentalStation(_ bikeRentalStation: BikeRentalStation) throws {
 
         if bikeRentalStation.stationId.count > 4 || bikeRentalStation.stationId.count < 3 {

@@ -45,7 +45,7 @@ struct SettingsView: View {
             Spacer()
             VStack {
                 HStack(spacing: 0) {
-                    Text("HKI Bike Buddy is developed by ")
+                    Text("HKI Bike Buddy by ")
                         .font(.footnote)
                         .padding([.bottom], 5)
                     Button { viewModel.openJuanitoHomepage() } label: {

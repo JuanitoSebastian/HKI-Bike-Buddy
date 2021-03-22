@@ -10,6 +10,17 @@ import CoreLocation
 
 class UnmanagedBikeRentalStation: RentalStation {
 
+    var stationId: String
+    var name: String
+    var allowDropoff: Bool
+    var bikesAvailable: Int64
+    var favorite: Bool
+    var fetched: Date
+    var lat: Double
+    var lon: Double
+    var spacesAvailable: Int64
+    var state: Bool
+
     internal init(
         stationId: String,
         name: String,
@@ -33,36 +44,4 @@ class UnmanagedBikeRentalStation: RentalStation {
         self.spacesAvailable = spacesAvailable
         self.state = state
     }
-
-    var stationId: String
-    var name: String
-    var allowDropoff: Bool
-    var bikesAvailable: Int64
-    var favorite: Bool
-    var fetched: Date
-    var lat: Double
-    var lon: Double
-    var spacesAvailable: Int64
-    var state: Bool
-
-    var location: CLLocation {
-        return CLLocation(latitude: lat, longitude: lon)
-    }
-
-    var coordinate: CLLocationCoordinate2D {
-        return CLLocationCoordinate2D(latitude: lat, longitude: lon)
-    }
-
-    var totalCapacity: Int {
-        Int(spacesAvailable + bikesAvailable)
-    }
-
-    public var id: String {
-        stationId
-    }
-
-    func distance(to location: CLLocation) -> CLLocationDistance {
-        return location.distance(from: self.location)
-    }
-
 }

@@ -57,15 +57,15 @@ class UserLocationManager: NSObject, ObservableObject, CLLocationManagerDelegate
     // TODO: Is this needed?
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         /*
-        if let locationObj = locations.last {
-            Helper.log(locationObj.horizontalAccuracy)
-            userLocationObj = locationObj
-            isLocationAccurate = locationObj.horizontalAccuracy < 500
-            if BikeRentalService.shared.lastFetchAccurate == nil || !BikeRentalService.shared.lastFetchAccurate! && isLocationAccurate {
-                BikeRentalService.shared.updateAll()
-            }
+         if let locationObj = locations.last {
+         Helper.log(locationObj.horizontalAccuracy)
+         userLocationObj = locationObj
+         isLocationAccurate = locationObj.horizontalAccuracy < 500
+         if BikeRentalService.shared.lastFetchAccurate == nil || !BikeRentalService.shared.lastFetchAccurate! && isLocationAccurate {
+         BikeRentalService.shared.updateAll()
+         }
 
-        }
+         }
          */
     }
     private func toCoordinate2D(lat: Double, lon: Double) -> CLLocationCoordinate2D {
