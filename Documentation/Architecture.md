@@ -21,3 +21,4 @@ The UI is built almost entirely using SwiftUI. UiKit was used on one view where 
 
 ## Models
 ![ModelsDiagram](https://raw.githubusercontent.com/JuanitoSebastian/HelsinkiBikeBuddy/main/Documentation/graphics/ModelsDiagram.png)
+The data model of the application consists of two classes ManagedBikeRentalStation and UnmanagedBikeRentalStation which both conform to the protocol RentalStation. When stations are fetched from the API an UnmanagedBikeRentalStation object is created for each new station. When a station is marked as a favourite it converted to a ManagedBikeRentalStation. This is because of how Apple's Core Data system works. 
