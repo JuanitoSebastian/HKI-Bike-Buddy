@@ -2,7 +2,7 @@
 ## Structure
 HKI Bike Buddy is built using the model-view-viewmodel (MVVM) design pattern. In MVVM the business logic and data (model) is abstracted by the viewmodel which offers public properties and actions for the view. The views are used to build the actual user interfaces.
 
-![BikeBuddyScreen](https://raw.githubusercontent.com/JuanitoSebastian/HelsinkiBikeBuddy/main/Documentation/graphics/ArchitectureGraph.png)
+![ArchitectureDiagram](https://raw.githubusercontent.com/JuanitoSebastian/HelsinkiBikeBuddy/main/Documentation/graphics/ArchitectureGraph.png)
 
 **The project is divided into the following groups:**
 * stores: Rental Stations are stored here. Handles saving and fetching ManagedBikeRentalStation objects to/from Core Data.
@@ -18,3 +18,6 @@ HKI Bike Buddy is built using the model-view-viewmodel (MVVM) design pattern. In
 * A settings view where the maximum distance for bike rental stations to be considered nearby can be changed.
 
 The UI is built almost entirely using SwiftUI. UiKit was used on one view where MapKit was needed (MapView). Navigation between the views of the application is done using the SwiftUI components NavigationView and TabView which are contained in *ContentView.swift*.
+
+## Models
+![ModelsDiagram](https://raw.githubusercontent.com/JuanitoSebastian/HelsinkiBikeBuddy/main/Documentation/graphics/ModelsDiagram.png)

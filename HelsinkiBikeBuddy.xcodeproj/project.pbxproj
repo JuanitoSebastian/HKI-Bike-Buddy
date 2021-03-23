@@ -102,6 +102,7 @@
 		28D0F98B25FA129C008FC736 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 281C5BB225D0111D001502BE /* Helper.swift */; };
 		28E3A98C2608FA0E0093BC1B /* HBB_Screen1.png in Resources */ = {isa = PBXBuildFile; fileRef = 28E3A98B2608FA0E0093BC1B /* HBB_Screen1.png */; };
 		28E3A9992609D1310093BC1B /* ArchitectureGraph.png in Resources */ = {isa = PBXBuildFile; fileRef = 28E3A9982609D1310093BC1B /* ArchitectureGraph.png */; };
+		28F5B6D4260A2A0300105E0B /* ModelsDiagram.png in Resources */ = {isa = PBXBuildFile; fileRef = 28F5B6D3260A2A0300105E0B /* ModelsDiagram.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -197,6 +198,7 @@
 		28E3A98B2608FA0E0093BC1B /* HBB_Screen1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HBB_Screen1.png; sourceTree = "<group>"; };
 		28E3A9982609D1310093BC1B /* ArchitectureGraph.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ArchitectureGraph.png; sourceTree = "<group>"; };
 		28E3A99D2609D4070093BC1B /* Architecture.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Architecture.md; sourceTree = "<group>"; };
+		28F5B6D3260A2A0300105E0B /* ModelsDiagram.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ModelsDiagram.png; path = ../../../../../../../Downloads/ModelsDiagram.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -432,6 +434,7 @@
 		28E3A9972609D1310093BC1B /* graphics */ = {
 			isa = PBXGroup;
 			children = (
+				28F5B6D3260A2A0300105E0B /* ModelsDiagram.png */,
 				28E3A98B2608FA0E0093BC1B /* HBB_Screen1.png */,
 				28E3A9982609D1310093BC1B /* ArchitectureGraph.png */,
 			);
@@ -584,6 +587,7 @@
 				28A21C5F25CEEA150062C7AC /* Assets.xcassets in Resources */,
 				28E3A9992609D1310093BC1B /* ArchitectureGraph.png in Resources */,
 				2898613A25D93D5B0007D137 /* FetchNearByBikeRentalStations.graphql in Resources */,
+				28F5B6D4260A2A0300105E0B /* ModelsDiagram.png in Resources */,
 				28A21CA025CEEF040062C7AC /* AllBikeRentalStations.graphql in Resources */,
 				28E3A98C2608FA0E0093BC1B /* HBB_Screen1.png in Resources */,
 				283D90A225D7E0B30007434E /* FetchBikeRentalStationByStationId.graphql in Resources */,
