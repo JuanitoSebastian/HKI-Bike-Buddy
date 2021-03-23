@@ -12,8 +12,8 @@ class DetailedBikeRentalStationViewModel: ObservableObject {
 
     @Published var bikeRentalStation: RentalStation?
 
-    let bikeRentalStorage = BikeRentalStationStorage.shared
-    let userLocationManager = UserLocationManager.shared
+    let bikeRentalStorage = BikeRentalStationStore.shared
+    let userLocationManager = UserLocationService.shared
 
     init(bikeRentalStation: RentalStation) {
         self.bikeRentalStation = bikeRentalStation

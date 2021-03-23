@@ -12,9 +12,9 @@ import MapKit
 // TODO: Error handling for locations
 // TODO: Handling inaccurate locations
 
-class UserLocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
+class UserLocationService: NSObject, ObservableObject, CLLocationManagerDelegate {
 
-    static let shared: UserLocationManager = UserLocationManager()
+    static let shared: UserLocationService = UserLocationService()
     private let manager: CLLocationManager
     @Published var locationAuthorization = LocationAuthorizationStatus.denied
 

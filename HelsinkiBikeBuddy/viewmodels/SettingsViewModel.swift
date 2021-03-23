@@ -10,7 +10,7 @@ import SwiftUI
 
 class SettingsViewModel: ObservableObject {
 
-    @Published var nearbyRange: Double = Double(UserSettingsManager.shared.nearbyDistance)
+    @Published var nearbyRange: Double = Double(UserDefaultsService.shared.nearbyDistance)
 
     var currentYear: String {
         String(Calendar.current.component(.year, from: Date()))
@@ -27,7 +27,7 @@ class SettingsViewModel: ObservableObject {
     public static var shared = SettingsViewModel()
 
     func saveSettings() {
-        UserSettingsManager.shared.nearbyDistance = nearbyRangeInt
+        UserDefaultsService.shared.nearbyDistance = nearbyRangeInt
         BikeRentalService.shared.updateAll()
     }
 

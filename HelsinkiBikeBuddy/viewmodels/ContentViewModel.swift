@@ -10,7 +10,7 @@ import SwiftUI
 
 class ContentViewModel: ObservableObject {
 
-    @Published var navigationSelection = BikeRentalStationStorage.shared.stationsFavorite.value.isEmpty ?
+    @Published var navigationSelection = BikeRentalStationStore.shared.stationsFavorite.value.isEmpty ?
         MainViewNavigation.nearbyStations : MainViewNavigation.myStations
     @Published var appState = MainViewContent.navigationView
     var timer: Timer?
@@ -41,7 +41,7 @@ class ContentViewModel: ObservableObject {
 
     @objc
     func updateStations() {
-        if UserLocationManager.shared.locationAuthorization == .success {
+        if UserLocationService.shared.locationAuthorization == .success {
             BikeRentalService.shared.updateAll()
         }
     }

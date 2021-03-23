@@ -8,6 +8,7 @@
 import Foundation
 import Combine
 
+/// ViewModel for the list of bike rental stations.
 class BikeRentalStationsListViewModel: ObservableObject {
 
     @Published var bikeRentalStations: [RentalStation] = []
@@ -15,15 +16,11 @@ class BikeRentalStationsListViewModel: ObservableObject {
     private var cancellable: AnyCancellable?
     private var sorting: Bool = false
 
-    // FIXME: Determiation of state. When to display loading and when are there actually no stations nearby?
     var state: BikeRentalStationListViewState {
         if bikeRentalStations.isEmpty {
-
-            if BikeRentalStationStorage.shared.stationsNearby.value.isEmpty && stationListType == .nearby {
-                Helper.log("Return loading!")
+            if BikeRentalService.shared.apiState == .loading && stationListType == .nearby {
                 return .loading
             }
-            Helper.log("Return empty!")
             return .empty
         }
         return .stationsLoaded
@@ -33,10 +30,10 @@ class BikeRentalStationsListViewModel: ObservableObject {
         switch stationListType {
         case .favourite:
             return "Nothing here yet...\n" +
-                "You can add stations here by tapping the heart 💛"
+                "You can add stations here by tapping the heart 💗"
         case .nearby:
             return "No bike rental stations nearby.\n" +
-                "You can increase the maximum length to nearby station from settings."
+                "You can increase the maximum distance to nearby stations from settings."
         }
     }
 
@@ -52,8 +49,8 @@ class BikeRentalStationsListViewModel: ObservableObject {
             // Sort stations from closest to furthest form user
             self.sorting = true
             self.bikeRentalStations.sort( by: {
-                $0.distance(to: UserLocationManager.shared.userLocation)
-                    < $1.distance(to: UserLocationManager.shared.userLocation)
+                $0.distance(to: UserLocationService.shared.userLocation)
+                    < $1.distance(to: UserLocationService.shared.userLocation)
             })
             self.sorting = false
         }

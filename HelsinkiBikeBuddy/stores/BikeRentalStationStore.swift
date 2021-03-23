@@ -10,7 +10,7 @@ import CoreData
 import Combine
 
 // MARK: - Initiation of class
-class BikeRentalStationStorage: NSObject, ObservableObject {
+class BikeRentalStationStore: NSObject, ObservableObject {
 
     var stationsFavorite = CurrentValueSubject<[RentalStation], Never>([])
     var stationsNearby = CurrentValueSubject<[RentalStation], Never>([])
@@ -22,7 +22,7 @@ class BikeRentalStationStorage: NSObject, ObservableObject {
     }
 
     // A singleton instance of the class
-    static let shared: BikeRentalStationStorage = BikeRentalStationStorage()
+    static let shared: BikeRentalStationStore = BikeRentalStationStore()
 
     private override init() {
         let fetchRequest: NSFetchRequest<ManagedBikeRentalStation> = ManagedBikeRentalStation.fetchRequest()
@@ -50,7 +50,7 @@ class BikeRentalStationStorage: NSObject, ObservableObject {
 }
 
 // MARK: - Creation / Editing of Rental Stations
-extension BikeRentalStationStorage {
+extension BikeRentalStationStore {
 
     func saveMoc() {
         do {
@@ -183,9 +183,9 @@ extension BikeRentalStationStorage {
      - Parameter rentalStation: The RentalStation to unfavourite
      */
     func unfavouriteStation(rentalStation: RentalStation) {
-        let distance = rentalStation.distance(to: UserLocationManager.shared.userLocation)
+        let distance = rentalStation.distance(to: UserLocationService.shared.userLocation)
 
-        if distance <= Double(UserSettingsManager.shared.nearbyDistance) {
+        if distance <= Double(UserDefaultsService.shared.nearbyDistance) {
             var stationsEdited = removeStationFromList(stationToRemove: rentalStation, stations: stationsNearby.value)
             let unmanaged = createUnmanagedBikeRentalStation(
                 name: rentalStation.name,
@@ -226,7 +226,7 @@ extension BikeRentalStationStorage {
 }
 
 // MARK: - NSFetchedResultsControllerDelegate
-extension BikeRentalStationStorage: NSFetchedResultsControllerDelegate {
+extension BikeRentalStationStore: NSFetchedResultsControllerDelegate {
 
     // When content in the MOC changes the value of stationsFavourite is updated (overwritten) with new values from MOC.
     public func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {

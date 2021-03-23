@@ -52,7 +52,7 @@ struct Provider: IntentTimelineProvider {
         let nextDate = Calendar.current.date(byAdding: .minute, value: 5, to: Date())!
 
         if let idToFetch = configuration.bikeRentalStation?.identifier {
-            let bikeRentalStationFromMoc = BikeRentalStationStorage.shared.bikeRentalStationFromCoreData(stationId: idToFetch)
+            let bikeRentalStationFromMoc = BikeRentalStationStore.shared.bikeRentalStationFromCoreData(stationId: idToFetch)
             let entry = BikeRentalStationWidgetEntry(date: Date(), configuration: configuration, bikeRentalStation: bikeRentalStationFromMoc)
             let timeline = Timeline(entries: [entry], policy: .after(nextDate))
             completion(timeline)
@@ -76,7 +76,7 @@ struct BikeBuddyWidgetEntryView: View {
 
     func distanceInMeters() -> String {
         let location = CLLocation(latitude: entry.bikeRentalStation!.lat, longitude: entry.bikeRentalStation!.lon)
-        var distanceDouble = Double(location.distance(from: UserLocationManager.shared.userLocation)).rounded()
+        var distanceDouble = Double(location.distance(from: UserLocationService.shared.userLocation)).rounded()
         if distanceDouble >= 1000 {
             distanceDouble /= 1000
             return "\(String(distanceDouble))km"

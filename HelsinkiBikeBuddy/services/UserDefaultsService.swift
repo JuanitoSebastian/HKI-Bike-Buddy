@@ -7,9 +7,9 @@
 
 import Foundation
 
-class UserSettingsManager {
+class UserDefaultsService {
 
-    public static let shared = UserSettingsManager()
+    public static let shared = UserDefaultsService()
 
     private let userDefaults = UserDefaults()
 

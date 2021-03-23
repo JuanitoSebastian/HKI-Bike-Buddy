@@ -18,9 +18,9 @@ struct SettingsView: View {
     var body: some View {
         VStack {
             Form {
-                Section(header: Text("BIKE RENTAL STATIONS")) {
+                Section(header: Text("NEARBY STATIONS")) {
                     VStack {
-                        Text("Maximum distance to a nearby station:")
+                        Text("Distance to nearby stations:")
                             .font(.headline)
                             .foregroundColor(Color("TextMain"))
                         Slider(

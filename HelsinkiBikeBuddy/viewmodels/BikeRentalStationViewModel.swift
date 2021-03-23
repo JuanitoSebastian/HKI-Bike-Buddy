@@ -17,8 +17,8 @@ class BikeRentalStationViewModel: ObservableObject {
     @Published var favoriteStatus: Bool
     private var toggleTriggered: Bool
 
-    let bikeRentalStorage = BikeRentalStationStorage.shared
-    let userLocationManager = UserLocationManager.shared
+    let bikeRentalStorage = BikeRentalStationStore.shared
+    let userLocationManager = UserLocationService.shared
 
     init(bikeRentalStation: RentalStation) {
         self.bikeRentalStation = bikeRentalStation
@@ -78,11 +78,11 @@ class BikeRentalStationViewModel: ObservableObject {
         if bikeRentalStation.favorite {
             // Wait for the heart to turn grey
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .milliseconds(200)) {
-                BikeRentalStationStorage.shared.unfavouriteStation(rentalStation: self.bikeRentalStation)
+                BikeRentalStationStore.shared.unfavouriteStation(rentalStation: self.bikeRentalStation)
                 self.toggleTriggered = false
             }
         } else {
-            BikeRentalStationStorage.shared.favouriteStation(rentalStation: bikeRentalStation)
+            BikeRentalStationStore.shared.favouriteStation(rentalStation: bikeRentalStation)
             toggleTriggered = false
         }
     }

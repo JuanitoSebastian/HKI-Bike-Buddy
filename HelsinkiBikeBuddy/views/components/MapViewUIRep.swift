@@ -17,31 +17,31 @@ struct MapView: UIViewRepresentable {
     }
 
     private var minLat: Double {
-        if rentalStation.lat <= UserLocationManager.shared.userLocation2D.latitude {
+        if rentalStation.lat <= UserLocationService.shared.userLocation2D.latitude {
             return rentalStation.lat
         }
-        return UserLocationManager.shared.userLocation2D.latitude
+        return UserLocationService.shared.userLocation2D.latitude
     }
 
     private var minLon: Double {
-        if rentalStation.lon <= UserLocationManager.shared.userLocation2D.longitude {
+        if rentalStation.lon <= UserLocationService.shared.userLocation2D.longitude {
             return rentalStation.lon
         }
-        return UserLocationManager.shared.userLocation2D.longitude
+        return UserLocationService.shared.userLocation2D.longitude
     }
 
     private var maxLat: Double {
-        if rentalStation.lat >= UserLocationManager.shared.userLocation2D.latitude {
+        if rentalStation.lat >= UserLocationService.shared.userLocation2D.latitude {
             return rentalStation.lat
         }
-        return UserLocationManager.shared.userLocation2D.latitude
+        return UserLocationService.shared.userLocation2D.latitude
     }
 
     private var maxLon: Double {
-        if rentalStation.lon >= UserLocationManager.shared.userLocation2D.longitude {
+        if rentalStation.lon >= UserLocationService.shared.userLocation2D.longitude {
             return rentalStation.lon
         }
-        return UserLocationManager.shared.userLocation2D.longitude
+        return UserLocationService.shared.userLocation2D.longitude
     }
 
     private var centerPoint: CLLocationCoordinate2D {

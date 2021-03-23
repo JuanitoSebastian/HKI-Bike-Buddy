@@ -44,7 +44,9 @@ class BikeRentalService: ObservableObject, ReachabilityObserverDelegate {
 
     func reachabilityChanged(_ isReachable: Bool) {
         if isReachable {
-            setState(.allGood)
+            if apiState == .error {
+                setState(.allGood)
+            }
             return
         }
         setState(.error)
@@ -60,11 +62,11 @@ class BikeRentalService: ObservableObject, ReachabilityObserverDelegate {
     }
 
     func updateFavorites() {
-        for var bikeRentalStation in BikeRentalStationStorage.shared.stationsFavorite.value {
+        for var bikeRentalStation in BikeRentalStationStore.shared.stationsFavorite.value {
             bikeRentalStation.fetched = Date()
 
         }
-        BikeRentalStationStorage.shared.saveMoc()
+        BikeRentalStationStore.shared.saveMoc()
     }
 
     func updateStationValues(
@@ -80,14 +82,14 @@ class BikeRentalService: ObservableObject, ReachabilityObserverDelegate {
     }
 
      func fetchNearbyStations() {
-        let userLocation = UserLocationManager.shared.userLocation
+        let userLocation = UserLocationService.shared.userLocation
         if apiState == .error { return }
 
         Network.shared.apollo.fetch(
             query: FetchNearByBikeRentalStationsQuery(
                 lat: userLocation.coordinate.latitude,
                 lon: userLocation.coordinate.longitude,
-                maxDistance: UserSettingsManager.shared.nearbyDistance
+                maxDistance: UserDefaultsService.shared.nearbyDistance
             )
         ) { result in
             switch result {
@@ -99,7 +101,7 @@ class BikeRentalService: ObservableObject, ReachabilityObserverDelegate {
                     guard let stationUnwrapped = self.unwrapGraphQLStationObject(edge?.node?.place?.asBikeRentalStation) else {
                         return
                     }
-                    if let bikeRentalStationCoreData = BikeRentalStationStorage.shared.bikeRentalStationFromCoreData(
+                    if let bikeRentalStationCoreData = BikeRentalStationStore.shared.bikeRentalStationFromCoreData(
                         stationId: stationUnwrapped.stationId!
                     ) {
                         self.updateStationValues(
@@ -123,7 +125,7 @@ class BikeRentalService: ObservableObject, ReachabilityObserverDelegate {
                         nearbyStationFetched.append(bikeRentalStationUnmanaged)
                     }
                 }
-                BikeRentalStationStorage.shared.stationsNearby.value = nearbyStationFetched
+                BikeRentalStationStore.shared.stationsNearby.value = nearbyStationFetched
                 if self.apiState == .loading {
                     self.setState(.allGood)
                 }

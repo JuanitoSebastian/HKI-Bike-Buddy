@@ -28,11 +28,11 @@ struct PermissionsPromptView: View {
     }
 
     var content: AnyView {
-        if UserSettingsManager.shared.locationServicesPromptDisplayed {
+        if UserDefaultsService.shared.locationServicesPromptDisplayed {
             return AnyView(
                 Group {
                     VStack {
-                        Text("Before we start,")
+                        Text("Before we get started,")
                             .font(.custom("Helvetica Neue Bold", size: 35))
                             .foregroundColor(Color("TextTitle"))
                             .multilineTextAlignment(.leading)
@@ -51,7 +51,7 @@ struct PermissionsPromptView: View {
         return AnyView(
             VStack {
                 VStack(alignment: .leading) {
-                    Text("Before you start,")
+                    Text("Before we get started,")
                         .font(.custom("Helvetica Neue Bold", size: 35))
                         .foregroundColor(Color("TextTitle"))
                         .padding([.bottom], 5)
@@ -59,8 +59,8 @@ struct PermissionsPromptView: View {
                         .multilineTextAlignment(.leading)
                         .padding([.bottom], 10)
                     PrettyButton(textToDisplay: "Enable location services", perform: {
-                        UserLocationManager.shared.requestPermissions()
-                        UserSettingsManager.shared.locationServicesPromptDisplayed = true
+                        UserLocationService.shared.requestPermissions()
+                        UserDefaultsService.shared.locationServicesPromptDisplayed = true
 
                     })
                 }

@@ -12,7 +12,7 @@ struct ContentView: View {
 
     @ObservedObject var viewModel = ContentViewModel.shared
     @ObservedObject var bikeRentalService = BikeRentalService.shared
-    @ObservedObject var userLocationManager = UserLocationManager.shared
+    @ObservedObject var userLocationManager = UserLocationService.shared
 
     var body: some View {
         contentToDisplay
@@ -44,7 +44,7 @@ struct ContentView: View {
                     TabView(selection: $viewModel.navigationSelection) {
                         BikeRentalStationsListView(
                             viewModel: BikeRentalStationsListViewModel(
-                                publisher: BikeRentalStationStorage.shared.stationsNearby.eraseToAnyPublisher(),
+                                publisher: BikeRentalStationStore.shared.stationsNearby.eraseToAnyPublisher(),
                                 stationListType: .nearby
                             )
                         )
@@ -59,7 +59,7 @@ struct ContentView: View {
 
                         BikeRentalStationsListView(
                             viewModel: BikeRentalStationsListViewModel(
-                                publisher: BikeRentalStationStorage.shared.stationsFavorite.eraseToAnyPublisher(),
+                                publisher: BikeRentalStationStore.shared.stationsFavorite.eraseToAnyPublisher(),
                                 stationListType: .favourite
                             )
                         )
