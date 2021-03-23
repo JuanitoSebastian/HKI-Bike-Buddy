@@ -9,4 +9,12 @@ HKI Bike Buddy is built using the model-view-viewmodel (MVVM) design pattern. In
 * services: Handles fetching data from the Routing API, management of user location and user defaults.
 * views: Contains the views of the UI
 * viewmodels: Contains the viewmodels for views
-The user interface is built almost entirely using SwiftUI. UiKit was used on one view where MapKit was needed.
+
+## User interface
+**The UI of the application consists of the following views:**
+* Welcome screen featuring a prompt asking the user to enable location services.
+* Main view featuring a list of bike rental stations and a tab bar. User can change between nearby stations and favourite stations from the tab bar.
+* A detailed view of a bike rental station featuring a map showing the location of the user relative to the location of the bike rental station.
+* A settings view where the maximum distance for bike rental stations to be considered nearby can be changed.
+
+The UI is built almost entirely using SwiftUI. UiKit was used on one view where MapKit was needed (MapView). Navigation between the views of the application is done using the SwiftUI components NavigationView and TabView which are contained in *ContentView.swift*.
