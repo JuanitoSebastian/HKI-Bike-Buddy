@@ -24,6 +24,6 @@ There are two types of bike rental stations in the application: favourite statio
 
 ![ModelsDiagram](https://raw.githubusercontent.com/JuanitoSebastian/HelsinkiBikeBuddy/main/Documentation/graphics/ModelsDiagram.png)
 
-Both ManagedBikeRentalStation and UnmanagedBikeRentalStation classes conform to the RentalStation protocol. This makes it possible to work interchangeably with both types of bike rental stations and not having to write class specific code for each station. Some information about the variables and functions:
+Both ManagedBikeRentalStation and UnmanagedBikeRentalStation classes conform to the RentalStation protocol. This makes it possible to work interchangeably with both types of bike rental stations and not having to write class specific implementations. Some fruther information about the variables and functions:
 *  ``fetched`` is Date object containing the information of when the data of the station was last updated with from the API
-*  ``distance(to location: CLLocation): CLLocationDistance`` returns the distance between the RentalStation and the CLLocation object given as parameter. This is used to order the RentalStations from nearest to furthest from the user.
+*  ``distance(to location: CLLocation): CLLocationDistance`` returns the distance between the RentalStation and the CLLocation object given as parameter. This is used to sort the RentalStations from nearest to furthest from the user.

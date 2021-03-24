@@ -10,24 +10,32 @@ import CoreData
 import Combine
 
 // MARK: - Initiation of class
+/**
+ Handles creation, editing and storage of RentalStations. Class is accessed using the singleton instance: shared.
+
+ Class conforms to NSFetchedResultsControllerDelegate protocol enabling use of NSFetchedResultsController.
+ With NSFetchedResultsController we can subscribe to listen for changes in the MOC. This way when
+ ManagedBikeRentalStation objects values are updated or new ManagedBikeRentalStations are created
+ we can reload the objects from the store. This way the persistent store and the application always stay in sync.
+ */
 class BikeRentalStationStore: NSObject, ObservableObject {
-
-    var stationsFavorite = CurrentValueSubject<[RentalStation], Never>([])
-    var stationsNearby = CurrentValueSubject<[RentalStation], Never>([])
-
-    private let bikeRentalStationFetchController: NSFetchedResultsController<ManagedBikeRentalStation>
-
-    var moc: NSManagedObjectContext {
-        PersistenceController.shared.container.viewContext
-    }
-
-    // A singleton instance of the class
+    /// Singleton instance of class
     static let shared: BikeRentalStationStore = BikeRentalStationStore()
 
+    let favouriteBikeRentalStations = CurrentValueSubject<[RentalStation], Never>([])
+    let nearbyBikeRentalStations = CurrentValueSubject<[RentalStation], Never>([])
+    private let fetchController: NSFetchedResultsController<ManagedBikeRentalStation>
+
+    var managedObjectContext: NSManagedObjectContext {
+        fetchController.managedObjectContext
+    }
+
+    /// Initiates the NSFetchedResultsController and performs initial fetch
+    /// of ManagedBikeRentalStations from persistent store.
     private override init() {
         let fetchRequest: NSFetchRequest<ManagedBikeRentalStation> = ManagedBikeRentalStation.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
-        bikeRentalStationFetchController = NSFetchedResultsController(
+        fetchController = NSFetchedResultsController(
             fetchRequest: fetchRequest,
             managedObjectContext: PersistenceController.shared.container.viewContext,
             sectionNameKeyPath: nil,
@@ -36,12 +44,17 @@ class BikeRentalStationStore: NSObject, ObservableObject {
 
         super.init()
 
-        bikeRentalStationFetchController.delegate = self
+        fetchController.delegate = self
+        fetchStationsFromPersistentStore()
 
+    }
+
+    /// Fetches stations from Core Data persistent store
+    private func fetchStationsFromPersistentStore() {
         do {
-            try bikeRentalStationFetchController.performFetch()
-            guard let bikeRentalStationsArray = bikeRentalStationFetchController.fetchedObjects else { return }
-            self.stationsFavorite.value = bikeRentalStationsArray
+            try fetchController.performFetch()
+            guard let bikeRentalStationsArray = fetchController.fetchedObjects else { return }
+            self.favouriteBikeRentalStations.value = bikeRentalStationsArray
         } catch {
             Helper.log("Failed to fetch stations from Core Data")
         }
@@ -52,7 +65,7 @@ class BikeRentalStationStore: NSObject, ObservableObject {
 // MARK: - Creation / Editing of Rental Stations
 extension BikeRentalStationStore {
 
-    func saveMoc() {
+    func saveManagedObjectContext() {
         do {
             try PersistenceController.shared.container.viewContext.save()
         } catch {
@@ -60,8 +73,8 @@ extension BikeRentalStationStore {
         }
     }
 
-    private func removeFromMoc(_ bikeRentalStationToDelete: ManagedBikeRentalStation) {
-        moc.delete(bikeRentalStationToDelete)
+    private func removeFromManagedObjectContext(_ bikeRentalStationToDelete: ManagedBikeRentalStation) {
+        managedObjectContext.delete(bikeRentalStationToDelete)
     }
 
     /**
@@ -81,7 +94,7 @@ extension BikeRentalStationStore {
         state: Bool,
         fetched: Date
     ) -> ManagedBikeRentalStation {
-        let managedBikeRentalStation = ManagedBikeRentalStation(context: moc)
+        let managedBikeRentalStation = ManagedBikeRentalStation(context: managedObjectContext)
         managedBikeRentalStation.stationId = stationId
         managedBikeRentalStation.name = name
         managedBikeRentalStation.lat = lat
@@ -138,7 +151,7 @@ extension BikeRentalStationStore {
         fetchRequest.predicate = NSPredicate(format: "stationId = %@", stationId)
 
         do {
-            let results = try moc.fetch(fetchRequest)
+            let results = try managedObjectContext.fetch(fetchRequest)
             if let bikeRentalStation = results.first {
                 return bikeRentalStation
             }
@@ -157,7 +170,7 @@ extension BikeRentalStationStore {
         if rentalStation is UnmanagedBikeRentalStation {
             var stationsNearbyEdited = removeStationFromList(
                 stationToRemove: rentalStation,
-                stations: stationsNearby.value
+                stations: nearbyBikeRentalStations.value
             )
             let managedStation = createManagedBikeRentalStation(
                 name: rentalStation.name,
@@ -172,8 +185,8 @@ extension BikeRentalStationStore {
                 fetched: rentalStation.fetched
             )
             stationsNearbyEdited.append(managedStation)
-            stationsNearby.value = stationsNearbyEdited
-            saveMoc()
+            nearbyBikeRentalStations.value = stationsNearbyEdited
+            saveManagedObjectContext()
         }
     }
 
@@ -186,7 +199,7 @@ extension BikeRentalStationStore {
         let distance = rentalStation.distance(to: UserLocationService.shared.userLocation)
 
         if distance <= Double(UserDefaultsService.shared.nearbyDistance) {
-            var stationsEdited = removeStationFromList(stationToRemove: rentalStation, stations: stationsNearby.value)
+            var stationsEdited = removeStationFromList(stationToRemove: rentalStation, stations: nearbyBikeRentalStations.value)
             let unmanaged = createUnmanagedBikeRentalStation(
                 name: rentalStation.name,
                 stationId: rentalStation.stationId,
@@ -200,12 +213,12 @@ extension BikeRentalStationStore {
                 fetched: rentalStation.fetched
             )
             stationsEdited.append(unmanaged)
-            stationsNearby.value = stationsEdited
+            nearbyBikeRentalStations.value = stationsEdited
         }
         // swiftlint:disable force_cast
-        removeFromMoc(rentalStation as! ManagedBikeRentalStation)
+        removeFromManagedObjectContext(rentalStation as! ManagedBikeRentalStation)
         // swiftlint:enable force_cast
-        saveMoc()
+        saveManagedObjectContext()
     }
     /**
      Removes a RentalStation from a list of RentalStations.
@@ -231,7 +244,7 @@ extension BikeRentalStationStore: NSFetchedResultsControllerDelegate {
     // When content in the MOC changes the value of stationsFavourite is updated (overwritten) with new values from MOC.
     public func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         guard let fetchedBikeRentalStations = controller.fetchedObjects as? [RentalStation] else { return }
-        self.stationsFavorite.value = fetchedBikeRentalStations
+        self.favouriteBikeRentalStations.value = fetchedBikeRentalStations
     }
 
 }

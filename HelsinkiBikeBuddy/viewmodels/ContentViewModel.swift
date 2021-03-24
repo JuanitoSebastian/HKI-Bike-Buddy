@@ -10,7 +10,7 @@ import SwiftUI
 
 class ContentViewModel: ObservableObject {
 
-    @Published var navigationSelection = BikeRentalStationStore.shared.stationsFavorite.value.isEmpty ?
+    @Published var navigationSelection = BikeRentalStationStore.shared.favouriteBikeRentalStations.value.isEmpty ?
         MainViewNavigation.nearbyStations : MainViewNavigation.myStations
     @Published var appState = MainViewContent.navigationView
     var timer: Timer?

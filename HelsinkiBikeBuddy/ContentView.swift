@@ -44,7 +44,7 @@ struct ContentView: View {
                     TabView(selection: $viewModel.navigationSelection) {
                         BikeRentalStationsListView(
                             viewModel: BikeRentalStationsListViewModel(
-                                publisher: BikeRentalStationStore.shared.stationsNearby.eraseToAnyPublisher(),
+                                publisher: BikeRentalStationStore.shared.nearbyBikeRentalStations.eraseToAnyPublisher(),
                                 stationListType: .nearby
                             )
                         )
@@ -59,7 +59,7 @@ struct ContentView: View {
 
                         BikeRentalStationsListView(
                             viewModel: BikeRentalStationsListViewModel(
-                                publisher: BikeRentalStationStore.shared.stationsFavorite.eraseToAnyPublisher(),
+                                publisher: BikeRentalStationStore.shared.favouriteBikeRentalStations.eraseToAnyPublisher(),
                                 stationListType: .favourite
                             )
                         )

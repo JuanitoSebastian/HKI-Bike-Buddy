@@ -11,7 +11,7 @@ import CoreData
 class IntentHandler: INExtension, ConfigurationIntentHandling {
     func provideBikeRentalStationOptionsCollection(for intent: ConfigurationIntent, with completion: @escaping (INObjectCollection<WidgetStation>?, Error?) -> Void) {
 
-        let stations: [WidgetStation] = BikeRentalStationStore.shared.stationsFavorite.value.map { bikeRentalStation in
+        let stations: [WidgetStation] = BikeRentalStationStore.shared.favouriteBikeRentalStations.value.map { bikeRentalStation in
             let widgetStation = WidgetStation(identifier: bikeRentalStation.stationId, display: bikeRentalStation.name)
             return widgetStation
         }

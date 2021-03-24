@@ -62,11 +62,11 @@ class BikeRentalService: ObservableObject, ReachabilityObserverDelegate {
     }
 
     func updateFavorites() {
-        for var bikeRentalStation in BikeRentalStationStore.shared.stationsFavorite.value {
+        for var bikeRentalStation in BikeRentalStationStore.shared.favouriteBikeRentalStations.value {
             bikeRentalStation.fetched = Date()
 
         }
-        BikeRentalStationStore.shared.saveMoc()
+        BikeRentalStationStore.shared.saveManagedObjectContext()
     }
 
     func updateStationValues(
@@ -125,7 +125,7 @@ class BikeRentalService: ObservableObject, ReachabilityObserverDelegate {
                         nearbyStationFetched.append(bikeRentalStationUnmanaged)
                     }
                 }
-                BikeRentalStationStore.shared.stationsNearby.value = nearbyStationFetched
+                BikeRentalStationStore.shared.nearbyBikeRentalStations.value = nearbyStationFetched
                 if self.apiState == .loading {
                     self.setState(.allGood)
                 }
