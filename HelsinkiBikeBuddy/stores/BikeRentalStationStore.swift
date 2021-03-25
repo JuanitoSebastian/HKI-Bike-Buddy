@@ -18,9 +18,10 @@ import Combine
  ManagedBikeRentalStation objects values are updated or new ManagedBikeRentalStations are created
  we can reload the objects from the store. This way the persistent store and the application always stay in sync.
  */
-class BikeRentalStationStore: NSObject, ObservableObject {
+class BikeRentalStationStore: NSObject {
     /// Singleton instance of class
-    static let shared: BikeRentalStationStore = BikeRentalStationStore()
+    static let shared = BikeRentalStationStore(testing: false)
+    static let testing = BikeRentalStationStore(testing: true)
 
     let favouriteBikeRentalStations = CurrentValueSubject<[RentalStation], Never>([])
     let nearbyBikeRentalStations = CurrentValueSubject<[RentalStation], Never>([])
@@ -32,12 +33,15 @@ class BikeRentalStationStore: NSObject, ObservableObject {
 
     /// Initiates the NSFetchedResultsController and performs initial fetch
     /// of ManagedBikeRentalStations from persistent store.
-    private override init() {
+    private init(testing: Bool) {
         let fetchRequest: NSFetchRequest<ManagedBikeRentalStation> = ManagedBikeRentalStation.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+
         fetchController = NSFetchedResultsController(
             fetchRequest: fetchRequest,
-            managedObjectContext: PersistenceController.shared.container.viewContext,
+            managedObjectContext: testing ?
+                PersistenceController.testing.container.viewContext :
+                PersistenceController.shared.container.viewContext,
             sectionNameKeyPath: nil,
             cacheName: nil
         )
@@ -77,65 +81,39 @@ extension BikeRentalStationStore {
         managedObjectContext.delete(bikeRentalStationToDelete)
     }
 
-    /**
-     Creates a ManagedBikeRentalStation and returns it
-     - Returns: The ManagedBikeRentalStation created from the parameters
-     */
-    // swiftlint:disable:next function_parameter_count
-    private func createManagedBikeRentalStation(
-        name: String,
-        stationId: String,
-        lat: Double,
-        lon: Double,
-        spacesAvailable: Int64,
-        bikesAvailable: Int64,
-        allowDropoff: Bool,
-        favourite: Bool,
-        state: Bool,
-        fetched: Date
-    ) -> ManagedBikeRentalStation {
+    /// Converts a UnmanagedBikeRentalStation to a ManagedBikeRentalStation
+    /// - Parameter rentalStation: The rental station that should be converted to a ManagedBikeRentalStation
+    /// - Returns: ManagedBikeRentalStation. If rentalStation is already managed it is returned as is.
+    private func toManagedBikeRentalStation(rentalStation: RentalStation) -> ManagedBikeRentalStation {
+        if rentalStation is ManagedBikeRentalStation { return (rentalStation as? ManagedBikeRentalStation)! }
         let managedBikeRentalStation = ManagedBikeRentalStation(context: managedObjectContext)
-        managedBikeRentalStation.stationId = stationId
-        managedBikeRentalStation.name = name
-        managedBikeRentalStation.lat = lat
-        managedBikeRentalStation.lon = lon
-        managedBikeRentalStation.bikesAvailable = bikesAvailable
-        managedBikeRentalStation.spacesAvailable = spacesAvailable
-        managedBikeRentalStation.allowDropoff = allowDropoff
-        managedBikeRentalStation.favorite = favourite
-        managedBikeRentalStation.fetched = fetched
-        managedBikeRentalStation.state = state
+        managedBikeRentalStation.stationId = rentalStation.stationId
+        managedBikeRentalStation.name = rentalStation.name
+        managedBikeRentalStation.lat = rentalStation.lat
+        managedBikeRentalStation.lon = rentalStation.lon
+        managedBikeRentalStation.spacesAvailable = rentalStation.spacesAvailable
+        managedBikeRentalStation.bikesAvailable = rentalStation.bikesAvailable
+        managedBikeRentalStation.allowDropoff = rentalStation.allowDropoff
+        managedBikeRentalStation.state = rentalStation.state
+        managedBikeRentalStation.fetched = rentalStation.fetched
         return managedBikeRentalStation
     }
 
-    /**
-     Creates an UnmanagedBikeRentalStation.
-     - Returns: The UnmanagedBikeRentalStation created from the parameters
-     */
-    // swiftlint:disable:next function_parameter_count
-    private func createUnmanagedBikeRentalStation(
-        name: String,
-        stationId: String,
-        lat: Double,
-        lon: Double,
-        spacesAvailable: Int64,
-        bikesAvailable: Int64,
-        allowDropoff: Bool,
-        favourite: Bool,
-        state: Bool,
-        fetched: Date
-    ) -> UnmanagedBikeRentalStation {
+    /// Converts a ManagedBikeRentalStation to an UnmanagedBikeRentalStation
+    /// - Parameter rentalStation: The rental station that should be converted to an UnmanagedBikeRentalStation
+    /// - Returns: UnmanagedBikeRentalStation. If rentalStation is already unmanaged it is returned as is.
+    private func toUnmanagedBikeRentalStation(rentalStation: RentalStation) -> UnmanagedBikeRentalStation {
+        if rentalStation is UnmanagedBikeRentalStation { return (rentalStation as? UnmanagedBikeRentalStation)! }
         let unmanagedBikeRentalStation = UnmanagedBikeRentalStation(
-            stationId: stationId,
-            name: name,
-            allowDropoff: allowDropoff,
-            bikesAvailable: bikesAvailable,
-            favorite: false,
-            fetched: fetched,
-            lat: lat,
-            lon: lon,
-            spacesAvailable: spacesAvailable,
-            state: state
+            stationId: rentalStation.stationId,
+            name: rentalStation.name,
+            allowDropoff: rentalStation.allowDropoff,
+            bikesAvailable: rentalStation.bikesAvailable,
+            fetched: rentalStation.fetched,
+            lat: rentalStation.lat,
+            lon: rentalStation.lon,
+            spacesAvailable: rentalStation.spacesAvailable,
+            state: rentalStation.state
         )
         return unmanagedBikeRentalStation
     }
@@ -169,21 +147,10 @@ extension BikeRentalStationStore {
     func favouriteStation(rentalStation: RentalStation) {
         if rentalStation is UnmanagedBikeRentalStation {
             var stationsNearbyEdited = removeStationFromList(
-                stationToRemove: rentalStation,
-                stations: nearbyBikeRentalStations.value
+                station: rentalStation,
+                from: nearbyBikeRentalStations.value
             )
-            let managedStation = createManagedBikeRentalStation(
-                name: rentalStation.name,
-                stationId: rentalStation.stationId,
-                lat: rentalStation.lat,
-                lon: rentalStation.lon,
-                spacesAvailable: rentalStation.spacesAvailable,
-                bikesAvailable: rentalStation.bikesAvailable,
-                allowDropoff: rentalStation.allowDropoff,
-                favourite: true,
-                state: rentalStation.state,
-                fetched: rentalStation.fetched
-            )
+            let managedStation = toManagedBikeRentalStation(rentalStation: rentalStation)
             stationsNearbyEdited.append(managedStation)
             nearbyBikeRentalStations.value = stationsNearbyEdited
             saveManagedObjectContext()
@@ -196,24 +163,15 @@ extension BikeRentalStationStore {
      - Parameter rentalStation: The RentalStation to unfavourite
      */
     func unfavouriteStation(rentalStation: RentalStation) {
+        if rentalStation is UnmanagedBikeRentalStation { return }
         let distance = rentalStation.distance(to: UserLocationService.shared.userLocation)
 
         if distance <= Double(UserDefaultsService.shared.nearbyDistance) {
-            var stationsEdited = removeStationFromList(stationToRemove: rentalStation, stations: nearbyBikeRentalStations.value)
-            let unmanaged = createUnmanagedBikeRentalStation(
-                name: rentalStation.name,
-                stationId: rentalStation.stationId,
-                lat: rentalStation.lat,
-                lon: rentalStation.lon,
-                spacesAvailable: rentalStation.spacesAvailable,
-                bikesAvailable: rentalStation.bikesAvailable,
-                allowDropoff: rentalStation.allowDropoff,
-                favourite: false,
-                state: rentalStation.state,
-                fetched: rentalStation.fetched
-            )
-            stationsEdited.append(unmanaged)
+            var stationsEdited = removeStationFromList(station: rentalStation, from: nearbyBikeRentalStations.value)
+            let unmanagedRentalStation = toUnmanagedBikeRentalStation(rentalStation: rentalStation)
+            stationsEdited.append(unmanagedRentalStation)
             nearbyBikeRentalStations.value = stationsEdited
+
         }
         // swiftlint:disable force_cast
         removeFromManagedObjectContext(rentalStation as! ManagedBikeRentalStation)
@@ -227,10 +185,10 @@ extension BikeRentalStationStore {
      - Parameter stations: The list which will be edited
      - Returns: An edited list of the provided RentalStations.
      */
-    private func removeStationFromList(stationToRemove: RentalStation, stations: [RentalStation]) -> [RentalStation] {
-        var stationsEdited = stations
+    private func removeStationFromList(station: RentalStation, from: [RentalStation]) -> [RentalStation] {
+        var stationsEdited = from
         for (index, rentalStation) in stationsEdited.enumerated()
-        where rentalStation.stationId == stationToRemove.stationId {
+        where rentalStation.stationId == station.stationId {
             stationsEdited.remove(at: index)
         }
         return stationsEdited
@@ -241,7 +199,7 @@ extension BikeRentalStationStore {
 // MARK: - NSFetchedResultsControllerDelegate
 extension BikeRentalStationStore: NSFetchedResultsControllerDelegate {
 
-    // When content in the MOC changes the value of stationsFavourite is updated (overwritten) with new values from MOC.
+    /// Subscribig to listen for chances in the Managed Object Context. After changes have been made the ManagedBikeRentalStations are reloaded to keep MOC and store in sync.
     public func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         guard let fetchedBikeRentalStations = controller.fetchedObjects as? [RentalStation] else { return }
         self.favouriteBikeRentalStations.value = fetchedBikeRentalStations

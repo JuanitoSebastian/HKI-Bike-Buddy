@@ -154,7 +154,6 @@ func createBikeRentalStation(viewContext: NSManagedObjectContext) -> ManagedBike
     bikeRentalStation.spacesAvailable = 4
     bikeRentalStation.bikesAvailable = 5
     bikeRentalStation.fetched = Date()
-    bikeRentalStation.favorite = true
     bikeRentalStation.state = true
     return bikeRentalStation
 }

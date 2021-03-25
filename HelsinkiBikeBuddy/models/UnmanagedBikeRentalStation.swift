@@ -6,15 +6,13 @@
 //
 
 import Foundation
-import CoreLocation
 
-class UnmanagedBikeRentalStation: RentalStation {
+class UnmanagedBikeRentalStation {
 
     var stationId: String
     var name: String
     var allowDropoff: Bool
     var bikesAvailable: Int64
-    var favorite: Bool
     var fetched: Date
     var lat: Double
     var lon: Double
@@ -26,7 +24,6 @@ class UnmanagedBikeRentalStation: RentalStation {
         name: String,
         allowDropoff: Bool,
         bikesAvailable: Int64,
-        favorite: Bool,
         fetched: Date,
         lat: Double,
         lon: Double,
@@ -37,15 +34,23 @@ class UnmanagedBikeRentalStation: RentalStation {
         self.name = name
         self.allowDropoff = allowDropoff
         self.bikesAvailable = bikesAvailable
-        self.favorite = favorite
         self.fetched = fetched
         self.lat = lat
         self.lon = lon
         self.spacesAvailable = spacesAvailable
         self.state = state
     }
+
 }
 
+// MARK: - RentalStation
+extension UnmanagedBikeRentalStation: RentalStation {
+    var favourite: Bool {
+        false
+    }
+}
+
+// MARK: - Identifiable
 extension UnmanagedBikeRentalStation: Identifiable {
     var id: String {
         stationId

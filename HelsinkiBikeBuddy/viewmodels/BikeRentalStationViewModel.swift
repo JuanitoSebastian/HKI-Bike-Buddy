@@ -22,7 +22,7 @@ class BikeRentalStationViewModel: ObservableObject {
 
     init(bikeRentalStation: RentalStation) {
         self.bikeRentalStation = bikeRentalStation
-        self.favoriteStatus = bikeRentalStation.favorite
+        self.favoriteStatus = bikeRentalStation.favourite
         self.toggleTriggered = false
     }
 
@@ -75,7 +75,7 @@ class BikeRentalStationViewModel: ObservableObject {
 
         favoriteStatus.toggle()
 
-        if bikeRentalStation.favorite {
+        if bikeRentalStation.favourite {
             // Wait for the heart to turn grey
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .milliseconds(200)) {
                 BikeRentalStationStore.shared.unfavouriteStation(rentalStation: self.bikeRentalStation)

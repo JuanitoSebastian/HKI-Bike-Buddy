@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-extension ManagedBikeRentalStation: RentalStation {
+extension ManagedBikeRentalStation {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<ManagedBikeRentalStation> {
         return NSFetchRequest<ManagedBikeRentalStation>(entityName: "ManagedBikeRentalStation")
@@ -17,7 +17,6 @@ extension ManagedBikeRentalStation: RentalStation {
 
     @NSManaged dynamic public var allowDropoff: Bool
     @NSManaged dynamic public var bikesAvailable: Int64
-    @NSManaged dynamic public var favorite: Bool
     @NSManaged dynamic public var fetched: Date
     @NSManaged dynamic public var lat: Double
     @NSManaged dynamic public var lon: Double
