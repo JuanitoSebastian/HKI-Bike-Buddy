@@ -164,6 +164,7 @@ extension BikeRentalStationStore {
      */
     func unfavouriteStation(rentalStation: RentalStation) {
         if rentalStation is UnmanagedBikeRentalStation { return }
+        print(rentalStation.name)
         let distance = rentalStation.distance(to: UserLocationService.shared.userLocation)
 
         if distance <= Double(UserDefaultsService.shared.nearbyDistance) {

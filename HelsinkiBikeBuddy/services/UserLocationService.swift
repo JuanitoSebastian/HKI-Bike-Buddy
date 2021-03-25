@@ -28,7 +28,7 @@ class UserLocationService: NSObject, ObservableObject, CLLocationManagerDelegate
         manager.requestWhenInUseAuthorization()
     }
 
-    // FIXME: On first start of app causes crash beacause of nil value.
+    // FIXME: This value can not be forcefully unwrapped. Causes crash in testing.
     var userLocation: CLLocation {
         manager.location!
     }
