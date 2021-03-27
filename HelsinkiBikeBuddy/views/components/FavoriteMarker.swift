@@ -18,11 +18,6 @@ struct FavoriteMarker: View {
 
     var body: some View {
         Button {
-            // Delay added for more natural haptic feedback
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .milliseconds(200)) {
-                let generator = UIImpactFeedbackGenerator(style: .rigid)
-                generator.impactOccurred()
-            }
             action()
         } label: {
             heart

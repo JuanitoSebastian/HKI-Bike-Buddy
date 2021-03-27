@@ -8,6 +8,8 @@
 import SwiftUI
 import MapKit
 
+// TODO: When userlocation is unavailable display only the rental station on map
+// Check the right amount of zoom...
 struct MapView: UIViewRepresentable {
 
     var rentalStation: RentalStation
@@ -17,34 +19,40 @@ struct MapView: UIViewRepresentable {
     }
 
     private var minLat: Double {
-        if rentalStation.lat <= UserLocationService.shared.userLocation2D.latitude {
+        if rentalStation.lat <= UserLocationService.shared.userLocation2D!.latitude {
             return rentalStation.lat
         }
-        return UserLocationService.shared.userLocation2D.latitude
+        return UserLocationService.shared.userLocation2D!.latitude
     }
 
     private var minLon: Double {
-        if rentalStation.lon <= UserLocationService.shared.userLocation2D.longitude {
+        if rentalStation.lon <= UserLocationService.shared.userLocation2D!.longitude {
             return rentalStation.lon
         }
-        return UserLocationService.shared.userLocation2D.longitude
+        return UserLocationService.shared.userLocation2D!.longitude
     }
 
     private var maxLat: Double {
-        if rentalStation.lat >= UserLocationService.shared.userLocation2D.latitude {
+        if rentalStation.lat >= UserLocationService.shared.userLocation2D!.latitude {
             return rentalStation.lat
         }
-        return UserLocationService.shared.userLocation2D.latitude
+        return UserLocationService.shared.userLocation2D!.latitude
     }
 
     private var maxLon: Double {
-        if rentalStation.lon >= UserLocationService.shared.userLocation2D.longitude {
+        if rentalStation.lon >= UserLocationService.shared.userLocation2D!.longitude {
             return rentalStation.lon
         }
-        return UserLocationService.shared.userLocation2D.longitude
+        return UserLocationService.shared.userLocation2D!.longitude
     }
 
     private var centerPoint: CLLocationCoordinate2D {
+        if UserLocationService.shared.userLocation2D == nil {
+            return CLLocationCoordinate2D(
+                latitude: rentalStation.lat,
+                longitude: rentalStation.lon
+            )
+        }
         return CLLocationCoordinate2D(
             latitude: (maxLat + minLat) * 0.5,
             longitude: (maxLon + minLon) * 0.5
@@ -52,6 +60,9 @@ struct MapView: UIViewRepresentable {
     }
 
     private var zoom: Double {
+        if UserLocationService.shared.userLocation2D == nil {
+            return 1
+        }
         let location1 = CLLocation(latitude: minLat, longitude: minLon)
         let location2 = CLLocation(latitude: maxLat, longitude: maxLon)
         var zoom = location1.distance(from: location2)

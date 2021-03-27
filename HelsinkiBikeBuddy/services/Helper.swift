@@ -27,4 +27,9 @@ class Helper {
     static func roundToNearest(_ value: Double, toNearest: Double) -> Double {
       return round(value / toNearest) * toNearest
     }
+
+    static func isRunningTests() -> Bool {
+        return UserDefaults.standard.bool(forKey: "isTest")
+    }
+
 }

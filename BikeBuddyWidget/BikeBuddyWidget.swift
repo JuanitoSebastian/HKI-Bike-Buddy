@@ -69,12 +69,13 @@ struct BikeRentalStationWidgetEntry: TimelineEntry {
     let bikeRentalStation: RentalStation?
 }
 
+// FIXME: Forceful unwrapping of user location
 struct BikeBuddyWidgetEntryView: View {
     var entry: Provider.Entry
 
     func distanceInMeters() -> String {
         let location = CLLocation(latitude: entry.bikeRentalStation!.lat, longitude: entry.bikeRentalStation!.lon)
-        var distanceDouble = Double(location.distance(from: UserLocationService.shared.userLocation)).rounded()
+        var distanceDouble = Double(location.distance(from: UserLocationService.shared.userLocation!)).rounded()
         if distanceDouble >= 1000 {
             distanceDouble /= 1000
             return "\(String(distanceDouble))km"

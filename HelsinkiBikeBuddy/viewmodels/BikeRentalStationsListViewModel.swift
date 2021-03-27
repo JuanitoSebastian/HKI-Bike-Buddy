@@ -14,7 +14,6 @@ class BikeRentalStationsListViewModel: ObservableObject {
     @Published var bikeRentalStations: [RentalStation] = []
     var stationListType: BikeRentalStationListType
     private var cancellable: AnyCancellable?
-    private var sorting: Bool = false
 
     var state: BikeRentalStationListViewState {
         if bikeRentalStations.isEmpty {
@@ -47,12 +46,12 @@ class BikeRentalStationsListViewModel: ObservableObject {
         self.cancellable = publisher.sink { fetched in
             self.bikeRentalStations = fetched
             // Sort stations from closest to furthest form user
-            self.sorting = true
-            self.bikeRentalStations.sort( by: {
-                $0.distance(to: UserLocationService.shared.userLocation)
-                    < $1.distance(to: UserLocationService.shared.userLocation)
-            })
-            self.sorting = false
+            if let userLocation = UserLocationService.shared.userLocation {
+                self.bikeRentalStations.sort( by: {
+                    $0.distance(to: userLocation)
+                        < $1.distance(to: userLocation)
+                })
+            }
         }
     }
 }

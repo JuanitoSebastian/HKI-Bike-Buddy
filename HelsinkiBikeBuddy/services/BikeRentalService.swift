@@ -82,7 +82,7 @@ class BikeRentalService: ObservableObject, ReachabilityObserverDelegate {
     }
 
      func fetchNearbyStations() {
-        let userLocation = UserLocationService.shared.userLocation
+        guard let userLocation = UserLocationService.shared.userLocation else { return }
         if apiState == .error { return }
 
         Network.shared.apollo.fetch(

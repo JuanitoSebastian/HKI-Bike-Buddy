@@ -12,6 +12,7 @@ import Combine
 // MARK: - Initiation of class
 /**
  Handles creation, editing and storage of RentalStations. Class is accessed using the singleton instance: shared.
+ The testing instance of the class doees not persistently save the ManagedBikeRentalStations.
 
  Class conforms to NSFetchedResultsControllerDelegate protocol enabling use of NSFetchedResultsController.
  With NSFetchedResultsController we can subscribe to listen for changes in the MOC. This way when
@@ -20,8 +21,7 @@ import Combine
  */
 class BikeRentalStationStore: NSObject {
     /// Singleton instance of class
-    static let shared = BikeRentalStationStore(testing: false)
-    static let testing = BikeRentalStationStore(testing: true)
+    static let shared = BikeRentalStationStore()
 
     let favouriteBikeRentalStations = CurrentValueSubject<[RentalStation], Never>([])
     let nearbyBikeRentalStations = CurrentValueSubject<[RentalStation], Never>([])
@@ -33,15 +33,21 @@ class BikeRentalStationStore: NSObject {
 
     /// Initiates the NSFetchedResultsController and performs initial fetch
     /// of ManagedBikeRentalStations from persistent store.
-    private init(testing: Bool) {
+    /// If tests are running the correct Managed Object Context is fetched
+    override private init() {
         let fetchRequest: NSFetchRequest<ManagedBikeRentalStation> = ManagedBikeRentalStation.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
-
+        // Check for testing flag
+        #if DEBUG
+        let managedObjectContextToUse = Helper.isRunningTests() ?
+        PersistenceController.testing.container.viewContext :
+        PersistenceController.shared.container.viewContext
+        #else
+        let managedObjectContextToUse = PersistenceController.shared.container.viewContext
+        #endif
         fetchController = NSFetchedResultsController(
             fetchRequest: fetchRequest,
-            managedObjectContext: testing ?
-                PersistenceController.testing.container.viewContext :
-                PersistenceController.shared.container.viewContext,
+            managedObjectContext: managedObjectContextToUse,
             sectionNameKeyPath: nil,
             cacheName: nil
         )
@@ -165,20 +171,24 @@ extension BikeRentalStationStore {
     func unfavouriteStation(rentalStation: RentalStation) {
         if rentalStation is UnmanagedBikeRentalStation { return }
         print(rentalStation.name)
-        let distance = rentalStation.distance(to: UserLocationService.shared.userLocation)
+        if let userLocation = UserLocationService.shared.userLocation {
+            let distance = rentalStation.distance(to: userLocation)
 
-        if distance <= Double(UserDefaultsService.shared.nearbyDistance) {
-            var stationsEdited = removeStationFromList(station: rentalStation, from: nearbyBikeRentalStations.value)
-            let unmanagedRentalStation = toUnmanagedBikeRentalStation(rentalStation: rentalStation)
-            stationsEdited.append(unmanagedRentalStation)
-            nearbyBikeRentalStations.value = stationsEdited
-
+            if distance <= Double(UserDefaultsService.shared.nearbyDistance) {
+                Helper.log("Adding back, distance: \(distance)")
+                var stationsEdited = removeStationFromList(station: rentalStation, from: nearbyBikeRentalStations.value)
+                let unmanagedRentalStation = toUnmanagedBikeRentalStation(rentalStation: rentalStation)
+                stationsEdited.append(unmanagedRentalStation)
+                nearbyBikeRentalStations.value = stationsEdited
+            }
         }
+
         // swiftlint:disable force_cast
         removeFromManagedObjectContext(rentalStation as! ManagedBikeRentalStation)
         // swiftlint:enable force_cast
         saveManagedObjectContext()
     }
+
     /**
      Removes a RentalStation from a list of RentalStations.
      If stationToRemove is not found in stations it is returned untouched.

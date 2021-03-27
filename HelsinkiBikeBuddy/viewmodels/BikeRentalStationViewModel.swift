@@ -88,9 +88,12 @@ class BikeRentalStationViewModel: ObservableObject {
     }
 
     func distanceInMeters() -> String {
+        guard let userLocation = UserLocationService.shared.userLocation else {
+            return "User location unavailbale"
+        }
         var distanceDouble = Int(
             Helper.roundToNearest(
-                coordinates.distance(from: userLocationManager.userLocation), toNearest: 20
+                coordinates.distance(from: userLocation), toNearest: 20
             )
         )
 

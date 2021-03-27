@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import Combine
+
 struct BikeRentalStationsListView: View {
 
     @ObservedObject var viewModel: BikeRentalStationsListViewModel
@@ -30,10 +32,7 @@ struct BikeRentalStationsListView: View {
                         ForEach(viewModel.bikeRentalStations, id: \.id) { bikeRentalStation in
                             NavigationLink(destination: DetailedBikeRentalStationView(viewModel: DetailedBikeRentalStationViewModel(bikeRentalStation: bikeRentalStation))) {
 
-                                BikeRentalStationView(
-                                    viewModel: BikeRentalStationViewModel(bikeRentalStation: bikeRentalStation
-                                    )
-                                )
+                                BikeRentalStationCardView(rentalStation: bikeRentalStation)
                             }
                             .buttonStyle(PlainButtonStyle())
 
