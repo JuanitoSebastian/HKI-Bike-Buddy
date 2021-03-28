@@ -12,9 +12,12 @@ import MapKit
 // TODO: Error handling for locations
 class UserLocationService: NSObject, ObservableObject {
 
+    // Singleton instance
     static let shared: UserLocationService = UserLocationService()
-    private let manager: CLLocationManager
+
     @Published var locationAuthorization = LocationAuthorizationStatus.denied
+
+    private let manager: CLLocationManager
     private let operationMode: OperationMode
     var testingLocation: CLLocation?
 
@@ -29,10 +32,13 @@ class UserLocationService: NSObject, ObservableObject {
         manager.delegate = self
     }
 
-    func requestPermissions() {
+    /// Requests user to authorize location services
+    func requestLocationServicesPermission() {
         manager.requestWhenInUseAuthorization()
     }
 
+    /// Returns the current CLLocation? obtained from CLLocationManager.
+    /// If testing flag is found, the testingLocation is returned
     var userLocation: CLLocation? {
         #if DEBUG
         return operationMode == .testing ? testingLocation : manager.location
@@ -41,18 +47,13 @@ class UserLocationService: NSObject, ObservableObject {
         #endif
     }
 
+    /// Returns the current CLLocation? obtained from CLLocationManager but converted to CLLocationCoordinate2D?
+    /// If testing flag is found, the testingLocation is returned
     var userLocation2D: CLLocationCoordinate2D? {
         guard let location = userLocation else { return nil }
         return CLLocationCoordinate2D(
             latitude: location.coordinate.latitude,
             longitude: location.coordinate.longitude
-        )
-    }
-
-    private func toCoordinate2D(lat: Double, lon: Double) -> CLLocationCoordinate2D {
-        return CLLocationCoordinate2D(
-            latitude: lat,
-            longitude: lon
         )
     }
 }
@@ -63,11 +64,11 @@ extension UserLocationService: CLLocationManagerDelegate {
         switch manager.authorizationStatus {
 
         case .restricted, .denied, .notDetermined:
-            Helper.log("Location access is not permitted")
+            Log.i("Location services not permitted")
             locationAuthorization = .denied
 
         default:
-            Helper.log("Location access permitted!")
+            Log.i("Location services permitted")
             locationAuthorization = .success
 
         }

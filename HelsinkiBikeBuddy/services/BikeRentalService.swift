@@ -98,7 +98,9 @@ class BikeRentalService: ObservableObject, ReachabilityObserverDelegate {
                 // Iterating thru the fetched stations
                 var nearbyStationFetched: [RentalStation] = []
                 for edge in edgesUnwrapped {
-                    guard let stationUnwrapped = self.unwrapGraphQLStationObject(edge?.node?.place?.asBikeRentalStation) else {
+                    guard let stationUnwrapped = self.unwrapGraphQLStationObject(
+                            edge?.node?.place?.asBikeRentalStation
+                    ) else {
                         return
                     }
                     if let bikeRentalStationCoreData = BikeRentalStationStore.shared.bikeRentalStationFromCoreData(
@@ -134,7 +136,10 @@ class BikeRentalService: ObservableObject, ReachabilityObserverDelegate {
         }
     }
 
-    func fetchBikeRentalStation(stationId: String, completition: @escaping (_ rentalStation: UnmanagedBikeRentalStation?) -> Void) {
+    func fetchBikeRentalStation(
+        stationId: String,
+        completition: @escaping (_ rentalStation: UnmanagedBikeRentalStation?) -> Void
+    ) {
         Network.shared.apollo.fetch(query: FetchBikeRentalStationByStationIdQuery(stationId: stationId)) { result in
             switch result {
             case .success(let graphQlResults):
@@ -162,8 +167,9 @@ class BikeRentalService: ObservableObject, ReachabilityObserverDelegate {
         }
     }
 
-    private func unwrapGraphQLStationObject(_ wrapped: FetchNearByBikeRentalStationsQuery.Data.Nearest.Edge.Node.Place.AsBikeRentalStation?)
-    -> FetchNearByBikeRentalStationsQuery.Data.Nearest.Edge.Node.Place.AsBikeRentalStation? {
+    private func unwrapGraphQLStationObject(
+        _ wrapped: FetchNearByBikeRentalStationsQuery.Data.Nearest.Edge.Node.Place.AsBikeRentalStation?
+    ) -> FetchNearByBikeRentalStationsQuery.Data.Nearest.Edge.Node.Place.AsBikeRentalStation? {
         guard let stationUnwrapped = wrapped else { return nil }
         if stationUnwrapped.stationId == nil || stationUnwrapped.lat == nil || stationUnwrapped.lon == nil ||
             stationUnwrapped.spacesAvailable == nil || stationUnwrapped.spacesAvailable == nil ||

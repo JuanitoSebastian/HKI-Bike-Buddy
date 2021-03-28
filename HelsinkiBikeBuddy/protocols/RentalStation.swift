@@ -8,7 +8,6 @@
 import Foundation
 import CoreLocation
 
-// TODO: Rename favorite -> favourite
 protocol RentalStation {
 
     var stationId: String { get set }

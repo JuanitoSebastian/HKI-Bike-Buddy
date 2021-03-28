@@ -30,9 +30,15 @@ struct BikeRentalStationsListView: View {
                 VStack {
                     ScrollView {
                         ForEach(viewModel.bikeRentalStations, id: \.id) { bikeRentalStation in
-                            NavigationLink(destination: DetailedBikeRentalStationView(viewModel: DetailedBikeRentalStationViewModel(bikeRentalStation: bikeRentalStation))) {
-
-                                BikeRentalStationCardView(rentalStation: bikeRentalStation)
+                            NavigationLink(
+                                destination: DetailedBikeRentalStationView(
+                                    viewModel: DetailedBikeRentalStationViewModel(
+                                        bikeRentalStation: bikeRentalStation)
+                                )
+                            ) {
+                                BikeRentalStationCardView(
+                                    viewModel: BikeRentalStationViewModel(bikeRentalStation: bikeRentalStation)
+                                )
                             }
                             .buttonStyle(PlainButtonStyle())
 

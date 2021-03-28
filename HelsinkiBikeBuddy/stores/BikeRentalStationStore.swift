@@ -170,7 +170,6 @@ extension BikeRentalStationStore {
      */
     func unfavouriteStation(rentalStation: RentalStation) {
         if rentalStation is UnmanagedBikeRentalStation { return }
-        print(rentalStation.name)
         if let userLocation = UserLocationService.shared.userLocation {
             let distance = rentalStation.distance(to: userLocation)
 
@@ -210,7 +209,8 @@ extension BikeRentalStationStore {
 // MARK: - NSFetchedResultsControllerDelegate
 extension BikeRentalStationStore: NSFetchedResultsControllerDelegate {
 
-    /// Subscribig to listen for chances in the Managed Object Context. After changes have been made the ManagedBikeRentalStations are reloaded to keep MOC and store in sync.
+    /// Subscribig to listen for chances in the Managed Object Context.
+    /// After changes have been made the ManagedBikeRentalStations are reloaded to keep MOC and store in sync.
     public func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         guard let fetchedBikeRentalStations = controller.fetchedObjects as? [RentalStation] else { return }
         self.favouriteBikeRentalStations.value = fetchedBikeRentalStations
