@@ -8,7 +8,7 @@
 import Foundation
 import CoreLocation
 
-protocol RentalStation {
+protocol RentalStation: AnyObject {
 
     var stationId: String { get set }
     var name: String { get set }
@@ -49,7 +49,42 @@ extension RentalStation {
         stationId
     }
 
+    /// Calculate distance between RentalStation and parameter location
+    /// - Parameter location: CLLocation object to which the distance is calculated to
+    /// - Returns: A CLLocationDistance object
     func distance(to location: CLLocation) -> CLLocationDistance {
         return location.distance(from: self.location)
     }
+
+    // swiftlint:disable force_cast
+    /// Update RentalStation values with values provided
+    /// - Parameter apiResultMapOptional: ResultMap provided from API
+    func updateValues(apiResultMapOptional: [String: Any?]?) {
+        guard let apiResultMap = apiResultMapOptional else {
+            Log.d("Found nil when unwrapping apiResultMap")
+            return
+        }
+
+        guard let fetchedName = apiResultMap["name"] as! String?,
+              let fetchedBikesAvailable = apiResultMap["bikesAvailable"] as! Int?,
+              let fetchedSpacesAvailable = apiResultMap["spacesAvailable"] as! Int?,
+              let fetchedLat = apiResultMap["lat"] as! Double?,
+              let fetchedLon = apiResultMap["lon"] as! Double?,
+              let fetchedAllowDropoff = apiResultMap["allowDropoff"] as! Bool?,
+              let fetchedState = apiResultMap["state"] as! String? else {
+            Log.d("Found nil when unwrapping one of apiResultMap values")
+            return
+        }
+
+        Log.i("Updating values for: \(name) (\(stationId)")
+
+        self.name = fetchedName
+        self.bikesAvailable = Int64(fetchedBikesAvailable)
+        self.spacesAvailable = Int64(fetchedSpacesAvailable)
+        self.lat = fetchedLat
+        self.lon = fetchedLon
+        self.allowDropoff = fetchedAllowDropoff
+        self.state = Helper.parseStateString(fetchedState)
+    }
+    // swiftlint:enable force_cast
 }

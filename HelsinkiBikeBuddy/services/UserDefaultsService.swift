@@ -7,12 +7,20 @@
 
 import Foundation
 
+/// Saves default values to the UserDefaults store. Access via singleton.
 class UserDefaultsService {
 
+    // Singleton instance
     public static let shared = UserDefaultsService()
 
-    private let userDefaults = UserDefaults()
+    private let userDefaults: UserDefaults
 
+    private init() {
+        self.userDefaults = UserDefaults()
+    }
+
+    /// Maximum distance for bike rental station to be considered nearby
+    /// If the user has not set this from settings a default value of 1000 m is returned
     var nearbyDistance: Int {
         get {
             let fetch = userDefaults.integer(forKey: "nearbyDistance")
@@ -23,6 +31,8 @@ class UserDefaultsService {
         }
     }
 
+    /// This value is set to true when the system location authorization pop-up has been displayed.
+    /// Value is set to true when UserLocationService.shared.requestLocationServicesPermission() has been called.
     var locationServicesPromptDisplayed: Bool {
         get {
             let fetch = userDefaults.bool(forKey: "locationServices")

@@ -42,7 +42,7 @@ class ContentViewModel: ObservableObject {
     @objc
     func updateStations() {
         if UserLocationService.shared.locationAuthorization == .success {
-            BikeRentalService.shared.updateAll()
+            BikeRentalStationAPI.shared.updateStoreWithAPI()
         }
     }
 

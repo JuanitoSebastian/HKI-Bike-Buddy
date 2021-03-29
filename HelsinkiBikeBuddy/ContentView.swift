@@ -11,7 +11,7 @@ import CoreData
 struct ContentView: View {
 
     @ObservedObject var viewModel = ContentViewModel.shared
-    @ObservedObject var bikeRentalService = BikeRentalService.shared
+    @ObservedObject var bikeRentalService = BikeRentalStationAPI.shared
     @ObservedObject var userLocationManager = UserLocationService.shared
 
     var body: some View {

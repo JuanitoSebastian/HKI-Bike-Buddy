@@ -17,7 +17,7 @@ class BikeRentalStationsListViewModel: ObservableObject {
 
     var state: BikeRentalStationListViewState {
         if bikeRentalStations.isEmpty {
-            if BikeRentalService.shared.apiState == .loading && stationListType == .nearby {
+            if BikeRentalStationAPI.shared.apiState == .loading && stationListType == .nearby {
                 return .loading
             }
             return .empty

@@ -21,6 +21,7 @@ struct PermissionsPromptView: View {
     var body: some View {
         ZStack {
             Color("AppBackground").ignoresSafeArea()
+            Image("")
 
             content
                 .padding([.leading, .trailing], 15)

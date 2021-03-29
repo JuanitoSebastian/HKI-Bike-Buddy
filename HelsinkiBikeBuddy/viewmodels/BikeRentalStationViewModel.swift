@@ -78,11 +78,19 @@ class BikeRentalStationViewModel: ObservableObject {
         if bikeRentalStation.favourite {
             // Wait for the heart to turn grey
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .milliseconds(200)) {
-                BikeRentalStationStore.shared.unfavouriteStation(rentalStation: self.bikeRentalStation)
+                if let unmanagedRentalStation = BikeRentalStationStore.shared.unfavouriteStation(
+                    rentalStation: self.bikeRentalStation
+                ) {
+                    self.bikeRentalStation = unmanagedRentalStation
+                }
                 self.toggleTriggered = false
             }
         } else {
-            BikeRentalStationStore.shared.favouriteStation(rentalStation: bikeRentalStation)
+            if let managedRentalStation = BikeRentalStationStore.shared.favouriteStation(
+                rentalStation: bikeRentalStation
+            ) {
+                self.bikeRentalStation = managedRentalStation
+            }
             toggleTriggered = false
         }
     }

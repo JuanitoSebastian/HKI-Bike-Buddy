@@ -32,4 +32,9 @@ class Helper {
         return UserDefaults.standard.bool(forKey: "isTest")
     }
 
+    static func parseStateString(_ state: String) -> Bool {
+        if state.contains("off") { return false }
+        return true
+    }
+
 }

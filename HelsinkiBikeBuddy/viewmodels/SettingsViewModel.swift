@@ -28,7 +28,7 @@ class SettingsViewModel: ObservableObject {
 
     func saveSettings() {
         UserDefaultsService.shared.nearbyDistance = nearbyRangeInt
-        BikeRentalService.shared.updateAll()
+        BikeRentalStationAPI.shared.updateStoreWithAPI()
     }
 
     func openJuanitoHomepage() {
