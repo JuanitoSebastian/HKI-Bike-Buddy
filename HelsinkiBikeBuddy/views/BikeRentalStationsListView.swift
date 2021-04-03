@@ -7,7 +7,7 @@
 
 import SwiftUI
 import Combine
-
+/*
 struct BikeRentalStationsListView: View {
 
     @ObservedObject var viewModel: BikeRentalStationsListViewModel
@@ -70,3 +70,4 @@ struct BikeRentalStationsListView: View {
         }
     }
 }
+*/

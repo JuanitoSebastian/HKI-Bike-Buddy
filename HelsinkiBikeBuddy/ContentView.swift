@@ -9,120 +9,21 @@ import SwiftUI
 import CoreData
 
 struct ContentView: View {
-
-    @ObservedObject var viewModel = ContentViewModel.shared
-    @ObservedObject var bikeRentalService = BikeRentalStationApiService.shared
-    @ObservedObject var userLocationManager = UserLocationService.shared
     @EnvironmentObject var appState: AppState
 
     var body: some View {
-        contentToDisplay
-
+        ZStack {
+            mainContentToDisplay
+        }
     }
 
-    var contentToDisplay: AnyView {
-        if userLocationManager.locationAuthorization == .denied {
+    var mainContentToDisplay: AnyView {
+        switch appState.mainView {
+        case .rentalStations:
+            return AnyView(MainRentalStationsView())
+        case .locationPrompt:
             return AnyView(PermissionsPromptView())
         }
-
-        if bikeRentalService.apiReachabilityState == .error {
-            return error
-        }
-
-        switch viewModel.appState {
-        case .loading:
-            return loading
-        default:
-            return main
-        }
     }
 
-    // MARK: - Main Appplication view
-    var main: AnyView {
-        return AnyView(
-            ZStack {
-                NavigationView {
-                    TabView(selection: $viewModel.navigationSelection) {
-                        BikeRentalStationsListView(
-                            viewModel: BikeRentalStationsListViewModel(
-                                publisher: BikeRentalStationStore.shared.nearbyBikeRentalStations.eraseToAnyPublisher(),
-                                stationListType: .nearby
-                            )
-                        )
-                        .onTapGesture {
-                            viewModel.navigationSelection = MainViewNavigation.nearbyStations
-                        }
-                        .tabItem {
-                            Image(systemName: "bicycle")
-                            Text("Neaby Stations")
-                        }
-                        .tag(MainViewNavigation.nearbyStations)
-
-                        BikeRentalStationsListView(
-                            viewModel: BikeRentalStationsListViewModel(
-                                publisher: BikeRentalStationStore.shared.favouriteBikeRentalStations.eraseToAnyPublisher(),
-                                stationListType: .favourite
-                            )
-                        )
-                        .onTapGesture {
-                            viewModel.navigationSelection = MainViewNavigation.myStations
-                        }
-                        .tabItem {
-                            Image(systemName: "heart.fill")
-                            Text("My Stations")
-                        }
-                        .tag(MainViewNavigation.myStations)
-
-                    }
-                    .navigationBarTitleDisplayMode(.inline)
-                    .toolbar {
-                        ToolbarItem(placement: ToolbarItemPlacement.navigationBarLeading) {
-                            Text(viewModel.title)
-                                .font(.custom("Helvetica Neue Bold", size: 20))
-                                .foregroundColor(Color("TextTitle"))
-                        }
-
-                        ToolbarItem(placement: ToolbarItemPlacement.navigationBarTrailing) {
-                            NavigationLink(destination: SettingsView()) {
-                                Image(systemName: "gearshape.fill")
-                                    .font(.system(size: 20))
-                            }
-                            .buttonStyle(PlainButtonStyle())
-                        }
-                    }
-                    .accentColor(Color("NavBarIconActive"))
-
-                }
-                .accentColor(Color("NavBarIconActive"))
-            }
-            .onAppear(perform: {
-                viewModel.updateStations()
-                viewModel.startUpdateTimer()
-                appState.subscribeToBikeRentalStore()
-            })
-        )
-    }
-
-    // MARK: - Loading spinner
-    var loading: AnyView {
-        AnyView(
-            VStack {
-                Spacer()
-                ProgressView()
-                Spacer()
-            }
-        )
-    }
-
-    // MARK: - Error state
-
-    var error: AnyView {
-        AnyView(
-            VStack {
-                Spacer()
-                Text("No Internet connection 😬")
-                Spacer()
-            }
-        )
-    }
 }

@@ -9,6 +9,8 @@ import SwiftUI
 
 struct PermissionsPromptView: View {
 
+    @EnvironmentObject var appState: AppState
+
     let locationPromptText =
         "HKI Bike Buddy uses the location information of your device to determine the nearest bike rental stations." +
         " To start using this application you have to grant it access to the location services."
@@ -33,14 +35,13 @@ struct PermissionsPromptView: View {
     }
 
     var content: AnyView {
-        if UserDefaultsService.shared.locationServicesPromptDisplayed {
+        if appState.locationServicesPromptDisplayed {
             return AnyView(
                 Group {
-                    VStack {
+                    VStack(alignment: .leading) {
                         Text("Before we get started,")
                             .font(.custom("Helvetica Neue Bold", size: 35))
                             .foregroundColor(Color("TextTitle"))
-                            .multilineTextAlignment(.leading)
                             .padding([.bottom], 5)
 
                         Text(locationPromptTextFromSettings)
@@ -64,9 +65,8 @@ struct PermissionsPromptView: View {
                         .multilineTextAlignment(.leading)
                         .padding([.bottom], 10)
                     PrettyButton(textToDisplay: "Enable location services", perform: {
-                        UserLocationService.shared.requestLocationServicesPermission()
-                        UserDefaultsService.shared.locationServicesPromptDisplayed = true
-
+                        appState.requestLocationAuthorization()
+                        appState.locationServicesRequested()
                     })
                 }
                 .padding(15)

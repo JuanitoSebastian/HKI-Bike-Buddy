@@ -172,17 +172,6 @@ extension BikeRentalStationApiService {
         }
     }
 
-    enum ApiReachabilityState: Equatable {
-        case normal
-        case error
-        case undetermined
-    }
-
-    enum ApiOperationState {
-        case loading
-        case ready
-    }
-
 }
 
 // MARK: - ReachabilityObserverDelegate
@@ -192,4 +181,15 @@ extension BikeRentalStationApiService: ReachabilityObserverDelegate {
         apiReachabilityState = isReachable ? .normal : .error
     }
 
+}
+
+enum ApiReachabilityState: Equatable {
+    case normal
+    case error
+    case undetermined
+}
+
+enum ApiOperationState {
+    case loading
+    case ready
 }

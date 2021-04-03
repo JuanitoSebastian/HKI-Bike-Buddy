@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+/*
 
 /// ViewModel for the list of bike rental stations.
 class BikeRentalStationsListViewModel: ObservableObject {
@@ -59,8 +60,4 @@ enum BikeRentalStationListViewState {
     case empty
     case loading
 }
-
-enum BikeRentalStationListType {
-    case favourite
-    case nearby
-}
+*/

@@ -7,12 +7,20 @@
 
 import SwiftUI
 
+// TODO: Custom back button here, so that api fetch is performed when return back to main view
+
 struct SettingsView: View {
 
-    @ObservedObject var viewModel = SettingsViewModel.shared
+    @EnvironmentObject var appState: AppState
+    @State var nearbyRange: Double = 1000
 
     init() {
+        // This makes the custom background color visible
         UITableView.appearance().backgroundColor = .clear
+    }
+
+    var currentYear: String {
+        String(Calendar.current.component(.year, from: Date()))
     }
 
     var body: some View {
@@ -24,15 +32,16 @@ struct SettingsView: View {
                             .font(.headline)
                             .foregroundColor(Color("TextMain"))
                         Slider(
-                            value: $viewModel.nearbyRange,
+                            value: $nearbyRange,
                             in: 250...5000,
                             step: 250,
                             onEditingChanged: { editing in
                                 if editing { return }
-                                viewModel.saveSettings()
+                                appState.setNearbyRadius(radius: Int(nearbyRange))
+                                appState.fetchFromApi()
                             }
                         )
-                        Text("\(viewModel.nearbyRangeInt) meters")
+                        Text("\(Int(nearbyRange)) meters")
                             .foregroundColor(Color("TextMain"))
                     }
                 }
@@ -42,20 +51,22 @@ struct SettingsView: View {
             .background(
                 Color("AppBackground")
             )
+
             Spacer()
+
             VStack {
                 HStack(spacing: 0) {
                     Text("HKI Bike Buddy by ")
                         .font(.footnote)
                         .padding([.bottom], 5)
-                    Button { viewModel.openJuanitoHomepage() } label: {
+                    Button { openJuanitoHomepage() } label: {
                         Text("juan.fi")
                             .font(.footnote)
                             .fontWeight(.bold)
                             .padding([.bottom], 5)
                     }
                 }
-                Text("Data provided by © Helsinki Region Transport \(viewModel.currentYear)")
+                Text("Data provided by © Helsinki Region Transport \(currentYear)")
                     .font(.footnote)
             }
         }
@@ -65,11 +76,13 @@ struct SettingsView: View {
             Color("AppBackground")
         )
         .navigationTitle(Text("Settings"))
+        .onAppear(perform: {
+            nearbyRange = Double(appState.nearbyRadius)
+        })
     }
-}
 
-struct SettingsView_Previews: PreviewProvider {
-    static var previews: some View {
-        SettingsView()
+    // MARK: - Functions
+    func openJuanitoHomepage() {
+        UIApplication.shared.open(URL(string: "https://juan.fi")!, options: [:], completionHandler: nil)
     }
 }

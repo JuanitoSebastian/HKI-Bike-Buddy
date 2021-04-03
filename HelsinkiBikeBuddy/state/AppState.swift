@@ -16,6 +16,7 @@ class AppState: ObservableObject {
     @Published private(set) var nearbyRentalStations: [RentalStation]
     @Published private(set) var mainView: MainViewState
     @Published private(set) var notificationState: NotificationState
+    @Published var tabBarSelection: TabBarSelection
     private var cancellables: Set<AnyCancellable>
 
     init() {
@@ -24,6 +25,9 @@ class AppState: ObservableObject {
         self.cancellables = []
         self.mainView = .locationPrompt
         self.notificationState = .none
+        self.tabBarSelection = BikeRentalStationStore.shared.favouriteBikeRentalStations.value.isEmpty ?
+            .nearbyStations : .myStations
+        subscribeToUserLocationServiceState()
     }
 }
 
@@ -62,8 +66,12 @@ extension AppState {
     func subscribeToUserLocationServiceState() {
         let userLocationServiceCancellable =
             UserLocationService.shared.$locationAuthorization.eraseToAnyPublisher().sink { newValue in
-                if newValue == .success {
-
+                switch newValue {
+                case .success:
+                    self.mainView = .rentalStations
+                    self.subscribeToBikeRentalStore()
+                case .denied:
+                    self.mainView = .locationPrompt
                 }
             }
         cancellables.insert(userLocationServiceCancellable)
@@ -84,6 +92,14 @@ extension AppState {
 
     var nearbyRadius: Int {
         UserDefaultsService.shared.nearbyDistance
+    }
+
+    var apiState: ApiOperationState {
+        BikeRentalStationApiService.shared.apiOperationState
+    }
+
+    var locationServicesPromptDisplayed: Bool {
+        UserDefaultsService.shared.locationServicesPromptDisplayed
     }
 
 }
@@ -116,18 +132,20 @@ extension AppState {
     }
 }
 
-
 // MARK: - Enums
-extension AppState {
 
-    enum MainViewState {
-        case rentalStations
-        case locationPrompt
-    }
+enum MainViewState {
+    case rentalStations
+    case locationPrompt
+}
 
-    enum NotificationState {
-        case none
-        case notification(String)
-        case error(String)
-    }
+enum NotificationState {
+    case none
+    case notification(String)
+    case error(String)
+}
+
+enum TabBarSelection: Int, Codable {
+    case nearbyStations
+    case myStations
 }
