@@ -11,8 +11,9 @@ import CoreData
 struct ContentView: View {
 
     @ObservedObject var viewModel = ContentViewModel.shared
-    @ObservedObject var bikeRentalService = BikeRentalStationAPI.shared
+    @ObservedObject var bikeRentalService = BikeRentalStationApiService.shared
     @ObservedObject var userLocationManager = UserLocationService.shared
+    @EnvironmentObject var appState: AppState
 
     var body: some View {
         contentToDisplay
@@ -24,7 +25,7 @@ struct ContentView: View {
             return AnyView(PermissionsPromptView())
         }
 
-        if bikeRentalService.apiState == .error {
+        if bikeRentalService.apiReachabilityState == .error {
             return error
         }
 
@@ -97,6 +98,7 @@ struct ContentView: View {
             .onAppear(perform: {
                 viewModel.updateStations()
                 viewModel.startUpdateTimer()
+                appState.subscribeToBikeRentalStore()
             })
         )
     }

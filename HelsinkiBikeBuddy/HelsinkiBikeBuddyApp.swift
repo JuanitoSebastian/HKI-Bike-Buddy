@@ -11,9 +11,12 @@ import CoreLocation
 @main
 struct HelsinkiBikeBuddyApp: App {
 
+    let appState: AppState = AppState()
+
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(appState)
         }
     }
 }

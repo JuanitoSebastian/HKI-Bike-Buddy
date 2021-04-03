@@ -29,7 +29,7 @@ struct BikeRentalStationsListView: View {
             return AnyView(
                 VStack {
                     ScrollView {
-                        ForEach(viewModel.bikeRentalStations, id: \.id) { bikeRentalStation in
+                        ForEach(viewModel.rentalStations, id: \.id) { bikeRentalStation in
                             NavigationLink(
                                 destination: DetailedBikeRentalStationView(
                                     viewModel: DetailedBikeRentalStationViewModel(
@@ -37,7 +37,7 @@ struct BikeRentalStationsListView: View {
                                 )
                             ) {
                                 BikeRentalStationCardView(
-                                    viewModel: BikeRentalStationViewModel(bikeRentalStation: bikeRentalStation)
+                                    viewModel: BikeRentalStationCardViewModel(bikeRentalStation: bikeRentalStation)
                                 )
                             }
                             .buttonStyle(PlainButtonStyle())
@@ -53,7 +53,7 @@ struct BikeRentalStationsListView: View {
                     Spacer()
                     Text(viewModel.listEmptyText)
                         .foregroundColor(Color("TextMain"))
-                        .font(.caption)
+                        .font(.footnote)
                         .multilineTextAlignment(.center)
                     Spacer()
                 }

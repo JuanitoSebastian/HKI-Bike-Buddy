@@ -11,13 +11,13 @@ import Combine
 /// ViewModel for the list of bike rental stations.
 class BikeRentalStationsListViewModel: ObservableObject {
 
-    @Published var bikeRentalStations: [RentalStation] = []
+    @Published var rentalStations: [RentalStation] = []
     var stationListType: BikeRentalStationListType
     private var cancellable: AnyCancellable?
 
     var state: BikeRentalStationListViewState {
-        if bikeRentalStations.isEmpty {
-            if BikeRentalStationAPI.shared.apiState == .loading && stationListType == .nearby {
+        if rentalStations.isEmpty {
+            if BikeRentalStationApiService.shared.apiOperationState == .loading && stationListType == .nearby {
                 return .loading
             }
             return .empty
@@ -28,11 +28,9 @@ class BikeRentalStationsListViewModel: ObservableObject {
     var listEmptyText: String {
         switch stationListType {
         case .favourite:
-            return "Nothing here yet...\n" +
-                "You can add stations here by tapping the heart 💗"
+            return "You can add stations here by favouriting them 💗"
         case .nearby:
-            return "No bike rental stations nearby.\n" +
-                "You can increase the maximum distance to nearby stations from settings."
+            return "No bike rental stations nearby"
         }
     }
 
@@ -44,10 +42,10 @@ class BikeRentalStationsListViewModel: ObservableObject {
     init(publisher: AnyPublisher<[RentalStation], Never>, stationListType: BikeRentalStationListType) {
         self.stationListType = stationListType
         self.cancellable = publisher.sink { fetched in
-            self.bikeRentalStations = fetched
+            self.rentalStations = fetched
             // Sort stations from closest to furthest form user
             if let userLocation = UserLocationService.shared.userLocation {
-                self.bikeRentalStations.sort( by: {
+                self.rentalStations.sort( by: {
                     $0.distance(to: userLocation)
                         < $1.distance(to: userLocation)
                 })

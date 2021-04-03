@@ -10,9 +10,9 @@ import CoreData
 
 struct BikeRentalStationCardView: View {
 
-    @ObservedObject var viewModel: BikeRentalStationViewModel
+    @ObservedObject var viewModel: BikeRentalStationCardViewModel
 
-    init(viewModel: BikeRentalStationViewModel) {
+    init(viewModel: BikeRentalStationCardViewModel) {
         self.viewModel = viewModel
     }
 
@@ -33,7 +33,7 @@ struct BikeRentalStationCardView: View {
         switch viewModel.state {
 
         // MARK: - - STATION AVAILABLE
-        case BikeRentalStationViewState.normal:
+        case .inUse:
             return AnyView(
                 ZStack {
                     VStack {
@@ -94,7 +94,7 @@ struct BikeRentalStationCardView: View {
             )
 
         // MARK: - - STATION UNAVAILABLE
-        case .unavailable:
+        case .noInUse:
             return AnyView(
                 ZStack {
                     VStack {

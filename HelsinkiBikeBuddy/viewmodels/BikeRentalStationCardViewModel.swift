@@ -11,7 +11,7 @@ import CoreLocation
 import Combine
 import UIKit
 
-class BikeRentalStationViewModel: ObservableObject {
+class BikeRentalStationCardViewModel: ObservableObject {
 
     @Published var bikeRentalStation: RentalStation
     @Published var favoriteStatus: Bool
@@ -62,8 +62,8 @@ class BikeRentalStationViewModel: ObservableObject {
         CLLocation(latitude: lat, longitude: lon)
     }
 
-    var state: BikeRentalStationViewState {
-        return bikeRentalStation.state ? .normal : .unavailable
+    var state: RentalStationState {
+        return bikeRentalStation.state ? .inUse : .noInUse
     }
 
     /**
@@ -71,10 +71,10 @@ class BikeRentalStationViewModel: ObservableObject {
      */
     func toggleFavourite() {
         if toggleTriggered { return }
+
         toggleTriggered = true
-
         favoriteStatus.toggle()
-
+        hapticFeedback()
         if bikeRentalStation.favourite {
             // Wait for the heart to turn grey
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .milliseconds(200)) {
@@ -92,6 +92,12 @@ class BikeRentalStationViewModel: ObservableObject {
                 self.bikeRentalStation = managedRentalStation
             }
             toggleTriggered = false
+        }
+    }
+
+    private func hapticFeedback() {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .microseconds(750)) {
+            UINotificationFeedbackGenerator().notificationOccurred(.success)
         }
     }
 
@@ -120,7 +126,10 @@ class BikeRentalStationViewModel: ObservableObject {
     }
 }
 
-enum BikeRentalStationViewState {
-    case normal
-    case unavailable
+// MARK: - Enums
+extension BikeRentalStationCardViewModel {
+    enum RentalStationState {
+        case inUse
+        case noInUse
+    }
 }

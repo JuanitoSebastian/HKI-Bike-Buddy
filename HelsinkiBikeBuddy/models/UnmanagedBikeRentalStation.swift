@@ -72,7 +72,6 @@ class UnmanagedBikeRentalStation {
         Log.i("Init of UnmanagedBikeRentalStation: \(name) (\(stationId))")
     }
     // swiftlint:enable force_cast
-
     deinit {
         Log.i("Deinit of UnmanagedBikeRentalStation: \(name) (\(stationId))")
     }
