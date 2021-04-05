@@ -11,6 +11,7 @@ import CoreLocation
 protocol RentalStation: AnyObject {
 
     var stationId: String { get set }
+    var id: UUID { get set }
     var name: String { get set }
     var lat: Double { get set }
     var lon: Double { get set }
@@ -23,8 +24,8 @@ protocol RentalStation: AnyObject {
     var favourite: Bool { get }
     var location: CLLocation { get }
     var totalCapacity: Int { get }
-    var id: String { get }
     var coordinate: CLLocationCoordinate2D { get }
+    var isNearby: Bool { get }
 
     func distance(to location: CLLocation) -> CLLocationDistance
 
@@ -45,8 +46,18 @@ extension RentalStation {
         Int(spacesAvailable + bikesAvailable)
     }
 
-    public var id: String {
-        stationId
+    var idString: String {
+        Log.i("RentalStation: \(name) name is heres")
+        Log.i("Is type managedrentalstation: \(self is ManagedBikeRentalStation)")
+        return id.uuidString
+    }
+
+    var isNearby: Bool {
+        if let userLocation = UserLocationService.shared.userLocation {
+            return distance(to: userLocation) <= Double(UserDefaultsService.shared.nearbyDistance)
+        }
+
+        return false
     }
 
     /// Calculate distance between RentalStation and parameter location

@@ -76,14 +76,17 @@ class BikeRentalStationStore: NSObject {
 extension BikeRentalStationStore {
 
     func saveManagedObjectContext() {
-        do {
-            try PersistenceController.shared.container.viewContext.save()
-        } catch {
-            Helper.log("Failed to save MOC: \(error)")
-        }
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .milliseconds(500), execute: {
+            do {
+                try PersistenceController.shared.container.viewContext.save()
+            } catch {
+                Helper.log("Failed to save MOC: \(error)")
+            }
+        })
     }
 
     private func removeFromManagedObjectContext(_ bikeRentalStationToDelete: ManagedBikeRentalStation) {
+        Log.i("Deleting ManagedStation: \(bikeRentalStationToDelete.name)")
         managedObjectContext.delete(bikeRentalStationToDelete)
     }
 
@@ -123,6 +126,7 @@ extension BikeRentalStationStore {
             spacesAvailable: rentalStation.spacesAvailable,
             state: rentalStation.state
         )
+        Log.i("Created an unmanaged rentalStation")
         return unmanagedBikeRentalStation
     }
 
@@ -175,22 +179,26 @@ extension BikeRentalStationStore {
      */
     func unfavouriteStation(rentalStation: RentalStation) -> RentalStation? {
         if rentalStation is UnmanagedBikeRentalStation { return rentalStation }
+        // swiftlint:disable force_cast
+        removeFromManagedObjectContext(rentalStation as! ManagedBikeRentalStation)
+        // swiftlint:enable force_cast
+
         var unmanagedRentalStation: RentalStation?
+        var nearbyStationsEdited = removeStationFromList(station: rentalStation, from: nearbyBikeRentalStations.value)
+
         if let userLocation = UserLocationService.shared.userLocation {
             let distance = rentalStation.distance(to: userLocation)
 
             if distance <= Double(UserDefaultsService.shared.nearbyDistance) {
-                Helper.log("Adding back, distance: \(distance)")
-                var stationsEdited = removeStationFromList(station: rentalStation, from: nearbyBikeRentalStations.value)
+                Log.i("Adding back: \(rentalStation.name)")
                 unmanagedRentalStation = toUnmanagedBikeRentalStation(rentalStation: rentalStation)
-                stationsEdited.append(unmanagedRentalStation!)
-                nearbyBikeRentalStations.value = stationsEdited
+                nearbyStationsEdited.append(unmanagedRentalStation!)
             }
         }
 
-        // swiftlint:disable force_cast
-        removeFromManagedObjectContext(rentalStation as! ManagedBikeRentalStation)
-        // swiftlint:enable force_cast
+        nearbyBikeRentalStations.value = nearbyStationsEdited
+        Log.i("Store: NearbyStaions size after removal: \(nearbyBikeRentalStations.value.count)")
+
         saveManagedObjectContext()
         return unmanagedRentalStation
     }
@@ -205,8 +213,9 @@ extension BikeRentalStationStore {
     private func removeStationFromList(station: RentalStation, from: [RentalStation]) -> [RentalStation] {
         var stationsEdited = from
         for (index, rentalStation) in stationsEdited.enumerated()
-        where rentalStation.stationId == station.stationId {
+        where rentalStation.id == station.id {
             stationsEdited.remove(at: index)
+            Log.i("Removal from list success: \(rentalStation.name)")
         }
         return stationsEdited
     }

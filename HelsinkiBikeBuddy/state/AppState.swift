@@ -28,6 +28,7 @@ class AppState: ObservableObject {
         self.tabBarSelection = BikeRentalStationStore.shared.favouriteBikeRentalStations.value.isEmpty ?
             .nearbyStations : .myStations
         subscribeToUserLocationServiceState()
+        subscribeToBikeRentalStore()
     }
 }
 
@@ -37,27 +38,16 @@ extension AppState {
     func subscribeToBikeRentalStore() {
         let favouriteCancellable =
             BikeRentalStationStore.shared.favouriteBikeRentalStations.eraseToAnyPublisher().sink { fetched in
-            self.favouriteRentalStations = fetched
-            // Sort stations from closest to furthest form user
-            if let userLocation = UserLocationService.shared.userLocation {
-                self.favouriteRentalStations.sort( by: {
-                    $0.distance(to: userLocation)
-                        < $1.distance(to: userLocation)
-                })
+                Log.i("Updating values in AppState, favourite: \(fetched.count)")
+                self.favouriteRentalStations = self.sortRentalStation(rentalStations: fetched)
+
             }
-        }
 
         let nearbyCancellable =
             BikeRentalStationStore.shared.nearbyBikeRentalStations.eraseToAnyPublisher().sink { fetched in
-            self.nearbyRentalStations = fetched
-            // Sort stations from closest to furthest form user
-            if let userLocation = UserLocationService.shared.userLocation {
-                self.nearbyRentalStations.sort( by: {
-                    $0.distance(to: userLocation)
-                        < $1.distance(to: userLocation)
-                })
+                Log.i("Updating values in AppState, nearby (count: \(fetched.count)):")
+                self.nearbyRentalStations = self.sortRentalStation(rentalStations: fetched)
             }
-        }
 
         cancellables.insert(favouriteCancellable)
         cancellables.insert(nearbyCancellable)
@@ -69,12 +59,23 @@ extension AppState {
                 switch newValue {
                 case .success:
                     self.mainView = .rentalStations
-                    self.subscribeToBikeRentalStore()
+
                 case .denied:
                     self.mainView = .locationPrompt
                 }
             }
         cancellables.insert(userLocationServiceCancellable)
+    }
+
+    private func sortRentalStation(rentalStations: [RentalStation]) -> [RentalStation] {
+        if let userLocation = UserLocationService.shared.userLocation {
+            return rentalStations.sorted( by: {
+                $0.distance(to: userLocation)
+                    < $1.distance(to: userLocation)
+            })
+        } else {
+            return rentalStations
+        }
     }
 
 }
@@ -130,6 +131,7 @@ extension AppState {
     func fetchFromApi() {
         BikeRentalStationApiService.shared.updateStoreWithAPI()
     }
+
 }
 
 // MARK: - Enums

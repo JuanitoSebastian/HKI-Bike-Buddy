@@ -29,7 +29,7 @@ struct RentalStationsListView: View {
         case .favourite:
             return "Favourite a Bike Rental Station to add it here 💗"
         case .nearby:
-            return "No staions were found nearby 🤔\n" +
+            return "No stations were found nearby 🤔\n" +
             "Try increasing the nearby station radius from settings"
         }
     }
@@ -57,10 +57,8 @@ struct RentalStationsListView: View {
         AnyView(
             VStack {
                 ScrollView {
-                    ForEach(rentalStations, id: \.id) { rentalStation in
-                        BikeRentalStationCardView(
-                            viewModel: BikeRentalStationCardViewModel(bikeRentalStation: rentalStation)
-                        )
+                    ForEach(rentalStations, id: \.stationId) { rentalStation in
+                        RentalStationCardView(rentalStation: rentalStation)
                     }
                 }
             }

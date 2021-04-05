@@ -25,6 +25,7 @@ extension ManagedBikeRentalStation {
         Log.i("Initiating ManagedBikeRentalStation: \(name) (\(stationId)")
         self.init(context: context)
         self.stationId = stationId
+        self.id = UUID()
         self.name = name
         self.lat = lat
         self.lon = lon
@@ -33,13 +34,6 @@ extension ManagedBikeRentalStation {
         self.spacesAvailable = spacesAvailable
         self.bikesAvailable = bikesAvailable
         self.fetched = fetched
-    }
-}
-
-// MARK: - Identifiable
-extension ManagedBikeRentalStation: Identifiable {
-    public var id: String {
-        stationId
     }
 }
 

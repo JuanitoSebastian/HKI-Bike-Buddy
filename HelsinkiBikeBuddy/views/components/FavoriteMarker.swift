@@ -13,7 +13,7 @@ import SwiftUI
  */
 struct FavoriteMarker: View {
 
-    let isActive: Bool
+    @Binding var isActive: Bool
     let action: () -> Void
 
     var body: some View {
@@ -22,7 +22,6 @@ struct FavoriteMarker: View {
         } label: {
             heart
         }
-        .buttonStyle(StaticHighPriorityButtonStyle())
     }
 
     var heart: AnyView {
@@ -46,6 +45,6 @@ struct FavoriteMarker: View {
 
 struct FavoriteMarker_Previews: PreviewProvider {
     static var previews: some View {
-        FavoriteMarker(isActive: true, action: { Helper.log("Favorite marker tapped") })
+        FavoriteMarker(isActive: .constant(true), action: { Log.i("Favorite marker tapped") })
     }
 }

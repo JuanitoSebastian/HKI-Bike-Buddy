@@ -43,7 +43,7 @@ struct BikeRentalStationCardView: View {
                                 .foregroundColor(Color("TextTitle"))
                             Spacer()
 
-                            FavoriteMarker(isActive: viewModel.favoriteStatus, action: {
+                            FavoriteMarker(isActive: .constant(viewModel.favoriteStatus), action: {
                                 withAnimation {
                                     viewModel.toggleFavourite()
                                 }
@@ -103,7 +103,7 @@ struct BikeRentalStationCardView: View {
                                 .font(.custom("Helvetica Neue Medium", size: 24))
                                 .foregroundColor(Color("TextTitle"))
                             Spacer()
-                            FavoriteMarker(isActive: viewModel.favoriteStatus, action: { viewModel.toggleFavourite() })
+                            FavoriteMarker(isActive: .constant(viewModel.favoriteStatus), action: { viewModel.toggleFavourite() })
                         }
                         HStack {
                             Text("\(viewModel.distanceInMeters()) away")

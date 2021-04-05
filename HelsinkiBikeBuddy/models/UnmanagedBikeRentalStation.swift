@@ -9,9 +9,10 @@ import Foundation
 import CoreData
 
 /// A bike rental station that is not saved to persistent store
-class UnmanagedBikeRentalStation {
+class UnmanagedBikeRentalStation: Identifiable {
 
     var stationId: String
+    var id: UUID
     var name: String
     var allowDropoff: Bool
     var bikesAvailable: Int64
@@ -34,6 +35,7 @@ class UnmanagedBikeRentalStation {
     ) {
         Log.i("Init of UnmanagedBikeRentalStation: \(name) (\(stationId))")
         self.stationId = stationId
+        self.id = UUID()
         self.name = name
         self.allowDropoff = allowDropoff
         self.bikesAvailable = bikesAvailable
@@ -61,6 +63,7 @@ class UnmanagedBikeRentalStation {
             return nil
         }
         self.stationId = fetchedStationId
+        self.id = UUID()
         self.name = fetchedName
         self.allowDropoff = fetchedAllowDropoff
         self.bikesAvailable = Int64(fetchedBikesAvailable)
@@ -83,12 +86,5 @@ extension UnmanagedBikeRentalStation: RentalStation {
     /// When a station is favourited it converted to ManagedBikeRentalStation
     var favourite: Bool {
         false
-    }
-}
-
-// MARK: - Identifiable
-extension UnmanagedBikeRentalStation: Identifiable {
-    var id: String {
-        stationId
     }
 }
