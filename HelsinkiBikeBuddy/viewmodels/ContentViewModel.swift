@@ -7,7 +7,7 @@
 
 import Foundation
 import SwiftUI
-
+/*
 class ContentViewModel: ObservableObject {
 
     @Published var navigationSelection = BikeRentalStationStore.shared.favouriteBikeRentalStations.value.isEmpty ?
@@ -61,3 +61,5 @@ enum MainViewContent {
     case loading
     case error(String)
 }
+
+ */

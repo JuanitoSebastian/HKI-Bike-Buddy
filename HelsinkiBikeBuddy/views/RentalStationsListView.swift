@@ -57,7 +57,7 @@ struct RentalStationsListView: View {
         AnyView(
             VStack {
                 ScrollView {
-                    ForEach(rentalStations, id: \.stationId) { rentalStation in
+                    ForEach(rentalStations, id: \.id) { rentalStation in
                         RentalStationCardView(rentalStation: rentalStation)
                     }
                 }

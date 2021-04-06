@@ -41,42 +41,17 @@ extension BikeRentalStationApiService {
         Log.i("Starting updateStoreWithAPI()")
         favouriteStationsAlreadyUpdated.removeAll()
         setState(.loading)
-        let completition: () -> Void =
-            BikeRentalStationStore.shared.favouriteBikeRentalStations.value.isEmpty ? { self.setState(.ready) } : {}
-        fetchNearbyStationsFromApiToStore(completition: completition)
+
+        fetchNearbyStationsFromApiToStore()
         updateFavourites()
         Log.i("Completed updateStoreWithAPI()")
     }
 
     private func updateFavourites() {
-        let numberOfStationsToUpdate =
-            BikeRentalStationStore.shared.favouriteBikeRentalStations.value.count -
-            favouriteStationsAlreadyUpdated.count
-        var stationsUpdated = 0
-        Log.i("Stations to update: \(numberOfStationsToUpdate)")
 
-        if numberOfStationsToUpdate == 0 {
-            self.setState(.ready)
-            BikeRentalStationStore.shared.saveManagedObjectContext()
-            return
-        }
-
-        for rentalStation in BikeRentalStationStore.shared.favouriteBikeRentalStations.value
-        where !favouriteStationsAlreadyUpdated.contains(rentalStation.stationId) {
-            Log.i("in loop")
-            stationsUpdated += 1
-            if stationsUpdated == numberOfStationsToUpdate {
-                updateRentalStationValuesFromApi(rentalStation: rentalStation, completition: {
-                    self.setState(.ready)
-                    BikeRentalStationStore.shared.saveManagedObjectContext()
-                })
-            } else {
-                updateRentalStationValuesFromApi(rentalStation: rentalStation, completition: {})
-            }
-        }
     }
 
-    private func fetchNearbyStationsFromApiToStore(completition: @escaping () -> Void) {
+    private func fetchNearbyStationsFromApiToStore() {
         guard let userLocation = UserLocationService.shared.userLocation else {
             Log.e("Found nil userLocation when fetching stations from API")
             return
@@ -99,7 +74,7 @@ extension BikeRentalStationApiService {
                 let nearbyRentalStationsFromApi = self.edgesFromApiToArrayOfRentalStations(
                     edgesFromApi: edgesUnwrapped
                 )
-                BikeRentalStationStore.shared.nearbyBikeRentalStations.value = nearbyRentalStationsFromApi
+                BikeRentalStationStore.shared.addStations(rentalStations: nearbyRentalStationsFromApi)
             case .failure(let error):
                 Helper.log("API Fecth failed: \(error)")
             }
@@ -115,28 +90,26 @@ extension BikeRentalStationApiService {
         edgesFromApi: [FetchNearByBikeRentalStationsQuery.Data.Nearest.Edge]
     ) -> [RentalStation] {
 
-        var nearbyRentalStationsFromApi: [RentalStation] = []
+        var newRentalStationsFromApi: [RentalStation] = []
 
         for edge in edgesFromApi {
             // Check if station already exists in Core Data
-            if let bikeRentalStationFromCoreData = BikeRentalStationStore.shared.bikeRentalStationFromCoreData(
-                stationId: edge.node?.place?.asBikeRentalStation?.stationId
-            ) {
-                // RentalStation found in CoreData, updating values and adding info to favouriteStationsAlreadyUpdated
-                bikeRentalStationFromCoreData.updateValues(apiResultMapOptional: edge.node?.place!.resultMap)
-                favouriteStationsAlreadyUpdated.insert(bikeRentalStationFromCoreData.stationId)
-                nearbyRentalStationsFromApi.append(bikeRentalStationFromCoreData)
+            guard let apiStationId = edge.node?.place?.asBikeRentalStation?.stationId else { continue }
+            if let rentalStationFromStore =
+                BikeRentalStationStore.shared.bikeRentalStations[apiStationId] {
+                rentalStationFromStore.updateValues(
+                    apiResultMapOptional: edge.node?.place!.resultMap
+                )
             } else {
-                // Rental Station not found in CoreData, creating new UnmanagedRentalStation
-                if let bikeRentalStationUnmanaged = UnmanagedBikeRentalStation(
+                if let unmanagedRentalStation = UnmanagedBikeRentalStation(
                     apiResultMapOptional: edge.node?.place!.resultMap
                 ) {
-                    nearbyRentalStationsFromApi.append(bikeRentalStationUnmanaged)
+                    newRentalStationsFromApi.append(unmanagedRentalStation)
                 }
             }
         }
 
-        return nearbyRentalStationsFromApi
+        return newRentalStationsFromApi
     }
 
     /// Updates values of a RentalSation that is passed as a parameter

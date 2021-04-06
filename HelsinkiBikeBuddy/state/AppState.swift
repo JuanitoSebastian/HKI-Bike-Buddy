@@ -25,8 +25,7 @@ class AppState: ObservableObject {
         self.cancellables = []
         self.mainView = .locationPrompt
         self.notificationState = .none
-        self.tabBarSelection = BikeRentalStationStore.shared.favouriteBikeRentalStations.value.isEmpty ?
-            .nearbyStations : .myStations
+        self.tabBarSelection = .nearbyStations
         subscribeToUserLocationServiceState()
         subscribeToBikeRentalStore()
     }
@@ -36,21 +35,24 @@ class AppState: ObservableObject {
 extension AppState {
 
     func subscribeToBikeRentalStore() {
-        let favouriteCancellable =
-            BikeRentalStationStore.shared.favouriteBikeRentalStations.eraseToAnyPublisher().sink { fetched in
-                Log.i("Updating values in AppState, favourite: \(fetched.count)")
-                self.favouriteRentalStations = self.sortRentalStation(rentalStations: fetched)
+        let storeSubscription =
+            BikeRentalStationStore.shared.bikeRentalStationIds.eraseToAnyPublisher().sink { fetched in
+
+                self.nearbyRentalStations = fetched
+                    .map({ (stationId: String) in
+                        return self.getRentalStation(stationId: stationId)
+                    })
+                    .filter { $0.isNearby }
+
+                self.favouriteRentalStations = fetched
+                    .map({ (stationId: String) in
+                        return self.getRentalStation(stationId: stationId)
+                    })
+                    .filter { $0.favourite }
 
             }
 
-        let nearbyCancellable =
-            BikeRentalStationStore.shared.nearbyBikeRentalStations.eraseToAnyPublisher().sink { fetched in
-                Log.i("Updating values in AppState, nearby (count: \(fetched.count)):")
-                self.nearbyRentalStations = self.sortRentalStation(rentalStations: fetched)
-            }
-
-        cancellables.insert(favouriteCancellable)
-        cancellables.insert(nearbyCancellable)
+        cancellables.insert(storeSubscription)
     }
 
     func subscribeToUserLocationServiceState() {
@@ -107,6 +109,10 @@ extension AppState {
 
 // MARK: - UI Functions
 extension AppState {
+
+    func getRentalStation(stationId: String) -> RentalStation {
+        BikeRentalStationStore.shared.bikeRentalStations[stationId]!
+    }
 
     func favouriteRentalStation(rentalStation: RentalStation) -> RentalStation? {
         return BikeRentalStationStore.shared.favouriteStation(rentalStation: rentalStation)
