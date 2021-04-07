@@ -12,8 +12,8 @@ import CoreLocation
 
 class AppState: ObservableObject {
 
-    @Published private(set) var favouriteRentalStations: [RentalStation]
-    @Published private(set) var nearbyRentalStations: [RentalStation]
+    @Published private(set) var favouriteRentalStations: [BikeRentalStation]
+    @Published private(set) var nearbyRentalStations: [BikeRentalStation]
     @Published private(set) var mainView: MainViewState
     @Published private(set) var notificationState: NotificationState
     @Published var tabBarSelection: TabBarSelection
@@ -25,7 +25,8 @@ class AppState: ObservableObject {
         self.cancellables = []
         self.mainView = .locationPrompt
         self.notificationState = .none
-        self.tabBarSelection = .nearbyStations
+        self.tabBarSelection = RentalStationStore.shared.favouritesEmpty ?
+            .nearbyStations : .myStations
         subscribeToUserLocationServiceState()
         subscribeToBikeRentalStore()
     }
@@ -36,19 +37,19 @@ extension AppState {
 
     func subscribeToBikeRentalStore() {
         let storeSubscription =
-            BikeRentalStationStore.shared.bikeRentalStationIds.eraseToAnyPublisher().sink { fetched in
+            RentalStationStore.shared.bikeRentalStationIds.eraseToAnyPublisher().sink { fetched in
 
                 self.nearbyRentalStations = fetched
-                    .map({ (stationId: String) in
+                    .compactMap({ (stationId: String) in
                         return self.getRentalStation(stationId: stationId)
                     })
                     .filter { $0.isNearby }
 
                 self.favouriteRentalStations = fetched
-                    .map({ (stationId: String) in
+                    .compactMap({ (stationId: String) in
                         return self.getRentalStation(stationId: stationId)
                     })
-                    .filter { $0.favourite }
+                    .filter { $0.favourite ?? false }
 
             }
 
@@ -110,16 +111,20 @@ extension AppState {
 // MARK: - UI Functions
 extension AppState {
 
-    func getRentalStation(stationId: String) -> RentalStation {
-        BikeRentalStationStore.shared.bikeRentalStations[stationId]!
+    func getRentalStation(stationId: String) -> BikeRentalStation? {
+        RentalStationStore.shared.bikeRentalStations[stationId]
     }
 
-    func favouriteRentalStation(rentalStation: RentalStation) -> RentalStation? {
-        return BikeRentalStationStore.shared.favouriteStation(rentalStation: rentalStation)
+    func favouriteRentalStation(_ stationToFavourite: BikeRentalStation) {
+        RentalStationStore.shared.markAsFavourite(stationToFavourite)
+        favouriteRentalStations = insertStation(stationToFavourite, toList: favouriteRentalStations)
     }
 
-    func unFavouriteRentalStation(rentalStation: RentalStation) -> RentalStation? {
-        return BikeRentalStationStore.shared.unfavouriteStation(rentalStation: rentalStation)
+    func unFavouriteRentalStation(_ stationToUnfavourite: BikeRentalStation) {
+        if stationToUnfavourite.isNearby {
+            favouriteRentalStations = removeStation(stationToUnfavourite.stationId, from: favouriteRentalStations)
+        }
+        RentalStationStore.shared.markAsNonfavourite(stationToUnfavourite)
     }
 
     func setNearbyRadius(radius: Int) {
@@ -138,6 +143,43 @@ extension AppState {
         BikeRentalStationApiService.shared.updateStoreWithAPI()
     }
 
+}
+
+// MARK: - Functions
+extension AppState {
+
+    private func removeStation(
+        _ stationIdToRemove: String,
+        from: [BikeRentalStation]
+    ) -> [BikeRentalStation] {
+        return from.filter { $0.stationId != stationIdToRemove}
+    }
+
+    private func insertStation(
+        _ bikeRentalStationToInsert: BikeRentalStation,
+        toList: [BikeRentalStation]
+    ) -> [BikeRentalStation] {
+        var bikeRentalStationsArray = toList
+        var inserted = false
+
+        if let insertDistance = bikeRentalStationToInsert.distance(to: userLocation) {
+            for (index, bikeRentalStation) in bikeRentalStationsArray.enumerated() {
+                guard let comparisonDistance = bikeRentalStation.distance(to: userLocation) else { continue }
+                if insertDistance <= comparisonDistance {
+                    bikeRentalStationsArray.insert(bikeRentalStationToInsert, at: index)
+                    inserted = true
+                    break
+                }
+            }
+        }
+
+        if !inserted {
+            bikeRentalStationsArray.insert(bikeRentalStationToInsert, at: bikeRentalStationsArray.endIndex)
+        }
+
+        return bikeRentalStationsArray
+
+    }
 }
 
 // MARK: - Enums

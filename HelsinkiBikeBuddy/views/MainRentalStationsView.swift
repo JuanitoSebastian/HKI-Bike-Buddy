@@ -23,7 +23,7 @@ struct MainRentalStationsView: View {
             NavigationView {
                 TabView(selection: $appState.tabBarSelection) {
 
-                    RentalStationsListView(rentalStations: appState.nearbyRentalStations, listType: .nearby)
+                    ListView(rentalStations: appState.nearbyRentalStations, listType: .nearby)
                     .onTapGesture {
                         appState.tabBarSelection = .nearbyStations
                     }
@@ -33,7 +33,7 @@ struct MainRentalStationsView: View {
                     }
                     .tag(TabBarSelection.nearbyStations)
 
-                    RentalStationsListView(rentalStations: appState.favouriteRentalStations, listType: .favourite)
+                    ListView(rentalStations: appState.favouriteRentalStations, listType: .favourite)
                     .onTapGesture {
                         appState.tabBarSelection = .myStations
                     }

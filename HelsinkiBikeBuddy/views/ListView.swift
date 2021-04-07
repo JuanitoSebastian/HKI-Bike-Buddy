@@ -7,10 +7,10 @@
 
 import SwiftUI
 
-struct RentalStationsListView: View {
+struct ListView: View {
 
     @EnvironmentObject var appState: AppState
-    let rentalStations: [RentalStation]
+    let rentalStations: [BikeRentalStation]
     let listType: BikeRentalStationListType
 
     private var listState: ListState {
@@ -27,10 +27,10 @@ struct RentalStationsListView: View {
     private var listEmptyText: String {
         switch listType {
         case .favourite:
-            return "Favourite a Bike Rental Station to add it here 💗"
+            return "Favourite Bike Rental Stations can be found here 💗"
         case .nearby:
-            return "No stations were found nearby 🤔\n" +
-            "Try increasing the nearby station radius from settings"
+            return "No stations nearby\n" +
+            "Try increasing the nearby radius from settings"
         }
     }
 
@@ -58,7 +58,7 @@ struct RentalStationsListView: View {
             VStack {
                 ScrollView {
                     ForEach(rentalStations, id: \.id) { rentalStation in
-                        RentalStationCardView(rentalStation: rentalStation)
+                        StationCardView(rentalStation: rentalStation)
                     }
                 }
             }

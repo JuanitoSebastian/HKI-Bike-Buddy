@@ -9,7 +9,7 @@ import WidgetKit
 import SwiftUI
 import Intents
 import CoreLocation
-
+/*
 struct Provider: IntentTimelineProvider {
     func placeholder(in context: Context) -> BikeRentalStationWidgetEntry {
         let placeholderStation = UnmanagedBikeRentalStation(
@@ -154,4 +154,5 @@ struct BikeBuddyWidget_Previews: PreviewProvider {
             .previewContext(WidgetPreviewContext(family: .systemSmall))
     }
 }
+*/
 */

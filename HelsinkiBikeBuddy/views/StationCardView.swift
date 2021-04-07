@@ -8,12 +8,12 @@
 import SwiftUI
 import CoreLocation
 
-struct RentalStationCardView: View {
+struct StationCardView: View {
 
     @EnvironmentObject var appState: AppState
-    @State var favouriteStatus: Bool = false
+    @ObservedObject var rentalStation: BikeRentalStation
+    @State var favouriteStatus = false
     @State var toggleTriggered: Bool = false
-    @State var rentalStation: RentalStation
 
     var body: some View {
         content
@@ -28,15 +28,15 @@ struct RentalStationCardView: View {
     }
 
     private var bikes: Int {
-        Int(rentalStation.bikesAvailable)
+        rentalStation.bikes ?? 0
     }
 
     private var spaces: Int {
-        Int(rentalStation.spacesAvailable)
+        rentalStation.spaces ?? 0
     }
 
     private var coordinates: CLLocation {
-        CLLocation(latitude: rentalStation.lat, longitude: rentalStation.lon)
+        CLLocation(latitude: rentalStation.lat ?? -1, longitude: rentalStation.lon ?? -1)
     }
 
     private var stationInfoColor: Color {
@@ -44,7 +44,7 @@ struct RentalStationCardView: View {
     }
 
     private var state: RentalStationState {
-        rentalStation.state ? .inUse : .notInUse
+        rentalStation.state ?? false ? .inUse : .notInUse
     }
 
     var content: AnyView {
@@ -177,7 +177,7 @@ struct RentalStationCardView: View {
 
 }
     // MARK: - Functions
-extension RentalStationCardView {
+extension StationCardView {
     func distanceInMeters() -> String {
         guard let userLocation = appState.userLocation else {
             return "User location unavailbale"
@@ -200,28 +200,19 @@ extension RentalStationCardView {
     func toggleFavourite() {
         if toggleTriggered { return }
         toggleTriggered = true
+        let isStationFavourite = rentalStation.favourite ?? false
+
         favouriteStatus.toggle()
         hapticFeedback()
-
-        if rentalStation.favourite {
-            // Wait for the heart to turn grey
+        if isStationFavourite {
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .milliseconds(200)) {
-                if let unManagedRentalStation = self.appState.unFavouriteRentalStation(
-                    rentalStation: self.rentalStation
-                ) {
-                    self.rentalStation = unManagedRentalStation
-                }
+                appState.unFavouriteRentalStation(rentalStation)
                 self.toggleTriggered = false
             }
         } else {
-            if let managedRentalStation = appState.favouriteRentalStation(
-                rentalStation: rentalStation
-            ) {
-                rentalStation = managedRentalStation
-            }
+            appState.favouriteRentalStation(rentalStation)
             toggleTriggered = false
         }
-
     }
 
     private func hapticFeedback() {
@@ -232,7 +223,7 @@ extension RentalStationCardView {
 }
 
 // MARK: - Enums
-extension RentalStationCardView {
+extension StationCardView {
     enum RentalStationState {
         case inUse
         case notInUse

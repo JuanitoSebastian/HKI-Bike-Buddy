@@ -9,6 +9,7 @@ import XCTest
 import MapKit
 
 class BikeRentalStationStoreTests: XCTestCase {
+    /*
 
     var stationIdToFetch = "074"
     let stationNames = ["Rajasaarentie", "Senaatintori", "Kesäkatu", "Brahen kenttä"]
@@ -167,10 +168,12 @@ class BikeRentalStationStoreTests: XCTestCase {
         waitForExpectations(timeout: 10)
         cancellableFavourite.cancel()
     }
+ */
 }
 
 // MARK: - Helping functions
 extension BikeRentalStationStoreTests {
+    /*
 
     override func setUp() {
         BikeRentalStationStore.shared.nearbyBikeRentalStations.value = []
@@ -183,4 +186,5 @@ extension BikeRentalStationStoreTests {
             longitude: 24.917324
         )
     }
+ */
 }

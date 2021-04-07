@@ -14,7 +14,7 @@ class BikeRentalStationApiService: ObservableObject {
 
     @Published var apiReachabilityState: ApiReachabilityState
     @Published var apiOperationState: ApiOperationState
-    private var favouriteStationsAlreadyUpdated: Set<String>
+    private var alreadyUpdatedStationIds: Set<String>
 
     // Singleton instance
     static let shared = BikeRentalStationApiService()
@@ -22,7 +22,7 @@ class BikeRentalStationApiService: ObservableObject {
     private init() {
         self.apiReachabilityState = .undetermined
         self.apiOperationState = .loading
-        self.favouriteStationsAlreadyUpdated = []
+        self.alreadyUpdatedStationIds = []
         try? addReachabilityObserver()
     }
 
@@ -39,16 +39,22 @@ extension BikeRentalStationApiService {
     @objc
     func updateStoreWithAPI() {
         Log.i("Starting updateStoreWithAPI()")
-        favouriteStationsAlreadyUpdated.removeAll()
+        alreadyUpdatedStationIds = []
         setState(.loading)
-
         fetchNearbyStationsFromApiToStore()
         updateFavourites()
         Log.i("Completed updateStoreWithAPI()")
     }
 
     private func updateFavourites() {
-
+        for stationId in RentalStationStore.shared.bikeRentalStationIds.value
+        where !alreadyUpdatedStationIds.contains(stationId) {
+            guard let bikeRentalStationToUpdate = RentalStationStore.shared.bikeRentalStations[stationId]
+            else { return }
+            updateRentalStationValuesFromApi(
+                bikeRentalStationToUpdate,
+                completition: {})
+        }
     }
 
     private func fetchNearbyStationsFromApiToStore() {
@@ -71,12 +77,13 @@ extension BikeRentalStationApiService {
                     return
                 }
 
-                let nearbyRentalStationsFromApi = self.edgesFromApiToArrayOfRentalStations(
+                let newBikeRentalStationsFromApi = self.edgesFromApiToArrayOfRentalStations(
                     edgesFromApi: edgesUnwrapped
                 )
-                BikeRentalStationStore.shared.addStations(rentalStations: nearbyRentalStationsFromApi)
+
+                RentalStationStore.shared.addBikeRentalStations(newBikeRentalStationsFromApi)
             case .failure(let error):
-                Helper.log("API Fecth failed: \(error)")
+                Log.e("API Fecth failed: \(error)")
             }
         }
     }
@@ -88,43 +95,47 @@ extension BikeRentalStationApiService {
     /// - Returns: array of RentalStations parsed from edges provided by API
     private func edgesFromApiToArrayOfRentalStations(
         edgesFromApi: [FetchNearByBikeRentalStationsQuery.Data.Nearest.Edge]
-    ) -> [RentalStation] {
+    ) -> [BikeRentalStation] {
 
-        var newRentalStationsFromApi: [RentalStation] = []
+        var newRentalStationsFromApi: [BikeRentalStation] = []
 
         for edge in edgesFromApi {
-            // Check if station already exists in Core Data
+            // Checking if station already present at store
             guard let apiStationId = edge.node?.place?.asBikeRentalStation?.stationId else { continue }
             if let rentalStationFromStore =
-                BikeRentalStationStore.shared.bikeRentalStations[apiStationId] {
+                RentalStationStore.shared.bikeRentalStations[apiStationId] {
+                // Updating existing station
                 rentalStationFromStore.updateValues(
                     apiResultMapOptional: edge.node?.place!.resultMap
                 )
             } else {
-                if let unmanagedRentalStation = UnmanagedBikeRentalStation(
+                if let bikeRentalStation = BikeRentalStation(
                     apiResultMapOptional: edge.node?.place!.resultMap
                 ) {
-                    newRentalStationsFromApi.append(unmanagedRentalStation)
+                    // Creating a new station object
+                    bikeRentalStation.favourite = RentalStationStore.shared.isStationFavourite(stationId: apiStationId)
+                    newRentalStationsFromApi.append(bikeRentalStation)
                 }
             }
+            alreadyUpdatedStationIds.insert(apiStationId)
         }
-
+        setState(.ready)
         return newRentalStationsFromApi
     }
 
     /// Updates values of a RentalSation that is passed as a parameter
     /// - Parameter rentalStation: RentalStation that should be updated
     private func updateRentalStationValuesFromApi(
-        rentalStation: RentalStation,
+        _ bikeRentalStationToUpdate: BikeRentalStation,
         completition: @escaping () -> Void
     ) {
         ApolloNetworkClient.shared.apollo.fetch(query: FetchBikeRentalStationByStationIdQuery(
-            stationId: rentalStation.stationId
+            stationId: bikeRentalStationToUpdate.stationId
         )
         ) { result in
             switch result {
             case .success(let graphQlResult):
-                rentalStation.updateValues(
+                bikeRentalStationToUpdate.updateValues(
                     apiResultMapOptional: graphQlResult.data?.bikeRentalStation?.resultMap
                 )
                 completition()
