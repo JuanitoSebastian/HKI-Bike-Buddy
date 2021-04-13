@@ -17,7 +17,7 @@ struct PrettyButton: View {
             Text(textToDisplay)
                 .font(.headline)
                 .foregroundColor(Color("PrettyButtonTxt"))
-                .frame(maxWidth: .infinity, maxHeight: 40)
+                .frame(maxWidth: .infinity, minHeight: 40, maxHeight: 40)
                 .background(
                     Color("PrettyButtonBg")
                         .cornerRadius(5)

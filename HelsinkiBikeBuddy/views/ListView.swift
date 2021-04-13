@@ -12,6 +12,7 @@ struct ListView: View {
     @EnvironmentObject var appState: AppState
     let rentalStations: [BikeRentalStation]
     let listType: BikeRentalStationListType
+    @State var isScrolling: Bool = false
 
     private var listState: ListState {
         if rentalStations.isEmpty {
@@ -30,7 +31,7 @@ struct ListView: View {
             return "Favourite Bike Rental Stations can be found here 💗"
         case .nearby:
             return "No stations nearby\n" +
-            "Try increasing the nearby radius from settings"
+                "Try increasing the nearby radius from settings"
         }
     }
 
@@ -55,13 +56,13 @@ struct ListView: View {
 
     private var stationsLoadedView: AnyView {
         AnyView(
-            VStack {
-                ScrollView {
-                    ForEach(rentalStations, id: \.id) { rentalStation in
-                        StationCardView(rentalStation: rentalStation)
+                VStack {
+                    ScrollView {
+                        ForEach(rentalStations, id: \.id) { rentalStation in
+                            StationCardView(rentalStation: rentalStation, detailed: .constant(false))
+                        }
                     }
                 }
-            }
         )
     }
 

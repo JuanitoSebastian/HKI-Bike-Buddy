@@ -3,109 +3,109 @@
 	{
       "size" : "20x20",
       "idiom": "iphone",
-	  "filename" : "HkiBikeBuddyIcon-20@2x.png",
+	  "filename" : "Icon7-20@2x.png",
       "scale": "2x"
     },
 	{
       "size" : "20x20",
       "idiom": "iphone",
-	  "filename" : "HkiBikeBuddyIcon-20@3x.png",
+	  "filename" : "Icon7-20@3x.png",
       "scale": "3x"
     },
 	{
       "size" : "20x20",
       "idiom": "ipad",
-	  "filename" : "HkiBikeBuddyIcon-20.png",
+	  "filename" : "Icon7-20.png",
       "scale": "1x"
     },
     {
       "size" : "20x20",
       "idiom": "ipad",
-	  "filename" : "HkiBikeBuddyIcon-20@2x.png",
+	  "filename" : "Icon7-20@2x.png",
       "scale": "2x"
     },
     {
       "size" : "29x29",
       "idiom" : "iphone",
-      "filename" : "HkiBikeBuddyIcon-29@2x.png",
+      "filename" : "Icon7-29@2x.png",
       "scale" : "2x"
     },
     {
       "size" : "29x29",
       "idiom" : "iphone",
-      "filename" : "HkiBikeBuddyIcon-29@3x.png",
+      "filename" : "Icon7-29@3x.png",
       "scale" : "3x"
     },
     {
       "size" : "40x40",
       "idiom" : "iphone",
-      "filename" : "HkiBikeBuddyIcon-40@2x.png",
+      "filename" : "Icon7-40@2x.png",
       "scale" : "2x"
     },
     {
       "size" : "40x40",
       "idiom" : "iphone",
-      "filename" : "HkiBikeBuddyIcon-40@3x.png",
+      "filename" : "Icon7-40@3x.png",
       "scale" : "3x"
     },
     {
       "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "HkiBikeBuddyIcon-60@2x.png",
+      "filename" : "Icon7-60@2x.png",
       "scale" : "2x"
     },
     {
       "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "HkiBikeBuddyIcon-60@3x.png",
+      "filename" : "Icon7-60@3x.png",
       "scale" : "3x"
     },
     {
       "size" : "29x29",
       "idiom" : "ipad",
-      "filename" : "HkiBikeBuddyIcon-29.png",
+      "filename" : "Icon7-29.png",
       "scale" : "1x"
     },
     {
       "size" : "29x29",
       "idiom" : "ipad",
-      "filename" : "HkiBikeBuddyIcon-29@2x.png",
+      "filename" : "Icon7-29@2x.png",
       "scale" : "2x"
     },
     {
       "size" : "40x40",
       "idiom" : "ipad",
-      "filename" : "HkiBikeBuddyIcon-40.png",
+      "filename" : "Icon7-40.png",
       "scale" : "1x"
     },
     {
       "size" : "40x40",
       "idiom" : "ipad",
-      "filename" : "HkiBikeBuddyIcon-40@2x.png",
+      "filename" : "Icon7-40@2x.png",
       "scale" : "2x"
     },
     {
       "size" : "76x76",
       "idiom" : "ipad",
-      "filename" : "HkiBikeBuddyIcon-76.png",
+      "filename" : "Icon7-76.png",
       "scale" : "1x"
     },
     {
       "size" : "76x76",
       "idiom" : "ipad",
-      "filename" : "HkiBikeBuddyIcon-76@2x.png",
+      "filename" : "Icon7-76@2x.png",
       "scale" : "2x"
     },
     {
       "size" : "83.5x83.5",
       "idiom" : "ipad",
-      "filename" : "HkiBikeBuddyIcon-83.5@2x.png",
+      "filename" : "Icon7-83.5@2x.png",
       "scale" : "2x"
     },
     {
       "size" : "1024x1024",
       "idiom" : "ios-marketing",
-      "filename" : "HkiBikeBuddyIcon-1024.png",
+      "filename" : "Icon7-1024.png",
       "scale" : "1x"
     }
   ],

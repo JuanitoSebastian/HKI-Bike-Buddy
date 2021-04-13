@@ -12,36 +12,36 @@ import MapKit
 // Check the right amount of zoom...
 struct MapView: UIViewRepresentable {
 
-    var rentalStation: RentalStation
+    var rentalStation: BikeRentalStation
 
-    init(rentalStation: RentalStation) {
+    init(rentalStation: BikeRentalStation) {
         self.rentalStation = rentalStation
     }
 
     private var minLat: Double {
-        if rentalStation.lat <= UserLocationService.shared.userLocation2D!.latitude {
-            return rentalStation.lat
+        if rentalStation.lat! <= UserLocationService.shared.userLocation2D!.latitude {
+            return rentalStation.lat!
         }
         return UserLocationService.shared.userLocation2D!.latitude
     }
 
     private var minLon: Double {
-        if rentalStation.lon <= UserLocationService.shared.userLocation2D!.longitude {
-            return rentalStation.lon
+        if rentalStation.lon! <= UserLocationService.shared.userLocation2D!.longitude {
+            return rentalStation.lon!
         }
         return UserLocationService.shared.userLocation2D!.longitude
     }
 
     private var maxLat: Double {
-        if rentalStation.lat >= UserLocationService.shared.userLocation2D!.latitude {
-            return rentalStation.lat
+        if rentalStation.lat! >= UserLocationService.shared.userLocation2D!.latitude {
+            return rentalStation.lat!
         }
         return UserLocationService.shared.userLocation2D!.latitude
     }
 
     private var maxLon: Double {
-        if rentalStation.lon >= UserLocationService.shared.userLocation2D!.longitude {
-            return rentalStation.lon
+        if rentalStation.lon! >= UserLocationService.shared.userLocation2D!.longitude {
+            return rentalStation.lon!
         }
         return UserLocationService.shared.userLocation2D!.longitude
     }
@@ -49,8 +49,8 @@ struct MapView: UIViewRepresentable {
     private var centerPoint: CLLocationCoordinate2D {
         if UserLocationService.shared.userLocation2D == nil {
             return CLLocationCoordinate2D(
-                latitude: rentalStation.lat,
-                longitude: rentalStation.lon
+                latitude: rentalStation.lat!,
+                longitude: rentalStation.lon!
             )
         }
         return CLLocationCoordinate2D(
@@ -84,7 +84,7 @@ struct MapView: UIViewRepresentable {
 
     func makeUIView(context: UIViewRepresentableContext<MapView>) -> MKMapView {
         let annotation = MKPointAnnotation()
-        annotation.coordinate = rentalStation.coordinate
+        annotation.coordinate = rentalStation.coordinate!
         let mapView = map
         let region = MKCoordinateRegion(center: centerPoint, latitudinalMeters: zoom, longitudinalMeters: zoom)
         mapView.setRegion(region, animated: true)
@@ -97,7 +97,7 @@ struct MapView: UIViewRepresentable {
         let region = MKCoordinateRegion(center: centerPoint, latitudinalMeters: zoom, longitudinalMeters: zoom)
         uiView.setRegion(region, animated: true)
         let annotation = MKPointAnnotation()
-        annotation.coordinate = rentalStation.coordinate
+        annotation.coordinate = rentalStation.coordinate!
         uiView.addAnnotation(annotation)
     }
 }

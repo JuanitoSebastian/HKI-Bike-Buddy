@@ -8,7 +8,7 @@
 import Foundation
 import CoreLocation
 
-class BikeRentalStation: ObservableObject, Identifiable {
+class BikeRentalStation: ObservableObject {
 
     let stationId: String
     var name: String
@@ -18,13 +18,27 @@ class BikeRentalStation: ObservableObject, Identifiable {
     @Published var spaces: Int?
     @Published var allowDropoff: Bool?
     @Published var state: Bool?
-    var favourite: Bool
+    @Published var favourite: Bool
     var fetched: Date?
 
     init(stationId: String, name: String) {
         self.stationId = stationId
         self.name = name
         self.favourite = true
+    }
+
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.stationId = try container.decode(String.self, forKey: .stationId)
+        self.name = try container.decode(String.self, forKey: .name)
+        self.lat = try container.decode(Double.self, forKey: .lat)
+        self.lon = try container.decode(Double.self, forKey: .lon)
+        self.bikes = try container.decode(Int.self, forKey: .bikes)
+        self.spaces = try container.decode(Int.self, forKey: .spaces)
+        self.allowDropoff = try container.decode(Bool.self, forKey: .allowDropoff)
+        self.state = try container.decode(Bool.self, forKey: .state)
+        self.favourite = try container.decode(Bool.self, forKey: .favourite)
+        self.fetched = try container.decode(Date.self, forKey: .fetched)
     }
 
     init?(apiResultMapOptional: [String: Any?]?) {
@@ -82,10 +96,6 @@ extension BikeRentalStation {
         guard let distanceUnwrapped = distance(to: UserLocationService.shared.userLocation) else { return false }
         return distanceUnwrapped <= Double(UserDefaultsService.shared.nearbyDistance)
     }
-
-    var id: String {
-        stationId
-    }
 }
 
 // MARK: - Functions
@@ -96,7 +106,7 @@ extension BikeRentalStation {
     /// - Returns: A CLLocationDistance? object
     func distance(to location: CLLocation?) -> CLLocationDistance? {
         guard let locationUnwrapped = self.location,
-            let toLocationUnwrapped = location else { return nil }
+              let toLocationUnwrapped = location else { return nil }
         return toLocationUnwrapped.distance(from: locationUnwrapped)
     }
 
@@ -132,10 +142,79 @@ extension BikeRentalStation {
     // swiftlint:enable force_cast
 }
 
+// MARK: - Codable
+extension BikeRentalStation: Codable {
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(stationId, forKey: .stationId)
+        try container.encode(name, forKey: .name)
+        try container.encode(lat, forKey: .lat)
+        try container.encode(lon, forKey: .lon)
+        try container.encode(bikes, forKey: .bikes)
+        try container.encode(spaces, forKey: .spaces)
+        try container.encode(allowDropoff, forKey: .allowDropoff)
+        try container.encode(state, forKey: .state)
+        try container.encode(favourite, forKey: .favourite)
+        try container.encode(fetched, forKey: .fetched)
+    }
+
+    enum CodingKeys: CodingKey {
+        case name
+        case stationId
+        case lat
+        case lon
+        case bikes
+        case spaces
+        case allowDropoff
+        case state
+        case favourite
+        case fetched
+    }
+}
+
+// MARK: - Identifiable
+extension BikeRentalStation: Identifiable {
+    var id: String {
+        stationId
+    }
+}
+
 // MARK: - Equatable
 extension BikeRentalStation: Equatable {
-    static func ==(rhs: BikeRentalStation, lhs: BikeRentalStation) -> Bool {
+    static func == (lhs: BikeRentalStation, rhs: BikeRentalStation) -> Bool {
         return rhs.id == lhs.id
+    }
+}
+
+// MARK: - Comparable
+extension BikeRentalStation: Comparable {
+    static func < (lhs: BikeRentalStation, rhs: BikeRentalStation) -> Bool {
+        guard let userLocation = UserLocationService.shared.userLocation else { return false }
+        guard let lhsDistance = lhs.distance(to: userLocation) else { return false }
+        guard let rhsDistance = rhs.distance(to: userLocation) else { return true }
+        return lhsDistance < rhsDistance
+    }
+
+    static func <= (lhs: BikeRentalStation, rhs: BikeRentalStation) -> Bool {
+        guard let userLocation = UserLocationService.shared.userLocation else { return false }
+        guard let lhsDistance = lhs.distance(to: userLocation) else { return false }
+        guard let rhsDistance = rhs.distance(to: userLocation) else { return true }
+        return lhsDistance <= rhsDistance
+    }
+
+    static func > (lhs: BikeRentalStation, rhs: BikeRentalStation) -> Bool {
+        guard let userLocation = UserLocationService.shared.userLocation else { return false }
+        guard let lhsDistance = lhs.distance(to: userLocation) else { return false }
+        guard let rhsDistance = rhs.distance(to: userLocation) else { return true }
+        return lhsDistance > rhsDistance
+    }
+
+    static func >= (lhs: BikeRentalStation, rhs: BikeRentalStation) -> Bool {
+        guard let userLocation = UserLocationService.shared.userLocation else { return false }
+        guard let lhsDistance = lhs.distance(to: userLocation) else { return false }
+        guard let rhsDistance = rhs.distance(to: userLocation) else { return true }
+        return lhsDistance >= rhsDistance
     }
 }
 

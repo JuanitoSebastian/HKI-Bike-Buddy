@@ -65,6 +65,10 @@ struct MainRentalStationsView: View {
 
             }
             .accentColor(Color("NavBarIconActive"))
+            .blur(radius: appState.bgBlur)
+            if appState.detailedView {
+                OverlayCardView()
+            }
         }
         .onAppear(perform: {
             appState.fetchFromApi()

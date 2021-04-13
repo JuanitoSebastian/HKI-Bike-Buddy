@@ -8,7 +8,7 @@
 import Foundation
 import CoreData
 import Combine
-
+import CoreLocation
 // MARK: - Initiation of class
 
 class RentalStationStore: NSObject {
@@ -87,17 +87,21 @@ extension RentalStationStore {
     }
 
     func addBikeRentalStations(_ stationsToAdd: [BikeRentalStation]) {
+
         var stationIds: [String] = bikeRentalStationIds.value
         for rentalStationToAdd in stationsToAdd {
             bikeRentalStations[rentalStationToAdd.stationId] = rentalStationToAdd
             stationIds.append(rentalStationToAdd.stationId)
         }
+
         bikeRentalStationIds.value = stationIds
+            .compactMap { bikeRentalStations[$0] }
+            .sorted()
+            .map { $0.stationId }
     }
 
     func markAsFavourite(_ bikeRentalStation: BikeRentalStation) {
         Log.i("Favouriting: \(bikeRentalStation.name) (\(bikeRentalStation.stationId)")
-        bikeRentalStation.favourite = true
         let record = BikeRentalStationRecord(context: managedObjectContext)
         record.stationId = bikeRentalStation.stationId
         record.name = bikeRentalStation.name
@@ -106,10 +110,7 @@ extension RentalStationStore {
     }
 
     func markAsNonfavourite(_ bikeRentalStation: BikeRentalStation) {
-        if bikeRentalStation.favourite != true { return }
-
         Log.i("Unfavouriting: \(bikeRentalStation.name) (\(bikeRentalStation.stationId)")
-        bikeRentalStation.favourite = false
 
         if let recordToDelete = favouriteRecords[bikeRentalStation.stationId] {
             favouriteRecords.removeValue(forKey: bikeRentalStation.stationId)
@@ -124,6 +125,7 @@ extension RentalStationStore {
             )
             bikeRentalStations.removeValue(forKey: bikeRentalStation.stationId)
         }
+
     }
 
     func isStationFavourite(stationId: String) -> Bool {

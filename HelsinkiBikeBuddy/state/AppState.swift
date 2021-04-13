@@ -16,7 +16,11 @@ class AppState: ObservableObject {
     @Published private(set) var nearbyRentalStations: [BikeRentalStation]
     @Published private(set) var mainView: MainViewState
     @Published private(set) var notificationState: NotificationState
+    @Published private(set) var detailedBikeRentalStation: BikeRentalStation?
+    @Published private(set) var detailedView: Bool
+    @Published var detailedViewMidY: CGFloat
     @Published var tabBarSelection: TabBarSelection
+    @Published var bgBlur: CGFloat
     private var cancellables: Set<AnyCancellable>
 
     init() {
@@ -25,8 +29,10 @@ class AppState: ObservableObject {
         self.cancellables = []
         self.mainView = .locationPrompt
         self.notificationState = .none
-        self.tabBarSelection = RentalStationStore.shared.favouritesEmpty ?
-            .nearbyStations : .myStations
+        self.tabBarSelection = .myStations
+        self.bgBlur = CGFloat.zero
+        self.detailedView = false
+        self.detailedViewMidY = CGFloat.zero
         subscribeToUserLocationServiceState()
         subscribeToBikeRentalStore()
     }
@@ -49,7 +55,7 @@ extension AppState {
                     .compactMap({ (stationId: String) in
                         return self.getRentalStation(stationId: stationId)
                     })
-                    .filter { $0.favourite ?? false }
+                    .filter { $0.favourite }
 
             }
 
@@ -141,6 +147,23 @@ extension AppState {
 
     func fetchFromApi() {
         BikeRentalStationApiService.shared.updateStoreWithAPI()
+    }
+
+    func setDetailedBikeRentalStation(bikeRentalStation: BikeRentalStation) {
+        if detailedBikeRentalStation != bikeRentalStation {
+            detailedBikeRentalStation = bikeRentalStation
+        }
+    }
+
+    func setDetailedViewStatation(_ bikeRentalStation: BikeRentalStation) {
+        detailedBikeRentalStation = bikeRentalStation
+    }
+
+    func toggleDetailedView() {
+        withAnimation(Animation.spring()) {
+            bgBlur = detailedView ? 0 : 10
+            detailedView.toggle()
+        }
     }
 
 }
