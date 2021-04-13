@@ -30,7 +30,9 @@ class Haptics {
         switch intensity {
         case .hard:
             notificationGenerator.notificationOccurred(.success)
-        default:
+        case .medium:
+            impactGenerator.impactOccurred(intensity: 1.5)
+        case .soft:
             impactGenerator.impactOccurred(intensity: 1)
         }
     }

@@ -17,32 +17,22 @@ struct StationCardView: View {
     @Binding var detailed: Bool
     @State var longPress = false
 
-    private var bikes: Int {
-        rentalStation.bikes ?? 0
-    }
-
-    private var spaces: Int {
-        rentalStation.spaces ?? 0
-    }
-
     private var stationInfoColor: Color {
         Color(Color.RGBColorSpace.sRGB, white: 0.5, opacity: 0.1)
     }
 
     private var state: RentalStationState {
-        guard let unwrappedState = rentalStation.state else { return .loading }
-        return unwrappedState ? .inUse : .notInUse
+        return rentalStation.state ? .inUse : .notInUse
     }
 
     private var distanceString: String {
-        guard let userLocation = appState.userLocation,
-              let stationLocation = rentalStation.location else {
+        guard let userLocation = appState.userLocation else {
             return "-"
         }
 
         var distanceDouble = Int(
             Helper.roundToNearest(
-                stationLocation.distance(from: userLocation), toNearest: 20
+                rentalStation.location.distance(from: userLocation), toNearest: 20
             )
         )
 
@@ -60,24 +50,29 @@ struct StationCardView: View {
 extension StationCardView {
 
     var body: some View {
-        GeometryReader { geometry in
+        Button {
+            longPress = false
+        } label: {
             Card {
                 content
             }
-            .gesture(
-                TapGesture(count: 2)
-                    .onEnded { _ in
-                        withAnimation {
-                            appState.detailedViewMidY = geometry.frame(in: CoordinateSpace.global).minY + 15
-                            Haptics.shared.feedback(intensity: .hard)
-                            longPressAction()
-                        }
-                    }
-            )
+            .scaleEffect(longPress ? 0.95 : 1)
+        }
+        .buttonStyle(CardButton())
+        .simultaneousGesture(
+            LongPressGesture(minimumDuration: 0.1)
+                .onEnded { _ in
+                    longPress = true
+                    Haptics.shared.feedback(intensity: .hard)
+                    longPressAction()
+                    longPress = false
+                }
+        )
+        .onTapGesture(count: 2) {
+            toggleFavourite()
         }
         .padding(.vertical, 10)
         .padding(.horizontal, 15)
-        .frame(height: 140)
     }
 
     /// Determines which of the views to display
@@ -171,15 +166,15 @@ extension StationCardView {
     private var amountComponentInUse: AnyView {
         AnyView(
             VStack {
-                CapacityBar(leftValue: bikes, rightValue: spaces)
+                CapacityBar(leftValue: rentalStation.bikes, rightValue: rentalStation.spaces)
                     .shadow(color: Color("CardShadow"), radius: 3, x: 0, y: 3)
                     .padding([.top], 2)
                 HStack {
-                    Text("\(bikes) bikes")
+                    Text("\(rentalStation.bikes) bikes")
                         .font(.headline)
                         .foregroundColor(Color("TextMain"))
                     Spacer()
-                    Text("\(spaces) spaces")
+                    Text("\(rentalStation.spaces) spaces")
                         .font(.headline)
                         .foregroundColor(Color("TextMain"))
                 }
@@ -229,8 +224,10 @@ extension StationCardView {
 
     private func longPressAction() {
         Log.i("Long press")
-        appState.setDetailedViewStatation(rentalStation)
-        appState.toggleDetailedView()
+        withAnimation(.spring()) {
+            appState.setDetailedViewStatation(rentalStation)
+            appState.toggleDetailedView()
+        }
     }
 
 }
@@ -243,14 +240,3 @@ extension StationCardView {
         case loading
     }
 }
-
-#if DEBUG
-struct StationCardView_Previews: PreviewProvider {
-    static var previews: some View {
-        let appState = AppState()
-        let bikeRentalStation = BikeRentalStation(stationId: "014", name: "Senaatintori")
-        StationCardView(rentalStation: bikeRentalStation, detailed: .constant(false))
-            .environmentObject(appState)
-    }
-}
-#endif

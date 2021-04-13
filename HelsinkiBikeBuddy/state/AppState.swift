@@ -17,10 +17,9 @@ class AppState: ObservableObject {
     @Published private(set) var mainView: MainViewState
     @Published private(set) var notificationState: NotificationState
     @Published private(set) var detailedBikeRentalStation: BikeRentalStation?
-    @Published private(set) var detailedView: Bool
+    @Published var detailedView: Bool
     @Published var detailedViewMidY: CGFloat
     @Published var tabBarSelection: TabBarSelection
-    @Published var bgBlur: CGFloat
     private var cancellables: Set<AnyCancellable>
 
     init() {
@@ -30,7 +29,6 @@ class AppState: ObservableObject {
         self.mainView = .locationPrompt
         self.notificationState = .none
         self.tabBarSelection = .myStations
-        self.bgBlur = CGFloat.zero
         self.detailedView = false
         self.detailedViewMidY = CGFloat.zero
         subscribeToUserLocationServiceState()
@@ -76,17 +74,6 @@ extension AppState {
         cancellables.insert(userLocationServiceCancellable)
     }
 
-    private func sortRentalStation(rentalStations: [RentalStation]) -> [RentalStation] {
-        if let userLocation = UserLocationService.shared.userLocation {
-            return rentalStations.sorted( by: {
-                $0.distance(to: userLocation)
-                    < $1.distance(to: userLocation)
-            })
-        } else {
-            return rentalStations
-        }
-    }
-
 }
 
 // MARK: - Computed variables
@@ -122,15 +109,11 @@ extension AppState {
     }
 
     func favouriteRentalStation(_ stationToFavourite: BikeRentalStation) {
-        RentalStationStore.shared.markAsFavourite(stationToFavourite)
         favouriteRentalStations = insertStation(stationToFavourite, toList: favouriteRentalStations)
     }
 
     func unFavouriteRentalStation(_ stationToUnfavourite: BikeRentalStation) {
-        if stationToUnfavourite.isNearby {
-            favouriteRentalStations = removeStation(stationToUnfavourite.stationId, from: favouriteRentalStations)
-        }
-        RentalStationStore.shared.markAsNonfavourite(stationToUnfavourite)
+        favouriteRentalStations = removeStation(stationToUnfavourite.stationId, from: favouriteRentalStations)
     }
 
     func setNearbyRadius(radius: Int) {
@@ -161,9 +144,12 @@ extension AppState {
 
     func toggleDetailedView() {
         withAnimation(Animation.spring()) {
-            bgBlur = detailedView ? 0 : 10
             detailedView.toggle()
         }
+    }
+
+    func saveStore() {
+        RentalStationStore.shared.saveData()
     }
 
 }

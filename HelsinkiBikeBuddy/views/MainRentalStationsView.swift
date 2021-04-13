@@ -10,6 +10,7 @@ import SwiftUI
 struct MainRentalStationsView: View {
 
     @EnvironmentObject var appState: AppState
+    @Environment(\.scenePhase) private var scenePhase
 
     var title: String {
         switch appState.tabBarSelection {
@@ -65,13 +66,20 @@ struct MainRentalStationsView: View {
 
             }
             .accentColor(Color("NavBarIconActive"))
-            .blur(radius: appState.bgBlur)
-            if appState.detailedView {
+            .blur(radius: appState.detailedView ? 10 : 0)
+            .sheet(isPresented: $appState.detailedView) {
                 OverlayCardView()
+                    .animation(Animation.spring())
+                    .environmentObject(appState)
             }
         }
         .onAppear(perform: {
             appState.fetchFromApi()
         })
+        .onChange(of: scenePhase) { phase in
+            if phase == .inactive {
+                appState.saveStore()
+            }
+        }
     }
 }

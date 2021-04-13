@@ -12,20 +12,14 @@ class BikeRentalStation: ObservableObject {
 
     let stationId: String
     var name: String
-    @Published var lat: Double?
-    @Published var lon: Double?
-    @Published var bikes: Int?
-    @Published var spaces: Int?
-    @Published var allowDropoff: Bool?
-    @Published var state: Bool?
+    @Published var lat: Double
+    @Published var lon: Double
+    @Published var bikes: Int
+    @Published var spaces: Int
+    @Published var allowDropoff: Bool
+    @Published var state: Bool
     @Published var favourite: Bool
-    var fetched: Date?
-
-    init(stationId: String, name: String) {
-        self.stationId = stationId
-        self.name = name
-        self.favourite = true
-    }
+    var fetched: Date
 
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -46,19 +40,19 @@ class BikeRentalStation: ObservableObject {
             Log.d("Found nil when unwrapping apiResultMap")
             return nil
         }
-        // swiftlint:disable force_cast
-        guard let fetchedStationId = apiResultMap["stationId"] as! String?,
-              let fetchedName = apiResultMap["name"] as! String?,
-              let fetchedBikesAvailable = apiResultMap["bikesAvailable"] as! Int?,
-              let fetchedSpacesAvailable = apiResultMap["spacesAvailable"] as! Int?,
-              let fetchedLat = apiResultMap["lat"] as! Double?,
-              let fetchedLon = apiResultMap["lon"] as! Double?,
-              let fetchedAllowDropoff = apiResultMap["allowDropoff"] as! Bool?,
-              let fetchedState = apiResultMap["state"] as! String? else {
+
+        guard let fetchedStationId = apiResultMap["stationId"] as? String,
+              let fetchedName = apiResultMap["name"] as? String,
+              let fetchedBikesAvailable = apiResultMap["bikesAvailable"] as? Int,
+              let fetchedSpacesAvailable = apiResultMap["spacesAvailable"] as? Int,
+              let fetchedLat = apiResultMap["lat"] as? Double,
+              let fetchedLon = apiResultMap["lon"] as? Double,
+              let fetchedAllowDropoff = apiResultMap["allowDropoff"] as? Bool,
+              let fetchedState = apiResultMap["state"] as? String else {
             Log.d("Found nil when unwrapping one of apiResultMap values")
             return nil
         }
-        // swiftlint:enable force_cast
+
         self.stationId = fetchedStationId
         self.name = fetchedName
         self.allowDropoff = fetchedAllowDropoff
@@ -75,21 +69,15 @@ class BikeRentalStation: ObservableObject {
 // MARK: - Computer properties:
 extension BikeRentalStation {
 
-    var location: CLLocation? {
-        guard let latUnwrapped = lat,
-              let lonUnwrapped = lon else { return nil }
-        return CLLocation(latitude: latUnwrapped, longitude: lonUnwrapped)
+    var location: CLLocation {
+        CLLocation(latitude: lat, longitude: lon)
     }
 
     var totalCapacity: Int? {
-        guard let bikesUnwrapped = bikes,
-              let spacesUnwrapped = spaces else { return nil }
-        return bikesUnwrapped + spacesUnwrapped
+        bikes + spaces
     }
-    var coordinate: CLLocationCoordinate2D? {
-        guard let latUnwrapped = lat,
-              let lonUnwrapped = lon else { return nil }
-        return CLLocationCoordinate2D(latitude: latUnwrapped, longitude: lonUnwrapped)
+    var coordinate: CLLocationCoordinate2D {
+        return CLLocationCoordinate2D(latitude: lat, longitude: lon)
     }
 
     var isNearby: Bool {
@@ -101,16 +89,15 @@ extension BikeRentalStation {
 // MARK: - Functions
 
 extension BikeRentalStation {
+
     /// Calculate distance between RentalStation and parameter location
     /// - Parameter location: CLLocation object to which the distance is calculated to
     /// - Returns: A CLLocationDistance? object
     func distance(to location: CLLocation?) -> CLLocationDistance? {
-        guard let locationUnwrapped = self.location,
-              let toLocationUnwrapped = location else { return nil }
-        return toLocationUnwrapped.distance(from: locationUnwrapped)
+        guard let toLocationUnwrapped = location else { return nil }
+        return toLocationUnwrapped.distance(from: self.location)
     }
 
-    // swiftlint:disable force_cast
     /// Update RentalStation values with values provided
     /// - Parameter apiResultMapOptional: ResultMap provided from API
     func updateValues(apiResultMapOptional: [String: Any?]?) {
@@ -119,13 +106,13 @@ extension BikeRentalStation {
             return
         }
 
-        guard let fetchedName = apiResultMap["name"] as! String?,
-              let fetchedBikesAvailable = apiResultMap["bikesAvailable"] as! Int?,
-              let fetchedSpacesAvailable = apiResultMap["spacesAvailable"] as! Int?,
-              let fetchedLat = apiResultMap["lat"] as! Double?,
-              let fetchedLon = apiResultMap["lon"] as! Double?,
-              let fetchedAllowDropoff = apiResultMap["allowDropoff"] as! Bool?,
-              let fetchedState = apiResultMap["state"] as! String? else {
+        guard let fetchedName = apiResultMap["name"] as? String,
+              let fetchedBikesAvailable = apiResultMap["bikesAvailable"] as? Int,
+              let fetchedSpacesAvailable = apiResultMap["spacesAvailable"] as? Int,
+              let fetchedLat = apiResultMap["lat"] as? Double,
+              let fetchedLon = apiResultMap["lon"] as? Double,
+              let fetchedAllowDropoff = apiResultMap["allowDropoff"] as? Bool,
+              let fetchedState = apiResultMap["state"] as? String else {
             Log.d("Found nil when unwrapping one of apiResultMap values")
             return
         }
@@ -139,7 +126,6 @@ extension BikeRentalStation {
         self.allowDropoff = fetchedAllowDropoff
         self.state = Helper.parseStateString(fetchedState)
     }
-    // swiftlint:enable force_cast
 }
 
 // MARK: - Codable

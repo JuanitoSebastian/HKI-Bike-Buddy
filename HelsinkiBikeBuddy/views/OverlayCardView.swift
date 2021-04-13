@@ -15,16 +15,8 @@ struct OverlayCardView: View {
         if appState.detailedBikeRentalStation == nil {
             EmptyView()
         } else {
-            StationCardView(rentalStation: appState.detailedBikeRentalStation!, detailed: $detailed)
-                .position(x: UIScreen.main.bounds.midX, y: appState.detailedViewMidY)
-                .onAppear {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
-                        withAnimation(.spring()) {
-                            appState.detailedViewMidY = UIScreen.main.bounds.midY - 250
-                            detailed = true
-                        }
-                    }
-                }
+            StationCardView(rentalStation: appState.detailedBikeRentalStation!, detailed: .constant(true))
+                .position(x: UIScreen.main.bounds.midX, y: UIScreen.main.bounds.midY)
         }
     }
 }

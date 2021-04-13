@@ -60,6 +60,12 @@ struct ListView: View {
                     ScrollView {
                         ForEach(rentalStations, id: \.id) { rentalStation in
                             StationCardView(rentalStation: rentalStation, detailed: .constant(false))
+                                .highPriorityGesture(
+                                    TapGesture(count: 2)
+                                        .onEnded { _ in
+
+                                        }
+                                )
                         }
                     }
                 }

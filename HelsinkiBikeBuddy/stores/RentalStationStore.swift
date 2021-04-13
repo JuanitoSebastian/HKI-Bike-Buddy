@@ -6,84 +6,81 @@
 //
 
 import Foundation
-import CoreData
 import Combine
 import CoreLocation
 // MARK: - Initiation of class
 
-class RentalStationStore: NSObject {
+class RentalStationStore {
     /// Singleton instance of class
     static let shared = RentalStationStore()
 
+    private static var documentsFolder: URL {
+        guard let url = FileManager.default.containerURL(
+                forSecurityApplicationGroupIdentifier: "group.HelsinkiBikeBuddy"
+        ) else {
+            fatalError("Directory not found")
+        }
+        return url
+    }
+
+    private static var fileUrl: URL {
+        return documentsFolder.appendingPathComponent("bikerentalstations.data")
+    }
+
     private(set) var bikeRentalStations: [String: BikeRentalStation] = [:]
-    private var favouriteRecords: [String: BikeRentalStationRecord] = [:]
-    private let fetchController: NSFetchedResultsController<BikeRentalStationRecord>
     public let bikeRentalStationIds = CurrentValueSubject<[String], Never>([])
 
-    private var managedObjectContext: NSManagedObjectContext {
-        fetchController.managedObjectContext
+    private init() {
+        loadData()
     }
 
-    /// Initiates the NSFetchedResultsController and performs initial fetch
-    /// of ManagedBikeRentalStations from persistent store.
-    /// If tests are running the correct Managed Object Context is fetched
-    override private init() {
-        let fetchRequest: NSFetchRequest<BikeRentalStationRecord> = BikeRentalStationRecord.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
-        // Check for testing flag
-        #if DEBUG
-        let managedObjectContextToUse = Helper.isRunningTests() ?
-            PersistenceController.testing.container.viewContext :
-            PersistenceController.shared.container.viewContext
-        #else
-        let managedObjectContextToUse = PersistenceController.shared.container.viewContext
-        #endif
-        fetchController = NSFetchedResultsController(
-            fetchRequest: fetchRequest,
-            managedObjectContext: managedObjectContextToUse,
-            sectionNameKeyPath: nil,
-            cacheName: nil
-        )
-
-        super.init()
-
-        fetchController.delegate = self
-        fectchRecordsFromStore()
-        createStationsFromRecords()
-    }
-
-    private func fectchRecordsFromStore() {
-        do {
-            try fetchController.performFetch()
-            guard let recordsArray = fetchController.fetchedObjects else { return }
-            favouriteRecords = recordsArray.reduce([String: BikeRentalStationRecord]()) { (dict, record) -> [String: BikeRentalStationRecord] in
-                var dict = dict
-                dict[record.stationId] = record
-                return dict
+    private func loadData() {
+        DispatchQueue.global(qos: .background).async { [weak self] in
+            guard let data = try? Data(contentsOf: Self.fileUrl) else {
+                return
             }
-        } catch {
-            Log.e("Failed to fetch MOC: \(error)")
+
+            guard let bikeRentalStationsFromData =
+                    try? JSONDecoder().decode([BikeRentalStation].self, from: data) else {
+                Log.e("Failed to decode saved Bike Rental Stations!")
+                return
+            }
+
+            DispatchQueue.main.async {
+                self?.addBikeRentalStations(bikeRentalStationsFromData)
+            }
         }
     }
 
-    private func createStationsFromRecords() {
-        var bikeRentalStationsFromMoc: [BikeRentalStation] = []
-        for stationRecord in favouriteRecords.values {
-            let bikeRentalStation = BikeRentalStation(
-                stationId: stationRecord.stationId,
-                name: stationRecord.name
-            )
-            bikeRentalStationsFromMoc.append(bikeRentalStation)
+    func saveData() {
+        DispatchQueue.global(qos: .background).async { [weak self] in
+
+            guard let bikeRentalStationsToSave = self?.bikeRentalStations.values.filter({ $0.favourite }) else {
+                Log.e("Self out of scope")
+                return
+            }
+
+            guard let data = try? JSONEncoder().encode(bikeRentalStationsToSave) else {
+                Log.e("Failed to encode data")
+                return
+            }
+
+            do {
+                let outfile = Self.fileUrl
+                try data.write(to: outfile)
+            } catch {
+                Log.e("Failed to write to file")
+            }
         }
-        addBikeRentalStations(bikeRentalStationsFromMoc)
     }
+
 }
 
 // MARK: - Interaction with the store
 extension RentalStationStore {
 
     var favouritesEmpty: Bool {
-        return favouriteRecords.isEmpty
+        bikeRentalStations.values.contains { !$0.favourite }
     }
 
     func addBikeRentalStations(_ stationsToAdd: [BikeRentalStation]) {
@@ -100,68 +97,9 @@ extension RentalStationStore {
             .map { $0.stationId }
     }
 
-    func markAsFavourite(_ bikeRentalStation: BikeRentalStation) {
-        Log.i("Favouriting: \(bikeRentalStation.name) (\(bikeRentalStation.stationId)")
-        let record = BikeRentalStationRecord(context: managedObjectContext)
-        record.stationId = bikeRentalStation.stationId
-        record.name = bikeRentalStation.name
-        saveManagedObjectContext()
-        favouriteRecords[bikeRentalStation.stationId] = record
-    }
-
-    func markAsNonfavourite(_ bikeRentalStation: BikeRentalStation) {
-        Log.i("Unfavouriting: \(bikeRentalStation.name) (\(bikeRentalStation.stationId)")
-
-        if let recordToDelete = favouriteRecords[bikeRentalStation.stationId] {
-            favouriteRecords.removeValue(forKey: bikeRentalStation.stationId)
-            removeFromManagedObjectContext(recordToDelete)
-            saveManagedObjectContext()
-        }
-
-        if !bikeRentalStation.isNearby {
-            bikeRentalStationIds.value = removeStationId(
-                stationId: bikeRentalStation.stationId,
-                from: bikeRentalStationIds.value
-            )
-            bikeRentalStations.removeValue(forKey: bikeRentalStation.stationId)
-        }
-
-    }
-
     func isStationFavourite(stationId: String) -> Bool {
-        return favouriteRecords[stationId] != nil ? true : false
-    }
-
-    private func removeStationId(stationId: String, from: [String]) -> [String] {
-        return from.filter { $0 != stationId }
-    }
-}
-
-// MARK: - NSFetchedResultsControllerDelegate & managing of persistance
-extension RentalStationStore: NSFetchedResultsControllerDelegate {
-
-    func saveManagedObjectContext() {
-        do {
-            try PersistenceController.shared.container.viewContext.save()
-        } catch {
-            Log.e("Failed to save MOC: \(error)")
-        }
-    }
-
-    private func removeFromManagedObjectContext(_ recordToDelete: BikeRentalStationRecord) {
-        Log.i("Deleting record from MOC: \(recordToDelete.name)")
-        managedObjectContext.delete(recordToDelete)
-    }
-
-    /// Subscribig to listen for chances in the Managed Object Context.
-    /// After changes have been made the ManagedBikeRentalStations are reloaded to keep MOC and store in sync.
-    public func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        guard let recordsArray = fetchController.fetchedObjects else { return }
-        favouriteRecords = recordsArray.reduce([String: BikeRentalStationRecord]()) { (dict, record) -> [String: BikeRentalStationRecord] in
-            var dict = dict
-            dict[record.stationId] = record
-            return dict
-        }
+        guard let bikeRentalStation = bikeRentalStations[stationId] else { return false }
+        return bikeRentalStation.favourite
     }
 
 }
