@@ -59,7 +59,7 @@ struct CapacityBar: View {
                         .cornerRadius(8)
                         .padding([.leading, .trailing], 1)
                         .foregroundColor(Color("CapacityBarBikesNormal"))
-
+                        .animation(Animation.spring())
                 }
             }
         )

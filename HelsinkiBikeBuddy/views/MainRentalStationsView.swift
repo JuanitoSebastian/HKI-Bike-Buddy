@@ -66,11 +66,10 @@ struct MainRentalStationsView: View {
 
             }
             .accentColor(Color("NavBarIconActive"))
-            .blur(radius: appState.detailedView ? 10 : 0)
             .sheet(isPresented: $appState.detailedView) {
-                OverlayCardView()
-                    .animation(Animation.spring())
-                    .environmentObject(appState)
+                DetailedBikeRentalStationSheetView(
+                    bikeRentalStation: appState.detailedBikeRentalStation!
+                )
             }
         }
         .onAppear(perform: {

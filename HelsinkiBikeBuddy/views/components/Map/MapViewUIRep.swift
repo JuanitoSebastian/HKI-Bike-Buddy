@@ -72,12 +72,11 @@ struct MapView: UIViewRepresentable {
     private var map: MKMapView {
         let mapView = MKMapView(frame: UIScreen.main.bounds)
         mapView.showsUserLocation = true
-        mapView.isZoomEnabled = true
-        mapView.isScrollEnabled = true
+        mapView.isZoomEnabled = false
+        mapView.isScrollEnabled = false
         mapView.isRotateEnabled = false
         mapView.isPitchEnabled = false
         mapView.mapType = .standard
-        mapView.layer.cornerRadius = 10
         return mapView
     }
 

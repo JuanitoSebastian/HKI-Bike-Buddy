@@ -15,8 +15,7 @@ struct OverlayCardView: View {
         if appState.detailedBikeRentalStation == nil {
             EmptyView()
         } else {
-            StationCardView(rentalStation: appState.detailedBikeRentalStation!, detailed: .constant(true))
-                .position(x: UIScreen.main.bounds.midX, y: UIScreen.main.bounds.midY)
+            EmptyView()
         }
     }
 }

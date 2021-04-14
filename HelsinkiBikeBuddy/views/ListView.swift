@@ -57,9 +57,9 @@ struct ListView: View {
     private var stationsLoadedView: AnyView {
         AnyView(
                 VStack {
-                    ScrollView {
+                    PullToRefreshScrollView(onRelease: { appState.fetchFromApi() }) {
                         ForEach(rentalStations, id: \.id) { rentalStation in
-                            StationCardView(rentalStation: rentalStation, detailed: .constant(false))
+                            StationCardView(bikeRentalStation: rentalStation)
                                 .highPriorityGesture(
                                     TapGesture(count: 2)
                                         .onEnded { _ in
