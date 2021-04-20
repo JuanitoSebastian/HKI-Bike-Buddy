@@ -26,4 +26,4 @@ git clone https://github.com/JuanitoSebastian/HelsinkiBikeBuddy.git
 [🏛 Architecture](https://github.com/JuanitoSebastian/HelsinkiBikeBuddy/blob/main/Documentation/Architecture.md)\
 [🧪 Testing](https://github.com/JuanitoSebastian/HelsinkiBikeBuddy)\
 [📱 User's guide](https://github.com/JuanitoSebastian/HelsinkiBikeBuddy)\
-[⏱ Project report](https://github.com/JuanitoSebastian/HelsinkiBikeBuddy)\
+[⏱ Project report](https://github.com/JuanitoSebastian/HelsinkiBikeBuddy)
