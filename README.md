@@ -18,12 +18,12 @@ If you are interested in exploring this project you are going to need:
 ### Installation
 1. Clone the repository:
 ```
-git clone https://github.com/RocketChat/Rocket.Chat.iOS
+git clone https://github.com/JuanitoSebastian/HelsinkiBikeBuddy.git
 ```
 2. Open HelsinkiBikeBuddy.xcodeproj to access the Xcode workspace
 3. Build the project
 ## Documentation
-[🏛 Architecture](https://github.com/JuanitoSebastian/HelsinkiBikeBuddy/blob/main/Documentation/Architecture.md)
-[🧪 Testing](https://github.com/JuanitoSebastian/HelsinkiBikeBuddy)
-[📱 User's guide](https://github.com/JuanitoSebastian/HelsinkiBikeBuddy)
-[⏱ Project report](https://github.com/JuanitoSebastian/HelsinkiBikeBuddy)
+[🏛 Architecture](https://github.com/JuanitoSebastian/HelsinkiBikeBuddy/blob/main/Documentation/Architecture.md)\
+[🧪 Testing](https://github.com/JuanitoSebastian/HelsinkiBikeBuddy)\
+[📱 User's guide](https://github.com/JuanitoSebastian/HelsinkiBikeBuddy)\
+[⏱ Project report](https://github.com/JuanitoSebastian/HelsinkiBikeBuddy)\
