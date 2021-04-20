@@ -12,23 +12,20 @@ import CoreLocation
 
 class AppState: ObservableObject {
 
+    static let shared = AppState()
+
     @Published private(set) var favouriteRentalStations: [BikeRentalStation]
     @Published private(set) var nearbyRentalStations: [BikeRentalStation]
     @Published private(set) var mainView: MainViewState
-    @Published private(set) var notificationState: NotificationState
-    @Published private(set) var detailedBikeRentalStation: BikeRentalStation?
-    @Published var tabBarSelection: TabBarSelection
+    @Published var notification: NotificationContent?
+    @Published var detailedBikeRentalStation: BikeRentalStation?
     private var storeCancellable: AnyCancellable?
     private var userLocationServiceCancellable: AnyCancellable?
-    @Published var detailedView: Bool
 
-    init() {
+    private init() {
         self.favouriteRentalStations = []
         self.nearbyRentalStations = []
         self.mainView = .locationPrompt
-        self.notificationState = .none
-        self.tabBarSelection = .nearbyStations
-        self.detailedView = false
     }
 }
 
@@ -143,12 +140,6 @@ extension AppState {
         detailedBikeRentalStation = bikeRentalStation
     }
 
-    func toggleDetailedView() {
-        withAnimation(Animation.spring()) {
-            detailedView.toggle()
-        }
-    }
-
     func saveStore() {
         BikeRentalStationStore.shared.saveData()
     }
@@ -222,15 +213,4 @@ extension AppState {
 enum MainViewState {
     case rentalStations
     case locationPrompt
-}
-
-enum NotificationState {
-    case none
-    case notification(String)
-    case error(String)
-}
-
-enum TabBarSelection: Int, Codable {
-    case nearbyStations
-    case myStations
 }

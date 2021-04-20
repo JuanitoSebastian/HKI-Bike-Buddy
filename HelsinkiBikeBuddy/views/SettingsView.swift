@@ -115,11 +115,12 @@ extension SettingsView {
     }
 }
 
+// MARK: - Preview
 #if DEBUG
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
         SettingsView()
-            .environmentObject(AppState())
+            .environmentObject(AppState.shared)
     }
 }
 #endif

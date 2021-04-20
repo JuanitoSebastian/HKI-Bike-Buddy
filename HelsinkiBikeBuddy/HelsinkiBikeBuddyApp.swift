@@ -14,7 +14,7 @@ struct HelsinkiBikeBuddyApp: App {
     let appState: AppState
 
     init() {
-        self.appState = AppState()
+        self.appState = AppState.shared
         self.appState.subscribeToUserLocationServiceState()
     }
 

@@ -50,7 +50,7 @@ class BikeRentalStationViewBuilder {
             Spacer()
             if bikeRentalStationViewType == BikeRentalStationViewType.card ||
                 bikeRentalStationViewType == BikeRentalStationViewType.detailed {
-                FavoriteMarker(
+                FavouriteMarker(
                     isActive: favouriteStatus,
                     action: { withAnimation { favouriteAction() } },
                     size: bikeRentalStationViewType == BikeRentalStationViewType.detailed ? .large : .small

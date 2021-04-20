@@ -16,15 +16,15 @@ import CoreLocation
 /// BikeRentalStationStore.shared
 /// ```
 /// # Structure
-/// BikeRentalStation objects are kept in dictionary *bikeRentalStations* where stationId strings work as keys. Users of the class can
-/// subscribe to the CurrentValueSubject *bikeRentalStationIds* which contains an array of stationIds of stations that
-/// have been fetched from the API. This array of stationIds is always sorted from nearest
-/// to furthers stationId from the user
+/// BikeRentalStation objects are kept in dictionary *bikeRentalStations* where stationId strings work as keys.
+/// Users of the class can subscribe to the CurrentValueSubject *bikeRentalStationIds* which contains
+/// an array of stationIds of stations that have been fetched from the API. This array of stationIds is always
+/// sorted from nearest to furthers stationId from the user
 /// # Persistent storage
-/// Bike rental stations are persistently stored as JSON in a .data file. This file can be accessed by the main app, intents extension and widget extension.
+/// Bike rental stations are persistently stored as JSON in a .data file. This file can be accessed by the main app,
+/// intents extension and widget extension.
 class BikeRentalStationStore {
 
-    // Singleton
     static let shared = BikeRentalStationStore()
 
     private(set) var bikeRentalStations: [String: BikeRentalStation] = [:]

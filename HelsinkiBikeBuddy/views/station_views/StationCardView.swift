@@ -118,10 +118,7 @@ extension StationCardView {
     }
 
     private func longPressAction() {
-        withAnimation(.spring()) {
-            appState.setDetailedViewStatation(bikeRentalStation)
-            appState.toggleDetailedView()
-        }
+        appState.detailedBikeRentalStation = bikeRentalStation
     }
 
 }

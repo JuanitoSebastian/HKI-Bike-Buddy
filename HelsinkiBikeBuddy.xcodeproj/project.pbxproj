@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2805C8C225DFAFA600FE7D56 /* FavoriteMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2805C8C125DFAFA600FE7D56 /* FavoriteMarker.swift */; };
+		2805C8C225DFAFA600FE7D56 /* FavouriteMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2805C8C125DFAFA600FE7D56 /* FavouriteMarker.swift */; };
 		28085F44262D5FE900EB9F49 /* BikeBuddyWidgetProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28085F43262D5FE900EB9F49 /* BikeBuddyWidgetProvider.swift */; };
 		28085F5D262D648200EB9F49 /* BikeBuddyWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28085F5C262D648200EB9F49 /* BikeBuddyWidgetView.swift */; };
 		280BD93125FA35AF005568EF /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 284F9CFF25F8E26A0005D714 /* WidgetKit.framework */; };
@@ -64,8 +64,8 @@
 		2878678F2625BA66002DF114 /* ButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2878678E2625BA66002DF114 /* ButtonStyles.swift */; };
 		287867902625BA66002DF114 /* ButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2878678E2625BA66002DF114 /* ButtonStyles.swift */; };
 		287867912625BA66002DF114 /* ButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2878678E2625BA66002DF114 /* ButtonStyles.swift */; };
-		287BF5FF2618B91F008064FC /* FavoriteMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2805C8C125DFAFA600FE7D56 /* FavoriteMarker.swift */; };
-		287BF6042618B920008064FC /* FavoriteMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2805C8C125DFAFA600FE7D56 /* FavoriteMarker.swift */; };
+		287BF5FF2618B91F008064FC /* FavouriteMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2805C8C125DFAFA600FE7D56 /* FavouriteMarker.swift */; };
+		287BF6042618B920008064FC /* FavouriteMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2805C8C125DFAFA600FE7D56 /* FavouriteMarker.swift */; };
 		287D833326039D0700426B33 /* UserLocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28335B5C25D3CAAA00F447D5 /* UserLocationService.swift */; };
 		287D833A26039D0B00426B33 /* UserDefaultsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C97BF125F2473C0062FA00 /* UserDefaultsService.swift */; };
 		287D834526039D2D00426B33 /* UserDefaultsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C97BF125F2473C0062FA00 /* UserDefaultsService.swift */; };
@@ -98,7 +98,6 @@
 		28A75DB42618B51000C29E9E /* StationCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A75DB32618B51000C29E9E /* StationCardView.swift */; };
 		28A75DB52618B51000C29E9E /* StationCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A75DB32618B51000C29E9E /* StationCardView.swift */; };
 		28A75DB62618B51000C29E9E /* StationCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A75DB32618B51000C29E9E /* StationCardView.swift */; };
-		28BF6CE726203C7E000FB66A /* OverlayCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28BF6CE626203C7E000FB66A /* OverlayCardView.swift */; };
 		28C97BDC25F0C0B90062FA00 /* Reachability in Frameworks */ = {isa = PBXBuildFile; productRef = 28C97BDB25F0C0B90062FA00 /* Reachability */; };
 		28C97BE025F0C6580062FA00 /* ReachabilityObserverDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C97BDF25F0C6580062FA00 /* ReachabilityObserverDelegate.swift */; };
 		28C97BEC25F2082F0062FA00 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C97BEB25F2082F0062FA00 /* MapView.swift */; };
@@ -109,6 +108,10 @@
 		28D32654260C71BE00CC4E70 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 281C5BB225D0111D001502BE /* Helper.swift */; };
 		28D32655260C71BF00CC4E70 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 281C5BB225D0111D001502BE /* Helper.swift */; };
 		28D32656260C71C000CC4E70 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 281C5BB225D0111D001502BE /* Helper.swift */; };
+		28D524A4262ED60A008515A7 /* NotificationContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28D524A3262ED60A008515A7 /* NotificationContent.swift */; };
+		28D524AD262ED6BD008515A7 /* NotificationContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28D524A3262ED60A008515A7 /* NotificationContent.swift */; };
+		28D524B2262ED6BE008515A7 /* NotificationContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28D524A3262ED60A008515A7 /* NotificationContent.swift */; };
+		28D524B3262ED6BE008515A7 /* NotificationContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28D524A3262ED60A008515A7 /* NotificationContent.swift */; };
 		28E21A9726107A7500A605D9 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E21A9626107A7500A605D9 /* Log.swift */; };
 		28E21AA426107FDB00A605D9 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E21A9626107A7500A605D9 /* Log.swift */; };
 		28E21AA926107FDB00A605D9 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E21A9626107A7500A605D9 /* Log.swift */; };
@@ -175,7 +178,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		2805C8C125DFAFA600FE7D56 /* FavoriteMarker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteMarker.swift; sourceTree = "<group>"; };
+		2805C8C125DFAFA600FE7D56 /* FavouriteMarker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouriteMarker.swift; sourceTree = "<group>"; };
 		28085F43262D5FE900EB9F49 /* BikeBuddyWidgetProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BikeBuddyWidgetProvider.swift; sourceTree = "<group>"; };
 		28085F5C262D648200EB9F49 /* BikeBuddyWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BikeBuddyWidgetView.swift; sourceTree = "<group>"; };
 		280BD93025FA35AF005568EF /* BikeBuddyWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = BikeBuddyWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -223,12 +226,12 @@
 		28A6E77B262D9FA900A488A1 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		28A6E78B262DAF6000A488A1 /* WidgetStationCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetStationCard.swift; sourceTree = "<group>"; };
 		28A75DB32618B51000C29E9E /* StationCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationCardView.swift; sourceTree = "<group>"; };
-		28BF6CE626203C7E000FB66A /* OverlayCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayCardView.swift; sourceTree = "<group>"; };
 		28C97BDF25F0C6580062FA00 /* ReachabilityObserverDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReachabilityObserverDelegate.swift; sourceTree = "<group>"; };
 		28C97BEB25F2082F0062FA00 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		28C97BF125F2473C0062FA00 /* UserDefaultsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsService.swift; sourceTree = "<group>"; };
 		28CA9DB525D6B6480050380C /* BikeRentalStationApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BikeRentalStationApiService.swift; sourceTree = "<group>"; };
 		28CDAAE3261E19F90060699B /* SquarePlaceholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquarePlaceholder.swift; sourceTree = "<group>"; };
+		28D524A3262ED60A008515A7 /* NotificationContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationContent.swift; sourceTree = "<group>"; };
 		28DB3B4B25F8EC25004DA791 /* Intents.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Intents.framework; path = System/Library/Frameworks/Intents.framework; sourceTree = SDKROOT; };
 		28DB3B5625F8EC25004DA791 /* IntentsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IntentsUI.framework; path = System/Library/Frameworks/IntentsUI.framework; sourceTree = SDKROOT; };
 		28E21A9626107A7500A605D9 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
@@ -337,7 +340,6 @@
 				28851D1925F7AAC800C08F86 /* SettingsView.swift */,
 				2872725125FBBC7800604A44 /* PermissionsPromptView.swift */,
 				28802FFB2618739700E6D5D0 /* MainRentalStationsView.swift */,
-				28BF6CE626203C7E000FB66A /* OverlayCardView.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -348,7 +350,7 @@
 				28C97BEB25F2082F0062FA00 /* MapView.swift */,
 				28FB437626281FA3006AAD06 /* TextTag.swift */,
 				28335B4725D3AE3500F447D5 /* CapacityBar.swift */,
-				2805C8C125DFAFA600FE7D56 /* FavoriteMarker.swift */,
+				2805C8C125DFAFA600FE7D56 /* FavouriteMarker.swift */,
 				284F9CF525F8CDEC0005D714 /* PrettyButton.swift */,
 				28CDAAE3261E19F90060699B /* SquarePlaceholder.swift */,
 				285ED541262301400080D9B1 /* Card.swift */,
@@ -401,6 +403,7 @@
 			isa = PBXGroup;
 			children = (
 				28F036BD261C5F7E00824273 /* BikeRentalStation.swift */,
+				28D524A3262ED60A008515A7 /* NotificationContent.swift */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -771,7 +774,7 @@
 				285D341E25FA372700ED13E3 /* BikeBuddyWidget.intentdefinition in Sources */,
 				2833F5212626C6EE00E336C7 /* BikeRentalStationViewBuilder.swift in Sources */,
 				285D34A925FA4F0E00ED13E3 /* BikeRentalStationApiService.swift in Sources */,
-				287BF5FF2618B91F008064FC /* FavoriteMarker.swift in Sources */,
+				287BF5FF2618B91F008064FC /* FavouriteMarker.swift in Sources */,
 				281ED6252615FA21008BCE79 /* ApolloNetwokClient.swift in Sources */,
 				28085F5D262D648200EB9F49 /* BikeBuddyWidgetView.swift in Sources */,
 				28FB437826281FA3006AAD06 /* TextTag.swift in Sources */,
@@ -792,6 +795,7 @@
 				28CDAAE5261E19F90060699B /* SquarePlaceholder.swift in Sources */,
 				28085F44262D5FE900EB9F49 /* BikeBuddyWidgetProvider.swift in Sources */,
 				285ED543262301400080D9B1 /* Card.swift in Sources */,
+				28D524AD262ED6BD008515A7 /* NotificationContent.swift in Sources */,
 				28E21AA426107FDB00A605D9 /* Log.swift in Sources */,
 				285D346E25FA38FA00ED13E3 /* IntentHandler.swift in Sources */,
 				285D34BA25FA4F4700ED13E3 /* ReachabilityObserverDelegate.swift in Sources */,
@@ -807,7 +811,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				285D347C25FA3BEE00ED13E3 /* BikeBuddyWidget.intentdefinition in Sources */,
-				287BF6042618B920008064FC /* FavoriteMarker.swift in Sources */,
+				287BF6042618B920008064FC /* FavouriteMarker.swift in Sources */,
 				28E21AA926107FDB00A605D9 /* Log.swift in Sources */,
 				285D34CA25FA732700ED13E3 /* CapacityBar.swift in Sources */,
 				287D835126039D4600426B33 /* ReachabilityObserverDelegate.swift in Sources */,
@@ -824,6 +828,7 @@
 				2833F5222626C6EE00E336C7 /* BikeRentalStationViewBuilder.swift in Sources */,
 				284A013F261756330082404D /* AppState.swift in Sources */,
 				281ED62A2615FA22008BCE79 /* ApolloNetwokClient.swift in Sources */,
+				28D524B2262ED6BE008515A7 /* NotificationContent.swift in Sources */,
 				285D342B25FA376500ED13E3 /* IntentHandler.swift in Sources */,
 				28A75DB62618B51000C29E9E /* StationCardView.swift in Sources */,
 				28F22FCC2624522C002D9A38 /* MapView.swift in Sources */,
@@ -846,7 +851,7 @@
 				285D347225FA38FF00ED13E3 /* IntentHandler.swift in Sources */,
 				28CA9DB625D6B6480050380C /* BikeRentalStationApiService.swift in Sources */,
 				28A75DB42618B51000C29E9E /* StationCardView.swift in Sources */,
-				2805C8C225DFAFA600FE7D56 /* FavoriteMarker.swift in Sources */,
+				2805C8C225DFAFA600FE7D56 /* FavouriteMarker.swift in Sources */,
 				28A21C5D25CEEA140062C7AC /* ContentView.swift in Sources */,
 				287D833A26039D0B00426B33 /* UserDefaultsService.swift in Sources */,
 				2872725225FBBC7800604A44 /* PermissionsPromptView.swift in Sources */,
@@ -871,9 +876,9 @@
 				28FB437726281FA3006AAD06 /* TextTag.swift in Sources */,
 				28CDAAE4261E19F90060699B /* SquarePlaceholder.swift in Sources */,
 				28A120A825CEF5DC005CAD77 /* API.swift in Sources */,
+				28D524A4262ED60A008515A7 /* NotificationContent.swift in Sources */,
 				28335B4825D3AE3500F447D5 /* CapacityBar.swift in Sources */,
 				287D833326039D0700426B33 /* UserLocationService.swift in Sources */,
-				28BF6CE726203C7E000FB66A /* OverlayCardView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -885,6 +890,7 @@
 				28F63531260C8AFC00325B9E /* Helper.swift in Sources */,
 				28F6351D260C891F00325B9E /* BikeRentalStationStoreTests.swift in Sources */,
 				28F6352F260C8AFC00325B9E /* UserDefaultsService.swift in Sources */,
+				28D524B3262ED6BE008515A7 /* NotificationContent.swift in Sources */,
 				284A0140261756350082404D /* AppState.swift in Sources */,
 				28F63532260C8AFC00325B9E /* UserLocationService.swift in Sources */,
 			);

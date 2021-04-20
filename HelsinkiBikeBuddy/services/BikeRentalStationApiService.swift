@@ -88,6 +88,10 @@ extension BikeRentalStationApiService {
                 BikeRentalStationStore.shared.addBikeRentalStations(newBikeRentalStationsFromApi)
             case .failure(let error):
                 Log.e("API Fecth failed: \(error)")
+                AppState.shared.notification = NotificationContent(
+                    title: "Network error",
+                    text: "Failed to fetch nearby stations from API"
+                )
             }
             self.dispatchGroup.leave()
         }
@@ -143,6 +147,10 @@ extension BikeRentalStationApiService {
                 )
             case .failure(let error):
                 Log.e("GraphQL Error: \(error)")
+                AppState.shared.notification = NotificationContent(
+                    title: "Network error",
+                    text: "Failed to update stations with API"
+                )
             }
             completion()
         }
@@ -191,6 +199,12 @@ extension BikeRentalStationApiService: ReachabilityObserverDelegate {
 
     func reachabilityChanged(_ isReachable: Bool) {
         apiReachabilityState = isReachable ? .normal : .error
+        if !isReachable {
+            AppState.shared.notification = NotificationContent(
+                title: "Network error",
+                text: "No network connection 😔"
+            )
+        }
     }
 
 }

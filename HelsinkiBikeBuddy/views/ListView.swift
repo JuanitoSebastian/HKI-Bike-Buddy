@@ -12,6 +12,7 @@ struct ListView: View {
     @EnvironmentObject var appState: AppState
     let rentalStations: [BikeRentalStation]
     let listType: BikeRentalStationListType
+    let layout = [GridItem(.flexible(maximum: .infinity))]
 
     private var listState: ListState {
         if rentalStations.isEmpty {
@@ -35,7 +36,11 @@ struct ListView: View {
         }
     }
 
+}
+
     // MARK: - Views
+extension ListView {
+
     var body: some View {
         VStack {
             contentToDisplay
@@ -58,15 +63,18 @@ struct ListView: View {
         AnyView(
                 VStack {
                     PullToRefreshScrollView(onRelease: { appState.fetchFromApi() }) {
-                        ForEach(rentalStations, id: \.id) { rentalStation in
-                            StationCardView(bikeRentalStation: rentalStation)
-                                .highPriorityGesture(
-                                    TapGesture(count: 2)
-                                        .onEnded { _ in
+                        LazyVGrid(columns: layout) {
+                            ForEach(rentalStations, id: \.id) { rentalStation in
+                                StationCardView(bikeRentalStation: rentalStation)
+                                    .highPriorityGesture(
+                                        TapGesture(count: 2)
+                                            .onEnded { _ in
 
-                                        }
-                                )
+                                            }
+                                    )
+                            }
                         }
+
                     }
                 }
         )
@@ -109,11 +117,12 @@ struct ListView: View {
 
 }
 
+// MARK: - Preview
 #if DEBUG
 struct ListView_Previews: PreviewProvider {
     static var previews: some View {
         ListView(rentalStations: BikeRentalStation.placeholderStations, listType: .nearby)
-            .environmentObject(AppState())
+            .environmentObject(AppState.shared)
     }
 }
 #endif

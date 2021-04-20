@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// A pretty looking card where content can be placed
 struct Card<Content: View>: View {
 
     private let builder: () -> Content
@@ -39,6 +40,7 @@ struct Card<Content: View>: View {
     }
 }
 
+// MARK: - Preview
 #if DEBUG
 struct Card_Previews: PreviewProvider {
     static var previews: some View {

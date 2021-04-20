@@ -38,6 +38,8 @@ class BikeRentalStation: ObservableObject {
     }
 
     /// ApiResultMapOptional init for when stations are created from API response
+    /// - Parameter apiResultMapOptional: Dictionary object obtained from API
+    /// - Returns: If the resultMap from API contains missing values nil is returned
     init?(apiResultMapOptional: [String: Any?]?) {
         guard let apiResultMap = apiResultMapOptional else {
             Log.d("Found nil when unwrapping apiResultMap")
@@ -68,6 +70,7 @@ class BikeRentalStation: ObservableObject {
         self.favourite = false
     }
 
+    /// Internal init used for testing and manual creation of BikeRentalStations
     internal init(
         stationId: String,
         name: String,
@@ -262,7 +265,7 @@ extension BikeRentalStation: Hashable {
 
 // MARK: - Placeholder Data
 extension BikeRentalStation {
-    
+
     /// These stations are used in widget and Xcode previews
     static var placeholderStations: [BikeRentalStation] = [
         BikeRentalStation(

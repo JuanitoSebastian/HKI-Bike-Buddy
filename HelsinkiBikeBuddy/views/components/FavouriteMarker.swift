@@ -6,17 +6,16 @@
 //
 
 import SwiftUI
-/**
- A heart shaped button.
- - Parameter isActive: Is the heart filled or not?
- - Parameter action: What is performed on tap.
- */
-struct FavoriteMarker: View {
+/// A heart shaped button. 💘
+struct FavouriteMarker: View {
 
     @Binding var isActive: Bool
     let action: () -> Void
     let size: HeartSize
 
+    /// - Parameter isActive: Is the heart filled or not?
+    /// - Parameter action: What is performed on tap?
+    /// - Parameter size: What size should the heart be?
     init(
         isActive: Binding<Bool>,
         action: @escaping () -> Void,
@@ -26,7 +25,10 @@ struct FavoriteMarker: View {
         self.action = action
         self.size = size
     }
+}
 
+// MARK: - Views
+extension FavouriteMarker {
     var body: some View {
         Button {
             action()
@@ -40,27 +42,19 @@ struct FavoriteMarker: View {
     }
 }
 
-extension FavoriteMarker {
+// MARK: - Enums
+extension FavouriteMarker {
     public enum HeartSize: CGFloat {
         case small = 20
         case large = 32
     }
 }
 
+// MARK: - Previews
 #if DEBUG
 struct FavoriteMarker_Previews: PreviewProvider {
     static var previews: some View {
-        FavoriteMarker(isActive: .constant(true), action: { Log.i("Favorite marker tapped") })
+        FavouriteMarker(isActive: .constant(true), action: { Log.i("Favorite marker tapped") })
     }
 }
 #endif
-
-struct StaticHighPriorityButtonStyle: PrimitiveButtonStyle {
-    func makeBody(configuration: PrimitiveButtonStyle.Configuration) -> some View {
-        let gesture = TapGesture()
-            .onEnded { _ in configuration.trigger() }
-
-        return configuration.label
-            .highPriorityGesture(gesture)
-    }
-}
