@@ -17,22 +17,18 @@ class AppState: ObservableObject {
     @Published private(set) var mainView: MainViewState
     @Published private(set) var notificationState: NotificationState
     @Published private(set) var detailedBikeRentalStation: BikeRentalStation?
-    @Published var detailedView: Bool
-    @Published var detailedViewMidY: CGFloat
     @Published var tabBarSelection: TabBarSelection
-    private var cancellables: Set<AnyCancellable>
+    private var storeCancellable: AnyCancellable?
+    private var userLocationServiceCancellable: AnyCancellable?
+    @Published var detailedView: Bool
 
     init() {
         self.favouriteRentalStations = []
         self.nearbyRentalStations = []
-        self.cancellables = []
         self.mainView = .locationPrompt
         self.notificationState = .none
-        self.tabBarSelection = .myStations
+        self.tabBarSelection = .nearbyStations
         self.detailedView = false
-        self.detailedViewMidY = CGFloat.zero
-        subscribeToUserLocationServiceState()
-        subscribeToBikeRentalStore()
     }
 }
 
@@ -40,28 +36,34 @@ class AppState: ObservableObject {
 extension AppState {
 
     func subscribeToBikeRentalStore() {
-        let storeSubscription =
-            RentalStationStore.shared.bikeRentalStationIds.eraseToAnyPublisher().sink { fetched in
+        if storeCancellable != nil { return }
+        storeCancellable =
+            BikeRentalStationStore.shared.bikeRentalStationIds.eraseToAnyPublisher().sink { fetched in
 
-                self.nearbyRentalStations = fetched
-                    .compactMap({ (stationId: String) in
-                        return self.getRentalStation(stationId: stationId)
-                    })
-                    .filter { $0.isNearby }
+                self.setBikeRentalStations(
+                    valuesToAdd: fetched
+                                    .compactMap({ (stationId: String) in
+                                        return self.getRentalStation(stationId: stationId)
+                                    })
+                                    .filter { $0.isNearby },
+                    destination: &self.nearbyRentalStations,
+                    animation: !self.nearbyRentalStations.isEmpty
+                )
 
-                self.favouriteRentalStations = fetched
-                    .compactMap({ (stationId: String) in
-                        return self.getRentalStation(stationId: stationId)
-                    })
-                    .filter { $0.favourite }
-
+                self.setBikeRentalStations(
+                    valuesToAdd: fetched
+                                    .compactMap({ (stationId: String) in
+                                        return self.getRentalStation(stationId: stationId)
+                                    })
+                        .filter { $0.favourite },
+                    destination: &self.favouriteRentalStations,
+                    animation: !self.favouriteRentalStations.isEmpty
+                )
             }
-
-        cancellables.insert(storeSubscription)
     }
 
     func subscribeToUserLocationServiceState() {
-        let userLocationServiceCancellable =
+        userLocationServiceCancellable =
             UserLocationService.shared.$locationAuthorization.eraseToAnyPublisher().sink { newValue in
                 switch newValue {
                 case .success:
@@ -71,7 +73,6 @@ extension AppState {
                     self.mainView = .locationPrompt
                 }
             }
-        cancellables.insert(userLocationServiceCancellable)
     }
 
 }
@@ -105,7 +106,7 @@ extension AppState {
 extension AppState {
 
     func getRentalStation(stationId: String) -> BikeRentalStation? {
-        RentalStationStore.shared.bikeRentalStations[stationId]
+        BikeRentalStationStore.shared.bikeRentalStations[stationId]
     }
 
     func favouriteRentalStation(_ stationToFavourite: BikeRentalStation) {
@@ -149,9 +150,34 @@ extension AppState {
     }
 
     func saveStore() {
-        RentalStationStore.shared.saveData()
+        BikeRentalStationStore.shared.saveData()
     }
 
+    func startUpdatingUserLocation() {
+        UserLocationService.shared.startUpdatingUserLocation()
+    }
+
+    func stopUpdatingUserLocation() {
+        UserLocationService.shared.stopUpdatingUserLocation()
+    }
+
+}
+// MARK: - Non UI Functions
+extension AppState {
+
+    private func setBikeRentalStations(
+        valuesToAdd: [BikeRentalStation],
+        destination: inout [BikeRentalStation],
+        animation: Bool
+    ) {
+        if animation {
+            withAnimation {
+                destination = valuesToAdd
+            }
+        } else {
+            destination = valuesToAdd
+        }
+    }
 }
 
 // MARK: - Functions

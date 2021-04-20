@@ -8,24 +8,24 @@
 import Foundation
 import Combine
 import CoreLocation
-// MARK: - Initiation of class
 
-class RentalStationStore {
-    /// Singleton instance of class
-    static let shared = RentalStationStore()
+/// A class for persistently storing Bike Rental Station objects
+/// # Usage
+/// Class is accessed via a singleton instance
+/// ```
+/// BikeRentalStationStore.shared
+/// ```
+/// # Structure
+/// BikeRentalStation objects are kept in dictionary *bikeRentalStations* where stationId strings work as keys. Users of the class can
+/// subscribe to the CurrentValueSubject *bikeRentalStationIds* which contains an array of stationIds of stations that
+/// have been fetched from the API. This array of stationIds is always sorted from nearest
+/// to furthers stationId from the user
+/// # Persistent storage
+/// Bike rental stations are persistently stored as JSON in a .data file. This file can be accessed by the main app, intents extension and widget extension.
+class BikeRentalStationStore {
 
-    private static var documentsFolder: URL {
-        guard let url = FileManager.default.containerURL(
-                forSecurityApplicationGroupIdentifier: "group.HelsinkiBikeBuddy"
-        ) else {
-            fatalError("Directory not found")
-        }
-        return url
-    }
-
-    private static var fileUrl: URL {
-        return documentsFolder.appendingPathComponent("bikerentalstations.data")
-    }
+    // Singleton
+    static let shared = BikeRentalStationStore()
 
     private(set) var bikeRentalStations: [String: BikeRentalStation] = [:]
     public let bikeRentalStationIds = CurrentValueSubject<[String], Never>([])
@@ -34,8 +34,27 @@ class RentalStationStore {
         loadData()
     }
 
+}
+
+// MARK: - Saving and loading of data
+extension BikeRentalStationStore {
+
+    static var documentsFolder: URL {
+        guard let url = FileManager.default.containerURL(
+                forSecurityApplicationGroupIdentifier: "group.HelsinkiBikeBuddy"
+        ) else {
+            fatalError("Directory not found")
+        }
+        return url
+    }
+
+    static var fileUrl: URL {
+        return documentsFolder.appendingPathComponent("bikerentalstations.data")
+    }
+
+    /// Loads contents of persistent store to *bikeRentalStations* and *bikeRentalStationIds*
     private func loadData() {
-        DispatchQueue.global(qos: .background).async { [weak self] in
+        DispatchQueue.main.async {
             guard let data = try? Data(contentsOf: Self.fileUrl) else {
                 return
             }
@@ -46,12 +65,13 @@ class RentalStationStore {
                 return
             }
 
-            DispatchQueue.main.async {
-                self?.addBikeRentalStations(bikeRentalStationsFromData)
-            }
+            self.addBikeRentalStations(bikeRentalStationsFromData)
+
         }
     }
 
+    /// Saves the favourite Bike Rental Stations persistently.
+    /// Data is written in background thread
     func saveData() {
         DispatchQueue.global(qos: .background).async { [weak self] in
 
@@ -77,7 +97,7 @@ class RentalStationStore {
 }
 
 // MARK: - Interaction with the store
-extension RentalStationStore {
+extension BikeRentalStationStore {
 
     var favouritesEmpty: Bool {
         bikeRentalStations.values.contains { !$0.favourite }

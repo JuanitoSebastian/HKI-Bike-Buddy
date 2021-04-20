@@ -9,12 +9,6 @@ import Foundation
 
 class Helper {
 
-    static func log(_ printMe: Any) {
-        #if DEBUG
-        print(printMe)
-        #endif
-    }
-
     static func timeIntervalToString(_ timeInverval: TimeInterval) -> String {
         if timeInverval < 60 {
             return "\(timeInverval) second"

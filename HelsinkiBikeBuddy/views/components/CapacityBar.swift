@@ -53,13 +53,13 @@ struct CapacityBar: View {
 
                     Rectangle()
                         .frame(
-                            width: progressWidth(fullWidth: geometry.size.width - 2),
-                            height: geometry.size.height - 2
+                            width: progressWidth(fullWidth: geometry.size.width - 4),
+                            height: geometry.size.height - 4
                         )
                         .cornerRadius(8)
-                        .padding([.leading, .trailing], 1)
+                        .padding([.leading, .trailing], 2)
                         .foregroundColor(Color("CapacityBarBikesNormal"))
-                        .animation(Animation.spring())
+                        .animation(Animation.spring(), value: leftValue)
                 }
             }
         )
@@ -67,7 +67,7 @@ struct CapacityBar: View {
 
     var body: some View {
         barToDisplay
-            .frame(height: 15)
+            .frame(height: 18)
 
     }
 
@@ -78,8 +78,10 @@ struct CapacityBar: View {
 
 }
 
+#if DEBUG
 struct CapacityBar_Previews: PreviewProvider {
     static var previews: some View {
         CapacityBar(leftValue: 10, rightValue: 0)
     }
 }
+#endif

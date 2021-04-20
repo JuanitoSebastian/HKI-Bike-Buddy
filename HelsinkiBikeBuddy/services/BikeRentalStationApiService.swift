@@ -15,6 +15,7 @@ class BikeRentalStationApiService: ObservableObject {
     @Published var apiReachabilityState: ApiReachabilityState
     @Published var apiOperationState: ApiOperationState
     private var alreadyUpdatedStationIds: Set<String>
+    private var dispatchGroup = DispatchGroup()
 
     // Singleton instance
     static let shared = BikeRentalStationApiService()
@@ -38,22 +39,24 @@ extension BikeRentalStationApiService {
     /// updates favourite stations with up-to-date data from API
     @objc
     func updateStoreWithAPI() {
-        Log.i("Starting updateStoreWithAPI()")
         alreadyUpdatedStationIds = []
         setState(.loading)
         fetchNearbyStationsFromApiToStore()
         updateFavourites()
-        Log.i("Completed updateStoreWithAPI()")
+        dispatchGroup.notify(queue: .main) {
+            self.setState(.ready)
+        }
     }
 
     private func updateFavourites() {
-        for stationId in RentalStationStore.shared.bikeRentalStationIds.value
+        for stationId in BikeRentalStationStore.shared.bikeRentalStationIds.value
         where !alreadyUpdatedStationIds.contains(stationId) {
-            guard let bikeRentalStationToUpdate = RentalStationStore.shared.bikeRentalStations[stationId]
+            guard let bikeRentalStationToUpdate = BikeRentalStationStore.shared.bikeRentalStations[stationId]
             else { return }
+            dispatchGroup.enter()
             updateRentalStationValuesFromApi(
                 bikeRentalStationToUpdate,
-                completition: {})
+                completion: { self.dispatchGroup.leave() })
         }
     }
 
@@ -62,13 +65,14 @@ extension BikeRentalStationApiService {
             Log.e("Found nil userLocation when fetching stations from API")
             return
         }
-
+        dispatchGroup.enter()
         ApolloNetworkClient.shared.apollo.fetch(
             query: FetchNearByBikeRentalStationsQuery(
                 lat: userLocation.coordinate.latitude,
                 lon: userLocation.coordinate.longitude,
                 maxDistance: UserDefaultsService.shared.nearbyDistance
-            )
+            ),
+            cachePolicy: .fetchIgnoringCacheCompletely
         ) { result in
             switch result {
             case .success(let graphQLResult):
@@ -81,18 +85,17 @@ extension BikeRentalStationApiService {
                     edgesFromApi: edgesUnwrapped
                 )
 
-                RentalStationStore.shared.addBikeRentalStations(newBikeRentalStationsFromApi)
+                BikeRentalStationStore.shared.addBikeRentalStations(newBikeRentalStationsFromApi)
             case .failure(let error):
                 Log.e("API Fecth failed: \(error)")
             }
+            self.dispatchGroup.leave()
         }
     }
 
-    /// Converts API result array to an array of RentalStations. If favourite stations are encountered
-    /// the ManagedBikeRentalStation object is fetched from CoreData, the values are updated and
-    /// the station is added to the list of nearby rental stations that is returned
+    /// Converts API result array to an array of BikeRentalStations
     /// - Parameter edgesFromApi: Nearby bike rental stations from the API
-    /// - Returns: array of RentalStations parsed from edges provided by API
+    /// - Returns: array of BikeRentalStations parsed from edges provided by API
     private func edgesFromApiToArrayOfRentalStations(
         edgesFromApi: [FetchNearByBikeRentalStationsQuery.Data.Nearest.Edge]
     ) -> [BikeRentalStation] {
@@ -103,7 +106,7 @@ extension BikeRentalStationApiService {
             // Checking if station already present at store
             guard let apiStationId = edge.node?.place?.asBikeRentalStation?.stationId else { continue }
             if let rentalStationFromStore =
-                RentalStationStore.shared.bikeRentalStations[apiStationId] {
+                BikeRentalStationStore.shared.bikeRentalStations[apiStationId] {
                 // Updating existing station
                 rentalStationFromStore.updateValues(
                     apiResultMapOptional: edge.node?.place!.resultMap
@@ -113,34 +116,59 @@ extension BikeRentalStationApiService {
                     apiResultMapOptional: edge.node?.place!.resultMap
                 ) {
                     // Creating a new station object
-                    bikeRentalStation.favourite = RentalStationStore.shared.isStationFavourite(stationId: apiStationId)
+                    bikeRentalStation.favourite = BikeRentalStationStore.shared.isStationFavourite(stationId: apiStationId)
                     newRentalStationsFromApi.append(bikeRentalStation)
                 }
             }
             alreadyUpdatedStationIds.insert(apiStationId)
         }
-        setState(.ready)
         return newRentalStationsFromApi
     }
 
     /// Updates values of a RentalSation that is passed as a parameter
-    /// - Parameter rentalStation: RentalStation that should be updated
-    private func updateRentalStationValuesFromApi(
+    /// - Parameter bikeRentalStationToUpdate: Bike Rental Station to update
+    /// - Parameter completion: Code block to call when ready
+    func updateRentalStationValuesFromApi(
         _ bikeRentalStationToUpdate: BikeRentalStation,
-        completition: @escaping () -> Void
+        completion: @escaping () -> Void = {}
     ) {
         ApolloNetworkClient.shared.apollo.fetch(query: FetchBikeRentalStationByStationIdQuery(
             stationId: bikeRentalStationToUpdate.stationId
-        )
+        ), cachePolicy: .fetchIgnoringCacheCompletely
         ) { result in
             switch result {
             case .success(let graphQlResult):
                 bikeRentalStationToUpdate.updateValues(
                     apiResultMapOptional: graphQlResult.data?.bikeRentalStation?.resultMap
                 )
-                completition()
             case .failure(let error):
-                Log.e("GraphQL Client Error: \(error)")
+                Log.e("GraphQL Error: \(error)")
+            }
+            completion()
+        }
+    }
+
+    /// Fetches a BikeRentalStation from API with stationId
+    /// - Parameter stationId: StationId of BikeRentalStation
+    /// - Parameter completion: Completion code block to call when station fethed
+    func fetchStationFromApi(
+        _ stationId: String,
+        completion: @escaping (BikeRentalStation?) -> Void
+    ) {
+        ApolloNetworkClient.shared.apollo.fetch(query: FetchBikeRentalStationByStationIdQuery(
+            stationId: stationId
+        ), cachePolicy: .fetchIgnoringCacheCompletely
+        ) { result in
+            switch result {
+            case .success(let graphQlResult):
+                let bikeRentalStation = BikeRentalStation(
+                    apiResultMapOptional: graphQlResult.data?.bikeRentalStation?.resultMap
+                )
+                completion(bikeRentalStation)
+
+            case .failure(let error):
+                Log.e("GraphQL Error: \(error)")
+                completion(nil)
             }
         }
     }

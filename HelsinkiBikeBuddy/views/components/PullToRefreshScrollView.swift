@@ -37,7 +37,7 @@ struct PullToRefreshScrollView<Content: View>: View {
                     }
 
                     if refresh.startOffset == refresh.offset && refresh.started && !refresh.released {
-                        withAnimation(Animation.spring()) {
+                        withAnimation(Animation.linear) {
                             refresh.released = true
                         }
                         action()
@@ -61,6 +61,7 @@ struct PullToRefreshScrollView<Content: View>: View {
                 } else {
                     Image(systemName: "arrow.down")
                         .font(.system(size: 15, weight: .heavy))
+                        .foregroundColor(Color("PullToRefreshIcon"))
                         .rotationEffect(.init(degrees: refresh.started ? 180 : 0))
                         .offset(y: -30)
                         .animation(.spring())
@@ -81,7 +82,7 @@ struct PullToRefreshScrollView<Content: View>: View {
 extension PullToRefreshScrollView {
     private func action() {
         DispatchQueue.main.async {
-            withAnimation(Animation.spring()) {
+            withAnimation(Animation.linear) {
                 if refresh.startOffset == refresh.offset {
                     onRelease()
                     refresh.released = false

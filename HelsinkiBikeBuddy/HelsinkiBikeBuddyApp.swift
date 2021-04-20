@@ -11,7 +11,12 @@ import CoreLocation
 @main
 struct HelsinkiBikeBuddyApp: App {
 
-    let appState: AppState = AppState()
+    let appState: AppState
+
+    init() {
+        self.appState = AppState()
+        self.appState.subscribeToUserLocationServiceState()
+    }
 
     var body: some Scene {
         WindowGroup {

@@ -12,7 +12,6 @@ struct ListView: View {
     @EnvironmentObject var appState: AppState
     let rentalStations: [BikeRentalStation]
     let listType: BikeRentalStationListType
-    @State var isScrolling: Bool = false
 
     private var listState: ListState {
         if rentalStations.isEmpty {
@@ -28,9 +27,10 @@ struct ListView: View {
     private var listEmptyText: String {
         switch listType {
         case .favourite:
-            return "Favourite Bike Rental Stations can be found here 💗"
+            return "Nothing here yet...\n" +
+                "Start by marking a station as your favourite 💖"
         case .nearby:
-            return "No stations nearby\n" +
+            return "No stations nearby 😔\n" +
                 "Try increasing the nearby radius from settings"
         }
     }
@@ -88,7 +88,7 @@ struct ListView: View {
                 Spacer()
                 Text(listEmptyText)
                     .foregroundColor(Color("TextMain"))
-                    .font(.footnote)
+                    .font(.callout)
                     .multilineTextAlignment(.center)
                 Spacer()
             }
@@ -108,3 +108,12 @@ struct ListView: View {
     }
 
 }
+
+#if DEBUG
+struct ListView_Previews: PreviewProvider {
+    static var previews: some View {
+        ListView(rentalStations: BikeRentalStation.placeholderStations, listType: .nearby)
+            .environmentObject(AppState())
+    }
+}
+#endif

@@ -8,6 +8,7 @@
 import Foundation
 import CoreLocation
 
+/// A station where city bikes can be rented from and returned to 🚲
 class BikeRentalStation: ObservableObject {
 
     let stationId: String
@@ -21,6 +22,7 @@ class BikeRentalStation: ObservableObject {
     @Published var favourite: Bool
     var fetched: Date
 
+    /// Decoder init for when stations are decoded from persistent store
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.stationId = try container.decode(String.self, forKey: .stationId)
@@ -35,6 +37,7 @@ class BikeRentalStation: ObservableObject {
         self.fetched = try container.decode(Date.self, forKey: .fetched)
     }
 
+    /// ApiResultMapOptional init for when stations are created from API response
     init?(apiResultMapOptional: [String: Any?]?) {
         guard let apiResultMap = apiResultMapOptional else {
             Log.d("Found nil when unwrapping apiResultMap")
@@ -64,18 +67,39 @@ class BikeRentalStation: ObservableObject {
         self.state = Helper.parseStateString(fetchedState)
         self.favourite = false
     }
+
+    internal init(
+        stationId: String,
+        name: String,
+        lat: Double,
+        lon: Double,
+        bikes: Int,
+        spaces: Int,
+        allowDropoff: Bool,
+        state: Bool,
+        favourite: Bool
+    ) {
+        self.stationId = stationId
+        self.name = name
+        self.lat = lat
+        self.lon = lon
+        self.bikes = bikes
+        self.spaces = spaces
+        self.allowDropoff = allowDropoff
+        self.state = state
+        self.favourite = favourite
+        self.fetched = Date()
+    }
+
 }
 
-// MARK: - Computer properties:
+// MARK: - Computed properties:
 extension BikeRentalStation {
 
     var location: CLLocation {
         CLLocation(latitude: lat, longitude: lon)
     }
 
-    var totalCapacity: Int? {
-        bikes + spaces
-    }
     var coordinate: CLLocationCoordinate2D {
         return CLLocationCoordinate2D(latitude: lat, longitude: lon)
     }
@@ -84,21 +108,45 @@ extension BikeRentalStation {
         guard let distanceUnwrapped = distance(to: UserLocationService.shared.userLocation) else { return false }
         return distanceUnwrapped <= Double(UserDefaultsService.shared.nearbyDistance)
     }
+
+    var stationInUseString: String {
+        return state ? "Station in use" : "Station not in use"
+    }
+
+    var allowDropoffString: String {
+        return allowDropoff ? "Accepts dropoffs" : "No dropoffs"
+    }
+
+    var lastUpdatedString: String {
+        let calendar = Calendar.current
+        let formatter = DateFormatter()
+        formatter.setLocalizedDateFormatFromTemplate("HH:mm")
+
+        if calendar.isDateInToday(fetched) {
+            let dateString = formatter.string(from: fetched)
+            return "Updated \(dateString)"
+        }
+
+        if calendar.isDateInYesterday(fetched) {
+            let dateString = formatter.string(from: fetched)
+            return "Updated yesterday \(dateString)"
+        }
+        return "Updated a long time ago"
+    }
 }
 
 // MARK: - Functions
-
 extension BikeRentalStation {
 
-    /// Calculate distance between RentalStation and parameter location
-    /// - Parameter location: CLLocation object to which the distance is calculated to
+    /// Calculate distance between self and parameter location
+    /// - Parameter location: CLLocation? object to which the distance is calculated to
     /// - Returns: A CLLocationDistance? object
     func distance(to location: CLLocation?) -> CLLocationDistance? {
         guard let toLocationUnwrapped = location else { return nil }
         return toLocationUnwrapped.distance(from: self.location)
     }
 
-    /// Update RentalStation values with values provided
+    /// Update selfs values with values provided
     /// - Parameter apiResultMapOptional: ResultMap provided from API
     func updateValues(apiResultMapOptional: [String: Any?]?) {
         guard let apiResultMap = apiResultMapOptional else {
@@ -125,6 +173,7 @@ extension BikeRentalStation {
         self.lon = fetchedLon
         self.allowDropoff = fetchedAllowDropoff
         self.state = Helper.parseStateString(fetchedState)
+        self.fetched = Date()
     }
 }
 
@@ -209,4 +258,47 @@ extension BikeRentalStation: Hashable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
+}
+
+// MARK: - Placeholder Data
+extension BikeRentalStation {
+    
+    /// These stations are used in widget and Xcode previews
+    static var placeholderStations: [BikeRentalStation] = [
+        BikeRentalStation(
+            stationId: "014",
+            name: "Senaatintori",
+            lat: 60.1691278,
+            lon: 24.9526414,
+            bikes: 10,
+            spaces: 13,
+            allowDropoff: true,
+            state: true,
+            favourite: false
+        ),
+
+        BikeRentalStation(
+            stationId: "008",
+            name: "Vanha kirkkopuisto",
+            lat: 60.1652883,
+            lon: 24.9391499,
+            bikes: 15,
+            spaces: 9,
+            allowDropoff: true,
+            state: true,
+            favourite: false
+        ),
+
+        BikeRentalStation(
+            stationId: "001",
+            name: "Kaivopuisto",
+            lat: 60.15544479382098,
+            lon: 24.950292889690314,
+            bikes: 11,
+            spaces: 13,
+            allowDropoff: true,
+            state: true,
+            favourite: false
+        )
+    ]
 }

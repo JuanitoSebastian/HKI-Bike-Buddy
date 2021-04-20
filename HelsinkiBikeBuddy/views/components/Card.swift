@@ -10,22 +10,32 @@ import SwiftUI
 struct Card<Content: View>: View {
 
     private let builder: () -> Content
+    private let shadowColor: Color
+    private let horizontalPadding: CGFloat
+    private let verticalPadding: CGFloat
 
-    init(@ViewBuilder _ builder: @escaping () -> Content) {
+    init(
+        shadowColor: Color = Color("CardShadow"),
+        horizontalPadding: CGFloat = 10,
+        verticalPadding: CGFloat = 10,
+        @ViewBuilder _ builder: @escaping () -> Content
+    ) {
         self.builder = builder
+        self.shadowColor = shadowColor
+        self.horizontalPadding = horizontalPadding
+        self.verticalPadding = verticalPadding
     }
 
     var body: some View {
         ZStack {
             builder()
-                .padding([.leading, .trailing], 15)
-                .padding([.top], 5)
-                .padding([.bottom], 10)
+                .padding(.horizontal, horizontalPadding)
+                .padding(.vertical, verticalPadding)
         }
         .background(Color("CardBg"))
         .cornerRadius(10)
-        .shadow(color: Color("CardShadow"), radius: 3, x: 5, y: 5)
-        .shadow(color: Color("CardShadow"), radius: 3, x: -5, y: -5)
+        .shadow(color: shadowColor, radius: 3, x: 5, y: 5)
+        .shadow(color: shadowColor, radius: 3, x: -5, y: -5)
     }
 }
 

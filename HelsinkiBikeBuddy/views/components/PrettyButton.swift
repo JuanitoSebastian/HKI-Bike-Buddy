@@ -31,6 +31,6 @@ struct PrettyButton: View {
 
 struct PrettyButton_Previews: PreviewProvider {
     static var previews: some View {
-        PrettyButton(textToDisplay: "Save settings!", perform: { Helper.log("Just pressed a pretty button!") })
+        PrettyButton(textToDisplay: "Save settings!", perform: { Log.i("Just pressed a pretty button!") })
     }
 }

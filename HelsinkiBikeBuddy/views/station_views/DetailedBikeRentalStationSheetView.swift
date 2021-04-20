@@ -12,6 +12,7 @@ struct DetailedBikeRentalStationSheetView: View {
     @EnvironmentObject var appState: AppState
     @ObservedObject var bikeRentalStation: BikeRentalStation
     @State var toggleTriggered: Bool = false
+    @State var bikeAmountsOffset: CGFloat = 200
 
     var body: some View {
         content
@@ -25,23 +26,44 @@ struct DetailedBikeRentalStationSheetView: View {
         return AnyView(
 
             ZStack(alignment: .top) {
-                VStack {
-                    HStack {
-                        Text(bikeRentalStation.name)
-                            .font(.custom("Helvetica Neue Medium", size: 38))
-                            .foregroundColor(Color("TextTitle"))
-                        Spacer()
-                    }
-                    .padding(.horizontal, 15)
-
-                    BikeRentalStationViewBuilder.shared.distanceFromUserComponent(
-                        distanceFromUserString: distanceString
+                VStack(spacing: 2) {
+                    BikeRentalStationViewBuilder.shared.nameAndFavouriteStatusComponent(
+                        name: bikeRentalStation.name,
+                        favouriteStatus: $bikeRentalStation.favourite,
+                        favouriteAction: toggleFavourite,
+                        bikeRentalStationViewType: .detailed
                     )
                     .padding(.horizontal, 15)
 
+                    BikeRentalStationViewBuilder.shared.distanceFromUserComponent(
+                        distanceFromUserString: distanceString,
+                        lastUpdatedString: bikeRentalStation.lastUpdatedString,
+                        bikeRentalStationViewType: .detailed
+                    )
+                    .padding(.horizontal, 15)
+                    .padding(.bottom, 2)
+
+                    ScrollView(.horizontal) {
+                        HStack {
+                            TextTag(
+                                bikeRentalStation.stationInUseString,
+                                underlineColor: bikeRentalStation.state ?
+                                    Color("GreenUnderline") : Color("RedUnderline")
+                            )
+                            TextTag(
+                                bikeRentalStation.allowDropoffString,
+                                underlineColor: bikeRentalStation.allowDropoff ?
+                                    Color("GreenUnderline") : Color("RedUnderline")
+                            )
+                            Spacer()
+                        }
+                    }
+                    .padding(.horizontal, 15)
+                    .padding(.bottom, 5)
+
                     ZStack(alignment: .bottom) {
 
-                        MapView(rentalStation: bikeRentalStation)
+                        MapView(bikeRentalStation: bikeRentalStation)
                             .mask(
                                 LinearGradient(
                                     gradient: Gradient(colors: [Color.black, Color.black.opacity(0)]),
@@ -50,17 +72,26 @@ struct DetailedBikeRentalStationSheetView: View {
                                 )
                             )
 
-                        BikeRentalStationViewBuilder.shared.bikeAmountsComponent(
-                            bikes: bikeRentalStation.bikes,
-                            spaces: bikeRentalStation.spaces,
-                            state: bikeRentalStation.state
-                        )
+                        Card(shadowColor: Color("CardShadowDark")) {
+                            BikeRentalStationViewBuilder.shared.bikeAmountsComponent(
+                                bikes: bikeRentalStation.bikes,
+                                spaces: bikeRentalStation.spaces,
+                                state: bikeRentalStation.state
+                            )
+                        }
+                        .offset(y: bikeAmountsOffset)
+                        .animation(Animation.spring(response: 0.8), value: bikeAmountsOffset)
                         .padding([.horizontal], 15)
                         .padding(.bottom, 30)
-                        .shadow(color: Color("CardShadow"), radius: 3, x: 5, y: 5)
-                        .shadow(color: Color("CardShadow"), radius: 3, x: -5, y: -5)
                     }
                 }
+            }
+            .onAppear {
+                bikeAmountsOffset = 0
+                appState.startUpdatingUserLocation()
+            }
+            .onDisappear {
+                appState.stopUpdatingUserLocation()
             }
 
         )

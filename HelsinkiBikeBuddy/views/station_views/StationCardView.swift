@@ -70,17 +70,19 @@ extension StationCardView {
     // Contents for when station is in use
     private var stationCardContent: AnyView {
         AnyView(
-            VStack {
+            VStack(spacing: 5) {
                 BikeRentalStationViewBuilder.shared.nameAndFavouriteStatusComponent(
                     name: bikeRentalStation.name,
                     favouriteStatus: $bikeRentalStation.favourite,
-                    favouriteAction: toggleFavourite
+                    favouriteAction: toggleFavourite,
+                    bikeRentalStationViewType: .card
                 )
 
                 BikeRentalStationViewBuilder.shared.distanceFromUserComponent(
-                    distanceFromUserString: distanceString
+                    distanceFromUserString: distanceString,
+                    bikeRentalStationViewType: .card
                 )
-                    .padding([.bottom], 5)
+                .padding(.bottom, 2)
 
                 BikeRentalStationViewBuilder.shared.bikeAmountsComponent(
                     bikes: bikeRentalStation.bikes,

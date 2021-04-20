@@ -7,15 +7,14 @@
 
 import SwiftUI
 
-// TODO: Custom back button here, so that api fetch is performed when return back to main view
-
+/// Settings view displayes the settings that can be edited and app credits 🔧
 struct SettingsView: View {
 
     @EnvironmentObject var appState: AppState
     @State var nearbyRange: Double = 1000
 
     init() {
-        // This makes the custom background color visible
+        // Makes background modifier visible
         UITableView.appearance().backgroundColor = .clear
     }
 
@@ -23,13 +22,28 @@ struct SettingsView: View {
         String(Calendar.current.component(.year, from: Date()))
     }
 
+    // Removes trailing zeroes from double and converts to string
+    var nearbyRangeKilometers: String {
+        let range = nearbyRange / 1000
+        let formatter = NumberFormatter()
+        let number = NSNumber(value: range)
+        formatter.minimumFractionDigits = 0
+        formatter.maximumFractionDigits = 1
+        return String(formatter.string(from: number) ?? "")
+    }
+
+}
+
+// MARK: - Views
+extension SettingsView {
+
     var body: some View {
         VStack {
             Form {
                 Section(header: Text("NEARBY STATIONS")) {
                     VStack {
-                        Text("Distance to nearby stations:")
-                            .font(.headline)
+                        Text("Maximum distance to nearby station")
+                            .font(.subheadline)
                             .foregroundColor(Color("TextMain"))
                         Slider(
                             value: $nearbyRange,
@@ -39,10 +53,15 @@ struct SettingsView: View {
                                 if editing { return }
                                 appState.setNearbyRadius(radius: Int(nearbyRange))
                                 appState.fetchFromApi()
-                            }
-                        )
-                        Text("\(Int(nearbyRange)) meters")
+                            },
+                            minimumValueLabel: sliderTextLabel("0.2 km"),
+                            maximumValueLabel: sliderTextLabel("5 km")
+                        ) { EmptyView() } // Slider requires a label view even if it is now shown...
+
+                        Text("~ \(nearbyRangeKilometers) km")
                             .foregroundColor(Color("TextMain"))
+                            .font(.footnote)
+                            .fontWeight(.bold)
                     }
                 }
 
@@ -81,8 +100,26 @@ struct SettingsView: View {
         })
     }
 
-    // MARK: - Functions
+    @ViewBuilder func sliderTextLabel(_ text: String) -> some View {
+        Text(text)
+            .foregroundColor(Color("TextMain"))
+            .font(.footnote)
+    }
+
+}
+
+// MARK: - Functions
+extension SettingsView {
     func openJuanitoHomepage() {
         UIApplication.shared.open(URL(string: "https://juan.fi")!, options: [:], completionHandler: nil)
     }
 }
+
+#if DEBUG
+struct SettingsView_Previews: PreviewProvider {
+    static var previews: some View {
+        SettingsView()
+            .environmentObject(AppState())
+    }
+}
+#endif

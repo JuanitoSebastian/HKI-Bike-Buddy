@@ -13,16 +13,31 @@ class IntentHandler: INExtension, ConfigurationIntentHandling {
         for intent: ConfigurationIntent,
         with completion: @escaping (INObjectCollection<WidgetStation>?, Error?) -> Void
     ) {
-        /*
-        let stations: [WidgetStation] =
-            BikeRentalStationStore.shared.favouriteBikeRentalStations.value.map { bikeRentalStation in
-            let widgetStation = WidgetStation(identifier: bikeRentalStation.stationId, display: bikeRentalStation.name)
-            return widgetStation
+
+        guard let data = try? Data(contentsOf: BikeRentalStationStore.fileUrl) else {
+            return
         }
 
+        guard let bikeRentalStationsFromData =
+                try? JSONDecoder().decode([BikeRentalStation].self, from: data) else {
+            Log.e("Failed to decode saved Bike Rental Stations!")
+            return
+        }
+
+        let stations: [WidgetStation] =
+            bikeRentalStationsFromData
+                .filter { $0.favourite }
+                .map { bikeRentalStation in
+                    let widgetStation = WidgetStation(
+                        identifier: bikeRentalStation.stationId,
+                        display: bikeRentalStation.name
+                    )
+                    return widgetStation
+                }
+
         let collection = INObjectCollection(items: stations)
-        */
-        // completion(collection, nil)
+
+        completion(collection, nil)
 
     }
 

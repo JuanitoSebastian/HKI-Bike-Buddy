@@ -73,11 +73,16 @@ struct MainRentalStationsView: View {
             }
         }
         .onAppear(perform: {
+            appState.subscribeToBikeRentalStore()
             appState.fetchFromApi()
         })
         .onChange(of: scenePhase) { phase in
             if phase == .inactive {
                 appState.saveStore()
+            }
+
+            if phase == .active {
+                appState.fetchFromApi()
             }
         }
     }
