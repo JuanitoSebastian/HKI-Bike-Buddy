@@ -232,6 +232,7 @@
 		28CA9DB525D6B6480050380C /* BikeRentalStationApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BikeRentalStationApiService.swift; sourceTree = "<group>"; };
 		28CDAAE3261E19F90060699B /* SquarePlaceholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquarePlaceholder.swift; sourceTree = "<group>"; };
 		28D524A3262ED60A008515A7 /* NotificationContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationContent.swift; sourceTree = "<group>"; };
+		28D524C5262F125C008515A7 /* ReadMeHeader.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ReadMeHeader.png; path = ../../../Promo/GitHub/ReadMeHeader.png; sourceTree = "<group>"; };
 		28DB3B4B25F8EC25004DA791 /* Intents.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Intents.framework; path = System/Library/Frameworks/Intents.framework; sourceTree = SDKROOT; };
 		28DB3B5625F8EC25004DA791 /* IntentsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IntentsUI.framework; path = System/Library/Frameworks/IntentsUI.framework; sourceTree = SDKROOT; };
 		28E21A9626107A7500A605D9 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
@@ -527,6 +528,7 @@
 			isa = PBXGroup;
 			children = (
 				28F5B6DB260A2B1800105E0B /* ModelsDiagram.png */,
+				28D524C5262F125C008515A7 /* ReadMeHeader.png */,
 				28E3A98B2608FA0E0093BC1B /* HBB_Screen1.png */,
 				28E3A9982609D1310093BC1B /* ArchitectureGraph.png */,
 			);
