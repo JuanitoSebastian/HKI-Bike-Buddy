@@ -1,6 +1,6 @@
 #  Architecture
 ## Structure
-HKI Bike Buddy is built using SwiftUI and consequently follows the Model-View-ViewModel design approach (since [MVVM is "built in" to SwiftUI](https://nalexn.github.io/clean-architecture-swiftui/)). The apps global state is contained in an instance of the class AppState wihch is injected using the [@EnvironmentObject](https://developer.apple.com/documentation/swiftui/environmentobject) property wrapper in the root view of the application. All of the data presented in the UI and all of the user actions are handled by the AppState. AppState makes the necessary requests to services and handles delivering of Bike Rental Station objects from store.
+HKI Bike Buddy is built using SwiftUI and consequently follows the Model-View-ViewModel design approach (since [MVVM is "built in" to SwiftUI](https://nalexn.github.io/clean-architecture-swiftui/)). The apps global state is contained in an instance of the class AppState wihch is injected using the [@EnvironmentObject](https://developer.apple.com/documentation/swiftui/environmentobject) property wrapper in the root view of the application. All of the data presented in the UI and all of the user actions are handled by the AppState. AppState makes the necessary requests to services and handles interaction with Bike Rental Station objects in the store.
 
 ![ArchitectureDiagram](https://raw.githubusercontent.com/JuanitoSebastian/HelsinkiBikeBuddy/main/Documentation/graphics/ArchitectureGraph.png)
 
@@ -19,7 +19,11 @@ HKI Bike Buddy is built using SwiftUI and consequently follows the Model-View-Vi
 3. Detailed view of a bike rental station featuring a map showing the location of the user relative to the location of the bike rental station.
 4. Settings view where the maximum distance for bike rental stations to be considered nearby can be changed.
 
-UiKit was used on one view where MapKit was needed (MapView). Navigation between the views of the application is done using the SwiftUIs NavigationView and TabView which are contained in ``MainRentalStationsView.swift``.
+Each of these views are their own struct which conforms to the [View protocol](https://developer.apple.com/documentation/swiftui/view). Many of these views have been divided into further useful sub-views (such as [Card](https://github.com/JuanitoSebastian/HelsinkiBikeBuddy/blob/main/HelsinkiBikeBuddy/views/components/CapacityBar.swift) and [CapacityBar](https://github.com/JuanitoSebastian/HelsinkiBikeBuddy/blob/main/HelsinkiBikeBuddy/views/components/CapacityBar.swift)) enabling easy reuse of UI components. Navigation between the views of the application is done using the SwiftUIs NavigationView and TabView which are contained in ``MainRentalStationsView.swift``.
+
+The state of the application and content in the views are kept in sync using the [Combine framework](https://developer.apple.com/documentation/combine). AppState conforms to the [ObservableObject](https://developer.apple.com/documentation/combine/observableobject) protocol enabling us to mark its variables with the @Published property wrapper. Views can then subscribe to these ObservedObjects and when @Published properties are updated the views get a notification that a value has changed and a re-render of the view is triggered.
+
+UiKit was used on only one view where MapKit was needed (MapView). 
 
 ## Models
 ### Bike Rental Station
