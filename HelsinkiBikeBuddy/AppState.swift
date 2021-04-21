@@ -102,16 +102,34 @@ extension AppState {
 // MARK: - UI Functions
 extension AppState {
 
+    /// Fetches a Bike Rental Station from store
+    /// - Parameter stationId: Id of the station to fetch
+    /// - Returns: the Bike Rental Station object or nil if station is not found in the store
     func getRentalStation(stationId: String) -> BikeRentalStation? {
         BikeRentalStationStore.shared.bikeRentalStations[stationId]
     }
 
-    func favouriteRentalStation(_ stationToFavourite: BikeRentalStation) {
-        favouriteRentalStations = insertStation(stationToFavourite, toList: favouriteRentalStations)
+    /// Marks the favourite property true of a given Bike Rental Station
+    /// - Parameter bikeRentalStation: Bike Rental Station object to mark as favourite
+    func markStationAsFavourite(_ bikeRentalStation: BikeRentalStation) {
+        bikeRentalStation.favourite = true
     }
 
-    func unFavouriteRentalStation(_ stationToUnfavourite: BikeRentalStation) {
-        favouriteRentalStations = removeStation(stationToUnfavourite.stationId, from: favouriteRentalStations)
+    /// Marks the favourite property false of a given Bike Rental Station
+    /// - Parameter bikeRentalStation: Bike Rental Station object to mark as non favourite
+    func markStationAsNonFavourite(_ bikeRentalStation: BikeRentalStation) {
+        bikeRentalStation.favourite = false
+    }
+
+    /// Adds given Bike Rental Station to list of favourite stations. Object is inserted in to the correct index.
+    /// Stations are kept in order from closest to furthest
+    /// - Parameter bikeRentalStation: Bike Rental Station object that should be added
+    func addStationToFavouritesList(_ bikeRentalStation: BikeRentalStation) {
+        favouriteRentalStations = insertStation(bikeRentalStation, toList: favouriteRentalStations)
+    }
+
+    func removeStationFromFavouritesList(_ bikeRentalStation: BikeRentalStation) {
+        favouriteRentalStations = removeStation(bikeRentalStation.stationId, from: favouriteRentalStations)
     }
 
     func setNearbyRadius(radius: Int) {
@@ -128,12 +146,6 @@ extension AppState {
 
     func fetchFromApi() {
         BikeRentalStationApiService.shared.updateStoreWithAPI()
-    }
-
-    func setDetailedBikeRentalStation(bikeRentalStation: BikeRentalStation) {
-        if detailedBikeRentalStation != bikeRentalStation {
-            detailedBikeRentalStation = bikeRentalStation
-        }
     }
 
     func setDetailedViewStatation(_ bikeRentalStation: BikeRentalStation) {

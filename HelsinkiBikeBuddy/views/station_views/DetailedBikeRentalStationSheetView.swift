@@ -125,17 +125,17 @@ extension DetailedBikeRentalStationSheetView {
         Haptics.shared.feedback(intensity: .medium, delay: 750)
 
         if bikeRentalStation.favourite {
-            bikeRentalStation.favourite.toggle()
+            appState.markStationAsNonFavourite(bikeRentalStation)
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .milliseconds(200)) {
                 withAnimation(.spring()) {
-                    appState.unFavouriteRentalStation(bikeRentalStation)
+                    appState.removeStationFromFavouritesList(bikeRentalStation)
                     self.toggleTriggered = false
                 }
             }
         } else {
-            bikeRentalStation.favourite.toggle()
+            appState.markStationAsFavourite(bikeRentalStation)
             withAnimation(.spring()) {
-                appState.favouriteRentalStation(bikeRentalStation)
+                appState.addStationToFavouritesList(bikeRentalStation)
                 toggleTriggered = false
             }
         }
