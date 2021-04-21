@@ -1,6 +1,6 @@
 #  Architecture
 ## Structure
-HKI Bike Buddy is built using SwiftUI and the Model-View-ViewModel design approach (since [MVVM is "built in" to SwiftUI](https://nalexn.github.io/clean-architecture-swiftui/)). The apps global state is contained in an instance of the class AppState wihch is injected using the [@EnvironmentObject](https://developer.apple.com/documentation/swiftui/environmentobject) property wrapper in the root view of the application. All of the data presented in the UI and all of the user actions are handled by the AppState. AppState makes the necessary requests to services and handles delivering of Bike Rental Station objects from store.
+HKI Bike Buddy is built using SwiftUI and consequently follows the Model-View-ViewModel design approach (since [MVVM is "built in" to SwiftUI](https://nalexn.github.io/clean-architecture-swiftui/)). The apps global state is contained in an instance of the class AppState wihch is injected using the [@EnvironmentObject](https://developer.apple.com/documentation/swiftui/environmentobject) property wrapper in the root view of the application. All of the data presented in the UI and all of the user actions are handled by the AppState. AppState makes the necessary requests to services and handles delivering of Bike Rental Station objects from store.
 
 ![ArchitectureDiagram](https://raw.githubusercontent.com/JuanitoSebastian/HelsinkiBikeBuddy/main/Documentation/graphics/ArchitectureGraph.png)
 
@@ -12,15 +12,17 @@ HKI Bike Buddy is built using SwiftUI and the Model-View-ViewModel design approa
 * utils: Utilities
 
 ## User interface
-**The UI of the application consists of the following views:**
-* Welcome screen featuring a prompt asking the user to enable location services.
-* Main view featuring a list of bike rental stations and a tab bar. User can change between nearby stations and favourite stations from the tab bar.
-* A detailed view of a bike rental station featuring a map showing the location of the user relative to the location of the bike rental station.
-* A settings view where the maximum distance for bike rental stations to be considered nearby can be changed.
+![ArchitectureUiViews](https://raw.githubusercontent.com/JuanitoSebastian/HelsinkiBikeBuddy/main/Documentation/graphics/ArchitectureUiViews.png)
+### The UI of the application consists of the following views:
+1. Welcome screen featuring a prompt asking the user to enable location services.
+2. Main view featuring a list of bike rental stations and a tab bar. User can change between nearby stations and favourite stations from the tab bar.
+3. Detailed view of a bike rental station featuring a map showing the location of the user relative to the location of the bike rental station.
+4. Settings view where the maximum distance for bike rental stations to be considered nearby can be changed.
 
 UiKit was used on one view where MapKit was needed (MapView). Navigation between the views of the application is done using the SwiftUIs NavigationView and TabView which are contained in ``MainRentalStationsView.swift``.
 
 ## Models
+### Bike Rental Station
 Information about a city bike stations current state is stored in a Bike Rental Station object. Creation of new BikeRentalStation objects is handled by BikeRentalStationApiService which fetches stations from Routing API. BikeRentalStationStore in turn handles marking stations as favourites and the persistent storage of station objects.
 
 ![BikeRentalStationModel](https://raw.githubusercontent.com/JuanitoSebastian/HelsinkiBikeBuddy/main/Documentation/graphics/BikeRentalStation.png)
