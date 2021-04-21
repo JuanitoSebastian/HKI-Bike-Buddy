@@ -128,6 +128,7 @@
 		28F22FCC2624522C002D9A38 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C97BEB25F2082F0062FA00 /* MapView.swift */; };
 		28F22FD126247577002D9A38 /* PrettyButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284F9CF525F8CDEC0005D714 /* PrettyButton.swift */; };
 		28F22FD626247578002D9A38 /* PrettyButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284F9CF525F8CDEC0005D714 /* PrettyButton.swift */; };
+		28F3214226301E0A0020CF35 /* ReadMeHeader.png in Resources */ = {isa = PBXBuildFile; fileRef = 28F3214126301E0A0020CF35 /* ReadMeHeader.png */; };
 		28F5B6DC260A2B1800105E0B /* ModelsDiagram.png in Resources */ = {isa = PBXBuildFile; fileRef = 28F5B6DB260A2B1800105E0B /* ModelsDiagram.png */; };
 		28F6351D260C891F00325B9E /* BikeRentalStationStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F6351C260C891F00325B9E /* BikeRentalStationStoreTests.swift */; };
 		28F6352F260C8AFC00325B9E /* UserDefaultsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C97BF125F2473C0062FA00 /* UserDefaultsService.swift */; };
@@ -241,6 +242,7 @@
 		28E3A99D2609D4070093BC1B /* Architecture.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Architecture.md; sourceTree = "<group>"; };
 		28F036BD261C5F7E00824273 /* BikeRentalStation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BikeRentalStation.swift; sourceTree = "<group>"; };
 		28F036C5261C6E3C00824273 /* BikeRentalStationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BikeRentalStationStore.swift; sourceTree = "<group>"; };
+		28F3214126301E0A0020CF35 /* ReadMeHeader.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ReadMeHeader.png; sourceTree = "<group>"; };
 		28F5B6DB260A2B1800105E0B /* ModelsDiagram.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ModelsDiagram.png; sourceTree = "<group>"; };
 		28F6351A260C891F00325B9E /* HelsinkiBikeBuddyLogicTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HelsinkiBikeBuddyLogicTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		28F6351C260C891F00325B9E /* BikeRentalStationStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BikeRentalStationStoreTests.swift; sourceTree = "<group>"; };
@@ -526,6 +528,7 @@
 		28E3A9972609D1310093BC1B /* graphics */ = {
 			isa = PBXGroup;
 			children = (
+				28F3214126301E0A0020CF35 /* ReadMeHeader.png */,
 				28F5B6DB260A2B1800105E0B /* ModelsDiagram.png */,
 				28E3A98B2608FA0E0093BC1B /* HBB_Screen1.png */,
 				28E3A9982609D1310093BC1B /* ArchitectureGraph.png */,
@@ -712,6 +715,7 @@
 				28F5B6DC260A2B1800105E0B /* ModelsDiagram.png in Resources */,
 				2898613A25D93D5B0007D137 /* FetchNearByBikeRentalStations.graphql in Resources */,
 				28A21CA025CEEF040062C7AC /* AllBikeRentalStations.graphql in Resources */,
+				28F3214226301E0A0020CF35 /* ReadMeHeader.png in Resources */,
 				28E3A98C2608FA0E0093BC1B /* HBB_Screen1.png in Resources */,
 				283D90A225D7E0B30007434E /* FetchBikeRentalStationByStationId.graphql in Resources */,
 			);
