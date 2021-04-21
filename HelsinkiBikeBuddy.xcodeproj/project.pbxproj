@@ -29,7 +29,6 @@
 		284A01312617562C0082404D /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284A01302617562C0082404D /* AppState.swift */; };
 		284A013A261756330082404D /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284A01302617562C0082404D /* AppState.swift */; };
 		284A013F261756330082404D /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284A01302617562C0082404D /* AppState.swift */; };
-		284A0140261756350082404D /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284A01302617562C0082404D /* AppState.swift */; };
 		284AF0B226270D450048F046 /* DetailedBikeRentalStationSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284AF0B126270D450048F046 /* DetailedBikeRentalStationSheetView.swift */; };
 		284AF0B326270D450048F046 /* DetailedBikeRentalStationSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284AF0B126270D450048F046 /* DetailedBikeRentalStationSheetView.swift */; };
 		284AF0B426270D450048F046 /* DetailedBikeRentalStationSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284AF0B126270D450048F046 /* DetailedBikeRentalStationSheetView.swift */; };
@@ -243,6 +242,7 @@
 		28F036BD261C5F7E00824273 /* BikeRentalStation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BikeRentalStation.swift; sourceTree = "<group>"; };
 		28F036C5261C6E3C00824273 /* BikeRentalStationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BikeRentalStationStore.swift; sourceTree = "<group>"; };
 		28F3214126301E0A0020CF35 /* ReadMeHeader.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ReadMeHeader.png; sourceTree = "<group>"; };
+		28F32157263055F80020CF35 /* BikeRentalStation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BikeRentalStation.png; sourceTree = "<group>"; };
 		28F5B6DB260A2B1800105E0B /* ModelsDiagram.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ModelsDiagram.png; sourceTree = "<group>"; };
 		28F6351A260C891F00325B9E /* HelsinkiBikeBuddyLogicTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HelsinkiBikeBuddyLogicTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		28F6351C260C891F00325B9E /* BikeRentalStationStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BikeRentalStationStoreTests.swift; sourceTree = "<group>"; };
@@ -372,14 +372,6 @@
 			path = station_views;
 			sourceTree = "<group>";
 		};
-		284A012F261753A20082404D /* state */ = {
-			isa = PBXGroup;
-			children = (
-				284A01302617562C0082404D /* AppState.swift */,
-			);
-			path = state;
-			sourceTree = "<group>";
-		};
 		284F9CFE25F8E26A0005D714 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -446,9 +438,9 @@
 				2884BDCD25D0098300747091 /* models */,
 				28A21C9625CEEDCD0062C7AC /* services */,
 				28E21A9526107A0300A605D9 /* utils */,
-				284A012F261753A20082404D /* state */,
 				28A6E77A262D9F7800A488A1 /* extensions */,
 				28A21C5A25CEEA140062C7AC /* HelsinkiBikeBuddyApp.swift */,
+				284A01302617562C0082404D /* AppState.swift */,
 				28A21C5C25CEEA140062C7AC /* ContentView.swift */,
 				28A21C5E25CEEA150062C7AC /* Assets.xcassets */,
 				28A21C6825CEEA150062C7AC /* Info.plist */,
@@ -528,6 +520,7 @@
 		28E3A9972609D1310093BC1B /* graphics */ = {
 			isa = PBXGroup;
 			children = (
+				28F32157263055F80020CF35 /* BikeRentalStation.png */,
 				28F3214126301E0A0020CF35 /* ReadMeHeader.png */,
 				28F5B6DB260A2B1800105E0B /* ModelsDiagram.png */,
 				28E3A98B2608FA0E0093BC1B /* HBB_Screen1.png */,
@@ -895,7 +888,6 @@
 				28F6351D260C891F00325B9E /* BikeRentalStationStoreTests.swift in Sources */,
 				28F6352F260C8AFC00325B9E /* UserDefaultsService.swift in Sources */,
 				28D524B3262ED6BE008515A7 /* NotificationContent.swift in Sources */,
-				284A0140261756350082404D /* AppState.swift in Sources */,
 				28F63532260C8AFC00325B9E /* UserLocationService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -10,14 +10,13 @@ import SwiftUI
 
 // MARK: - CardButton
 struct CardButton: ButtonStyle {
-    
+
     // Used for scaleEffect on long-press
     func makeBody(configuration: Configuration) -> some View {
         return configuration.label
             .scaleEffect(configuration.isPressed ? 0.98 : 1)
     }
 }
-
 
 // MARK: - FavouriteMarker
 struct StaticHighPriorityButtonStyle: PrimitiveButtonStyle {
