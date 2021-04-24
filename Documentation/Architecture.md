@@ -23,7 +23,7 @@ Each of these views are their own struct which conforms to the [View protocol](h
 
 The state of the application and content in the views are kept in sync using the [Combine framework](https://developer.apple.com/documentation/combine). AppState conforms to the [ObservableObject](https://developer.apple.com/documentation/combine/observableobject) protocol enabling us to mark its variables with the @Published property wrapper. Views can then subscribe to these ObservedObjects and when @Published properties are updated the views get a notification that a value has changed and a re-render of the view is triggered.
 
-UiKit was used on only one view where MapKit was needed (MapView). 
+UiKit is used on only one view where MapKit is needed (MapView). 
 
 ## Models
 ### Bike Rental Station
