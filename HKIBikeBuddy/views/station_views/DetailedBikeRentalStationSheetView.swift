@@ -106,7 +106,7 @@ extension DetailedBikeRentalStationSheetView {
         }
 
         var distanceDouble = Int(
-            Helper.roundToNearest(
+            Double.roundToNearest(
                 bikeRentalStation.location.distance(from: userLocation), toNearest: 20
             )
         )

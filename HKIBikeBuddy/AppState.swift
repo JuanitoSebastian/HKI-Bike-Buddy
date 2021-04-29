@@ -19,65 +19,66 @@ class AppState: ObservableObject {
     @Published private(set) var favouriteRentalStations: [BikeRentalStation]
     @Published private(set) var nearbyRentalStations: [BikeRentalStation]
 
-    @Published var notification: NotificationContent?
+    @Published var alert: AlertContent?
     @Published var detailedBikeRentalStation: BikeRentalStation?
+
+    @Published var reachability: Bool?
     var apiState: ApiState
 
     private var storeCancellable: AnyCancellable?
     private var userLocationAuthorizationCancellable: AnyCancellable?
     private var userLocationCancellable: AnyCancellable?
+    private var apiReachability: AnyCancellable?
 
     private init() {
-        self.apiState = .idle
+        self.apiState = .loading
         self.favouriteRentalStations = []
         self.nearbyRentalStations = []
         self.mainView = .locationPrompt
+        #if DEBUG
+        guard !Helper.isRunningTests() else { return }
+        #endif
+        try? addReachabilityObserver()
+    }
+
+    deinit {
+        removeReachabilityObserver()
     }
 }
 
 // MARK: - Subscriptions
 extension AppState {
 
-    func subscribeToBikeRentalStore() {
-        if storeCancellable != nil { return }
+    func subscribeToBikeRentalStore(
+        publisher: AnyPublisher<[String], Never> =
+            BikeRentalStationStore.shared.bikeRentalStationIds.eraseToAnyPublisher()
+    ) {
+        guard storeCancellable == nil else { return }
         storeCancellable =
-            BikeRentalStationStore.shared.bikeRentalStationIds.eraseToAnyPublisher().sink { fetched in
+            publisher.sink { fetched in
                 if UserLocationService.shared.userLocation == nil { return }
-                self.sortAndSetBikeRentalStations(stationIds: fetched)
+                self.fetchStationsFromStoreAndSort(stationIds: fetched)
             }
     }
 
-    func subscribeToUserLocation() {
-        if userLocationCancellable != nil { return }
-        userLocationCancellable = UserLocationService.shared.$userLocation.eraseToAnyPublisher().sink { _ in
-            if UserLocationService.shared.userLocation == nil { return }
-            self.sortAndSetBikeRentalStations(stationIds: BikeRentalStationStore.shared.bikeRentalStationIds.value)
+    func subscribeToUserLocation(
+        publisher: AnyPublisher<CLLocation?, Never> =
+            UserLocationService.shared.$userLocation.eraseToAnyPublisher()
+    ) {
+        guard userLocationCancellable == nil else { return }
+        userLocationCancellable = publisher.sink { receivedValue in
+            guard receivedValue != nil else { return }
+            self.fetchStationsFromStoreAndSort(stationIds: BikeRentalStationStore.shared.bikeRentalStationIds.value)
         }
     }
 
-    private func sortAndSetBikeRentalStations(stationIds: [String]) {
-        let bikeRentalStationFromIds = stationIds
-            .compactMap { self.getRentalStation(stationId: $0) }
-            .sorted()
-
-        setBikeRentalStations(
-            valuesToAdd: bikeRentalStationFromIds
-                .filter { $0.isNearby },
-            destination: &self.nearbyRentalStations,
-            animation: !self.nearbyRentalStations.isEmpty
-        )
-
-        setBikeRentalStations(
-            valuesToAdd: bikeRentalStationFromIds
-                .filter { $0.favourite },
-            destination: &self.favouriteRentalStations,
-            animation: !self.favouriteRentalStations.isEmpty
-        )
-    }
-
-    func subscribeToUserLocationServiceAuthorization() {
+    func subscribeToUserLocationServiceAuthorization(
+        publisher: AnyPublisher<UserLocationService.LocationAuthorizationStatus, Never> =
+            UserLocationService.shared.$locationAuthorization.eraseToAnyPublisher()
+    ) {
+        guard userLocationAuthorizationCancellable == nil else { return }
         userLocationAuthorizationCancellable =
-            UserLocationService.shared.$locationAuthorization.eraseToAnyPublisher().sink { newValue in
+            publisher.sink { newValue in
                 switch newValue {
                 case .success:
                     self.mainView = .rentalStations
@@ -95,10 +96,6 @@ extension AppState {
 
     var userLocation: CLLocation? {
         UserLocationService.shared.userLocation
-    }
-
-    var userLocation2D: CLLocationCoordinate2D? {
-        UserLocationService.shared.userLocation2D
     }
 
     var nearbyRadius: Int {
@@ -149,6 +146,7 @@ extension AppState {
     /// Sets and stores the maximum distance for stations to be considered nearby.
     /// - Parameter radius: The new value in meters
     func setNearbyRadius(radius: Int) {
+        self.alert = AlertContent(title: "Notification", message: "Setting nearby radius", type: .notice)
         UserDefaultsStore.shared.nearbyRadius = radius
     }
 
@@ -160,57 +158,79 @@ extension AppState {
         UserDefaultsStore.shared.locationServicesPromptDisplayed = true
     }
 
-    /// Performs a fetch from API. Nearby stations are fetched and favourite stations are updated.
+    /// Sync the BikeRentalStationStore with the API
+    /// First the curent nearby stations are fetched from the API. From this data new stations are created and existing stations updated.
+    /// Then the rest of the stations in the store are updated
     func fetchFromApi() {
-        guard let userLocationUnwrapped = userLocation else { return }
-        var stationsUpdatePending: Set<String> = []
-        let dispatchGroup = DispatchGroup()
-        Log.i("Setting api state to loading")
+
+        guard reachability == true else {
+            alert = AlertContent.noInternet
+            return
+        }
+
+        guard userLocation != nil else {
+            alert = AlertContent.noLocation
+            return
+        }
+
         apiState = .loading
 
-        dispatchGroup.notify(queue: DispatchQueue.main) {
-            Log.i("Setting api state to idle")
-            self.apiState = .idle
-        }
+        let mainGroup = DispatchGroup()
+        mainGroup.enter()
 
-        RoutingAPI.shared.fetchNearbyBikeRentalStations(
-            lat: userLocationUnwrapped.coordinate.latitude,
-            lon: userLocationUnwrapped.coordinate.longitude,
-            nearbyRadius: nearbyRadius
-        ) { (_ bikeRentalStations: [BikeRentalStation]?, _ error: Error?) in
-            guard let bikeRentalStationsFromApi = bikeRentalStations else {
+        Log.i("Starting to update now!")
+
+        DispatchQueue.global(qos: .utility).async { [weak self] in
+
+            guard self != nil else {
+                Log.e("Self out of reach")
+                mainGroup.leave()
                 return
             }
-            dispatchGroup.enter()
-            // Update values in main thread
-            DispatchQueue.main.async {
-                stationsUpdatePending = BikeRentalStationStore.shared.insertStations(bikeRentalStationsFromApi)
-                Log.i("Setting stations and leaving")
-                dispatchGroup.leave()
+
+            guard let stationsAlreadyUpdated = self?.fetchNearbyStationsFromApi() else {
+                Log.e("Found nil when unwrapping stationsAlreadyUpdated")
+                mainGroup.leave()
+                return
             }
+
+            Log.i("Nearby fetch done, already updated: \(stationsAlreadyUpdated)")
+
+            let stationsUpdatePending: [String] = BikeRentalStationStore.shared.bikeRentalStationIds.value
+                .filter { !stationsAlreadyUpdated.contains($0) }
+
+            self?.updateStationsWithAPI(
+                stationsToUpdate: stationsUpdatePending
+            )
+
+            mainGroup.leave()
+
         }
 
-        for stationId in Array(stationsUpdatePending) {
-            dispatchGroup.enter()
-            RoutingAPI.shared.fetchBikeRentalStation(
-                stationId: stationId
-            ) { (_ bikeRentalStation: BikeRentalStation?, _ error: Error?) in
-                guard let bikeRentalStation = bikeRentalStation else {
-                    return
-                }
-                // Update values in main thread
-                DispatchQueue.main.async {
-                    BikeRentalStationStore.shared.insertStation(bikeRentalStation)
-                    Log.i("Setting station and leaving")
-                    dispatchGroup.leave()
-                }
-            }
+        mainGroup.notify(queue: DispatchQueue.main) {
+            Log.i("fetchFromApi() completed")
+            self.apiState = .idle
         }
     }
 
     /// Saves the Bike Rental Station Store
     func saveBikeRentalStationStore() {
-        BikeRentalStationStore.shared.saveData()
+        do {
+            try BikeRentalStationStore.shared.saveData()
+        } catch let error {
+            Log.e("Failed to save store: \(error)")
+            alert = AlertContent.failedToSaveStore
+        }
+
+    }
+
+    func loadBikeRentalStationStore() {
+        do {
+            try BikeRentalStationStore.shared.loadData()
+        } catch let error {
+            Log.e("Failed to load store: \(error)")
+            alert = AlertContent.failedToLoadStore
+        }
     }
 
     /// Starts precise monitoring of user location
@@ -228,6 +248,79 @@ extension AppState {
 // MARK: - Functions
 extension AppState {
 
+    private func fetchNearbyStationsFromApi() -> Set<String>? {
+        guard let userLocationUnwrapped = self.userLocation else { return nil }
+
+        var stationsAlreadyUpdated: Set<String>?
+        let semaphore = DispatchSemaphore(value: 0)
+
+        RoutingAPI.shared.fetchNearbyBikeRentalStations(
+            lat: userLocationUnwrapped.coordinate.latitude,
+            lon: userLocationUnwrapped.coordinate.longitude,
+            radius: nearbyRadius
+        ) { (_ bikeRentalStations: [BikeRentalStation]?, _ error: Error?) in
+
+            guard error == nil else {
+                DispatchQueue.main.async {
+                    self.alert = AlertContent.fetchError
+                    semaphore.signal()
+                }
+                return
+            }
+
+            guard let bikeRentalStationsFromApi = bikeRentalStations else {
+                DispatchQueue.main.async {
+                    self.alert = AlertContent.fetchError
+                    semaphore.signal()
+                }
+                return
+            }
+
+            DispatchQueue.main.async {
+                BikeRentalStationStore.shared.insertStations(bikeRentalStationsFromApi)
+                stationsAlreadyUpdated = Set<String>(bikeRentalStationsFromApi.map { $0.stationId })
+                semaphore.signal()
+            }
+        }
+
+        _ = semaphore.wait(wallTimeout: .distantFuture)
+
+        return stationsAlreadyUpdated
+    }
+
+    private func updateStationsWithAPI(
+        stationsToUpdate: [String]
+    ) {
+        Log.i("Upading remaining stations: \(stationsToUpdate)")
+        RoutingAPI.shared.fetchBikeRentalStations(
+            stationIds: stationsToUpdate
+        ) { (_ bikeRentalStations: [BikeRentalStation]?, _ error: Error?) in
+            guard error == nil else {
+
+                DispatchQueue.main.async {
+                    self.alert = AlertContent.fetchError
+                }
+                return
+            }
+
+            guard let bikeRentalStations = bikeRentalStations else {
+
+                DispatchQueue.main.async {
+                    self.alert = AlertContent.fetchError
+                }
+                return
+            }
+
+            DispatchQueue.main.async {
+                BikeRentalStationStore.shared.insertStations(bikeRentalStations)
+            }
+        }
+    }
+
+    /// Set value of a given array of Bike Rental Stations
+    /// - Parameter valuesToAdd: New values
+    /// - Parameter destination: The array where to set the new values
+    /// - Parameter animation: If true values are set using withAnimation
     private func setBikeRentalStations(
         valuesToAdd: [BikeRentalStation],
         destination: inout [BikeRentalStation],
@@ -268,10 +361,10 @@ extension AppState {
         // Flag for checking that insertion was succesfull
         var inserted = false
 
-        if let insertDistance = bikeRentalStationToInsert.distance(to: userLocation) {
+        if let userLocationUnwrapped = userLocation {
+            let insertDistance = bikeRentalStationToInsert.distance(to: userLocationUnwrapped)
             for (index, bikeRentalStation) in bikeRentalStationsArray.enumerated() {
-                guard let comparisonDistance = bikeRentalStation.distance(to: userLocation) else { continue }
-                if insertDistance <= comparisonDistance {
+                if insertDistance <= bikeRentalStation.distance(to: userLocationUnwrapped) {
                     bikeRentalStationsArray.insert(bikeRentalStationToInsert, at: index)
                     inserted = true
                     break
@@ -286,6 +379,32 @@ extension AppState {
         return bikeRentalStationsArray
 
     }
+
+    /// Fetch stations from BikeRentalStationStore and sort (if location data available)
+    private func fetchStationsFromStoreAndSort(stationIds: [String]) {
+        let bikeRentalStationFromIds = userLocation == nil ?
+            stationIds
+            .compactMap { getRentalStation(stationId: $0) } :
+            stationIds
+            .compactMap { getRentalStation(stationId: $0) }
+            .sorted(by: {
+                $0.distance(to: userLocation!) < $1.distance(to: userLocation!)
+            })
+
+        setBikeRentalStations(
+            valuesToAdd: bikeRentalStationFromIds
+                .filter { $0.isNearby },
+            destination: &self.nearbyRentalStations,
+            animation: !self.nearbyRentalStations.isEmpty
+        )
+
+        setBikeRentalStations(
+            valuesToAdd: bikeRentalStationFromIds
+                .filter { $0.favourite },
+            destination: &self.favouriteRentalStations,
+            animation: !self.favouriteRentalStations.isEmpty
+        )
+    }
 }
 
 // MARK: - Enums
@@ -298,5 +417,15 @@ extension AppState {
     enum ApiState {
         case idle
         case loading
+    }
+}
+
+// MARK: - ReachabilityObserverDelegate
+
+extension AppState: ReachabilityObserverDelegate {
+    func reachabilityChanged(_ isReachable: Bool) {
+        let performFetch = isReachable && reachability != true
+        reachability = isReachable
+        if performFetch { fetchFromApi() }
     }
 }

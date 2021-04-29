@@ -37,3 +37,12 @@ struct WelcomeSingleStation: Codable {
 struct DataClassSingle: Codable {
     let bikeRentalStation: BikeRentalStation
 }
+
+// MARK: Fetch multiple stations
+struct WelcomeMultipleStations: Codable {
+    let data: DataMultipleStations
+}
+
+struct DataMultipleStations: Codable {
+    let bikeRentalStations: [BikeRentalStation]
+}

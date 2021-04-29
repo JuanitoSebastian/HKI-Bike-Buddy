@@ -76,11 +76,8 @@ extension MainRentalStationsView {
                 )
                 .environmentObject(appState)
             }
-            .alert(item: $appState.notification) { notification in
-                Alert(
-                    title: Text(notification.title),
-                    message: Text(notification.text)
-                )
+            .alert(item: $appState.alert) { alert in
+                AlertBuilder.shared.alert(content: alert)
             }
         }
         .onAppear(perform: onAppear)
@@ -97,7 +94,7 @@ extension MainRentalStationsView {
     private func onAppear() {
         appState.subscribeToBikeRentalStore()
         appState.subscribeToUserLocation()
-        appState.fetchFromApi()
+        appState.loadBikeRentalStationStore()
     }
 
     /// Hanldes changes in the operational state of the app.

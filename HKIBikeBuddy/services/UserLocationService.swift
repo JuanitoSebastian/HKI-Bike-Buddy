@@ -14,8 +14,8 @@ class UserLocationService: NSObject, ObservableObject {
     // Singleton instance
     static let shared: UserLocationService = UserLocationService()
 
-    @Published var locationAuthorization = LocationAuthorizationStatus.denied
-    @Published var userLocation: CLLocation?
+    @Published private(set) var locationAuthorization = LocationAuthorizationStatus.denied
+    @Published private(set) var userLocation: CLLocation?
 
     private let manager: CLLocationManager
     private let operationMode: OperationMode
@@ -25,12 +25,24 @@ class UserLocationService: NSObject, ObservableObject {
         manager = CLLocationManager()
         #if DEBUG
         operationMode = Helper.isRunningTests() ? .testing : .normal
+        super.init()
+        if operationMode == .normal { manager.delegate = self }
         #else
         operationMode = .normal
-        #endif
         super.init()
         manager.delegate = self
+        #endif
     }
+
+    /// Returns the current CLLocation? converted to CLLocationCoordinate2D?
+    var userLocation2D: CLLocationCoordinate2D? {
+        guard let location = userLocation else { return nil }
+        return location.coordinate
+    }
+}
+
+// MARK: - Functions
+extension UserLocationService {
 
     /// Requests user to authorize location services
     func requestLocationServicesPermission() {
@@ -47,13 +59,16 @@ class UserLocationService: NSObject, ObservableObject {
         manager.stopUpdatingLocation()
     }
 
-    /// Returns the current CLLocation? converted to CLLocationCoordinate2D?
-    var userLocation2D: CLLocationCoordinate2D? {
-        guard let location = userLocation else { return nil }
-        return CLLocationCoordinate2D(
-            latitude: location.coordinate.latitude,
-            longitude: location.coordinate.longitude
-        )
+    func setUserLocation(location: CLLocation) {
+        if operationMode == .testing {
+            userLocation = location
+        }
+    }
+
+    func setLocationAuthorization(authorization: LocationAuthorizationStatus) {
+        if operationMode == .testing {
+            locationAuthorization = authorization
+        }
     }
 }
 

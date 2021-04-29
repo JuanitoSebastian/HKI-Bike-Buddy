@@ -14,16 +14,22 @@ import Foundation
 /// ```
 /// RoutingAPI.shared
 /// ```
-class RoutingAPI {
+class RoutingAPI: ObservableObject {
 
     static let shared = RoutingAPI()
 
     private init() {}
 
+    /// Fetch multiple Bike Rental Stations around a given coordinate location
+    /// - Parameter lat: Latitude of location
+    /// - Parameter lon: Longitude of location
+    /// - Parameter radius: Radius around coordinate location in meters
+    /// - Parameter completion: A completion handler that is either passed an array of BikeRentalStations (success) or
+    /// an Error (failure)
     func fetchNearbyBikeRentalStations(
         lat: Double,
         lon: Double,
-        nearbyRadius: Int,
+        radius: Int,
         completion: @escaping (_ fetchedBikeRentalStations: [BikeRentalStation]?, _ error: Error?) -> Void
     ) {
 
@@ -32,7 +38,7 @@ class RoutingAPI {
         let router = DigitransitRoutable.fetchNearbyBikeRentalStations(
             lat: lat,
             lon: lon,
-            nearbyRadius: nearbyRadius
+            nearbyRadius: radius
         )
 
         bikeRentalStationsAPI.requestData(router: router) { (responseData: WelcomeNearby?, error: Error?) in
@@ -50,6 +56,39 @@ class RoutingAPI {
         }
     }
 
+    /// Fetches multiple Bike Rental Stations by their stationId
+    /// - Parameter stationIds: The stationIds to fetch
+    /// - Parameter completion: A completion handler that is either passed an array of BikeRentalStations (success) or
+    /// an Error (failure)
+    func fetchBikeRentalStations(
+        stationIds: [String],
+        completion: @escaping (_ fetchedBikeRentalStations: [BikeRentalStation]?, _ error: Error?) -> Void
+    ) {
+        let bikeRentalStationAPI = ApiRouter<WelcomeMultipleStations>()
+
+        let router = DigitransitRoutable.fetchBikeRentalStations(stationIds: stationIds)
+
+        bikeRentalStationAPI.requestData(router: router) { (_ responseData: WelcomeMultipleStations?, _ error: Error?) in
+            guard error == nil else {
+                completion(nil, error)
+                return
+            }
+
+            guard let responseData = responseData else {
+                completion(nil, nil)
+                return
+            }
+
+            let bikeRentalStationsFromAPI = responseData.data.bikeRentalStations
+
+            completion(bikeRentalStationsFromAPI, nil)
+        }
+    }
+
+    /// Fetch a single Bike Rental Station by its stationId
+    /// - Parameter stationId: The stationId to fetch
+    /// - Parameter completion: A completion handler that is either passed a BikeRentalStation (success) or
+    /// an Error (failure)
     func fetchBikeRentalStation(
         stationId: String,
         completion: @escaping (_ fetchedBikeRentalStation: BikeRentalStation?, _ error: Error?) -> Void

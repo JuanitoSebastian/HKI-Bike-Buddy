@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "28A21C5625CEEA140062C7AC"
-               BuildableName = "HelsinkiBikeBuddy.app"
-               BlueprintName = "HelsinkiBikeBuddy"
+               BuildableName = "HKIBikeBuddy.app"
+               BlueprintName = "HKIBikeBuddy"
                ReferencedContainer = "container:HKIBikeBuddy.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -39,8 +39,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "28A21C5625CEEA140062C7AC"
-            BuildableName = "HelsinkiBikeBuddy.app"
-            BlueprintName = "HelsinkiBikeBuddy"
+            BuildableName = "HKIBikeBuddy.app"
+            BlueprintName = "HKIBikeBuddy"
             ReferencedContainer = "container:HKIBikeBuddy.xcodeproj">
          </BuildableReference>
       </CodeCoverageTargets>
@@ -49,9 +49,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "28F63519260C891F00325B9E"
-               BuildableName = "HelsinkiBikeBuddyLogicTests.xctest"
-               BlueprintName = "HelsinkiBikeBuddyLogicTests"
+               BlueprintIdentifier = "2801B90E2635B2FC0076CF1F"
+               BuildableName = "HkiBikeBuddyLogicTests.xctest"
+               BlueprintName = "HkiBikeBuddyLogicTests"
                ReferencedContainer = "container:HKIBikeBuddy.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -72,8 +72,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "28A21C5625CEEA140062C7AC"
-            BuildableName = "HelsinkiBikeBuddy.app"
-            BlueprintName = "HelsinkiBikeBuddy"
+            BuildableName = "HKIBikeBuddy.app"
+            BlueprintName = "HKIBikeBuddy"
             ReferencedContainer = "container:HKIBikeBuddy.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -89,8 +89,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "28A21C5625CEEA140062C7AC"
-            BuildableName = "HelsinkiBikeBuddy.app"
-            BlueprintName = "HelsinkiBikeBuddy"
+            BuildableName = "HKIBikeBuddy.app"
+            BlueprintName = "HKIBikeBuddy"
             ReferencedContainer = "container:HKIBikeBuddy.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

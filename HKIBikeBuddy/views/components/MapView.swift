@@ -23,7 +23,7 @@ struct MapView: UIViewRepresentable {
 
     func makeUIView(context: UIViewRepresentableContext<MapView>) -> MKMapView {
         let annotation = MKPointAnnotation()
-        annotation.coordinate = bikeRentalStation.coordinate
+        annotation.coordinate = bikeRentalStation.location.coordinate
         let mapView = map
         mapView.delegate = context.coordinator
         mapView.showsUserLocation = true
@@ -38,7 +38,7 @@ struct MapView: UIViewRepresentable {
         let region = MKCoordinateRegion(center: centerPoint, latitudinalMeters: zoom, longitudinalMeters: zoom)
         uiView.setRegion(region, animated: true)
         let annotation = MKPointAnnotation()
-        annotation.coordinate = bikeRentalStation.coordinate
+        annotation.coordinate = bikeRentalStation.location.coordinate
         uiView.addAnnotation(annotation)
     }
 
@@ -87,7 +87,7 @@ extension MapView {
 
     private var centerPoint: CLLocationCoordinate2D {
         if userLocationService.userLocation2D == nil {
-            return bikeRentalStation.coordinate
+            return bikeRentalStation.location.coordinate
         }
         return CLLocationCoordinate2D(
             latitude: (maxLat + minLat) * 0.5,

@@ -39,39 +39,6 @@ class BikeRentalStation: ObservableObject {
         self.fetched = fetchedDecode != nil ? fetchedDecode! : Date()
     }
 
-    /// ApiResultMapOptional init for when stations are created from API response
-    /// - Parameter apiResultMapOptional: Dictionary object obtained from API
-    /// - Returns: If the resultMap from API contains missing values nil is returned
-    init?(apiResultMapOptional: [String: Any?]?) {
-        guard let apiResultMap = apiResultMapOptional else {
-            Log.d("Found nil when unwrapping apiResultMap")
-            return nil
-        }
-
-        guard let fetchedStationId = apiResultMap["stationId"] as? String,
-              let fetchedName = apiResultMap["name"] as? String,
-              let fetchedBikesAvailable = apiResultMap["bikesAvailable"] as? Int,
-              let fetchedSpacesAvailable = apiResultMap["spacesAvailable"] as? Int,
-              let fetchedLat = apiResultMap["lat"] as? Double,
-              let fetchedLon = apiResultMap["lon"] as? Double,
-              let fetchedAllowDropoff = apiResultMap["allowDropoff"] as? Bool,
-              let fetchedState = apiResultMap["state"] as? String else {
-            Log.d("Found nil when unwrapping one of apiResultMap values")
-            return nil
-        }
-
-        self.stationId = fetchedStationId
-        self.name = fetchedName
-        self.allowDropoff = fetchedAllowDropoff
-        self.bikes = fetchedBikesAvailable
-        self.fetched = Date()
-        self.lat = fetchedLat
-        self.lon = fetchedLon
-        self.spaces = fetchedSpacesAvailable
-        self.state = Helper.parseStateString(fetchedState) ? .inUse : .notInUse
-        self.favourite = false
-    }
-
     /// Internal init used for testing and manual creation of BikeRentalStations
     internal init(
         stationId: String,
@@ -105,13 +72,9 @@ extension BikeRentalStation {
         CLLocation(latitude: lat, longitude: lon)
     }
 
-    var coordinate: CLLocationCoordinate2D {
-        return CLLocationCoordinate2D(latitude: lat, longitude: lon)
-    }
-
     var isNearby: Bool {
-        guard let distanceUnwrapped = distance(to: UserLocationService.shared.userLocation) else { return false }
-        return distanceUnwrapped <= Double(UserDefaultsStore.shared.nearbyRadius)
+        guard let userLocationUnwrapped = UserLocationService.shared.userLocation else { return false }
+        return distance(to: userLocationUnwrapped) <= Double(UserDefaultsStore.shared.nearbyRadius)
     }
 
     var stationInUseString: String {
@@ -146,39 +109,8 @@ extension BikeRentalStation {
     /// Calculate distance between self and parameter location
     /// - Parameter location: CLLocation? object to which the distance is calculated to
     /// - Returns: A CLLocationDistance? object
-    func distance(to location: CLLocation?) -> CLLocationDistance? {
-        guard let toLocationUnwrapped = location else { return nil }
-        return toLocationUnwrapped.distance(from: self.location)
-    }
-
-    /// Update selfs values with values provided
-    /// - Parameter apiResultMapOptional: ResultMap provided from API
-    func updateValues(apiResultMapOptional: [String: Any?]?) {
-        guard let apiResultMap = apiResultMapOptional else {
-            Log.d("Found nil when unwrapping apiResultMap")
-            return
-        }
-
-        guard let fetchedName = apiResultMap["name"] as? String,
-              let fetchedBikesAvailable = apiResultMap["bikesAvailable"] as? Int,
-              let fetchedSpacesAvailable = apiResultMap["spacesAvailable"] as? Int,
-              let fetchedLat = apiResultMap["lat"] as? Double,
-              let fetchedLon = apiResultMap["lon"] as? Double,
-              let fetchedAllowDropoff = apiResultMap["allowDropoff"] as? Bool,
-              let fetchedState = apiResultMap["state"] as? String else {
-            Log.d("Found nil when unwrapping one of apiResultMap values")
-            return
-        }
-
-        Log.i("Updating values for: \(name) (\(stationId)")
-        self.name = fetchedName
-        self.bikes = fetchedBikesAvailable
-        self.spaces = fetchedSpacesAvailable
-        self.lat = fetchedLat
-        self.lon = fetchedLon
-        self.allowDropoff = fetchedAllowDropoff
-        self.state = Helper.parseStateString(fetchedState) ? .inUse : .notInUse
-        self.fetched = Date()
+    func distance(to location: CLLocation) -> CLLocationDistance {
+        return location.distance(from: self.location)
     }
 }
 
@@ -233,37 +165,6 @@ extension BikeRentalStation: Identifiable {
 extension BikeRentalStation: Equatable {
     static func == (lhs: BikeRentalStation, rhs: BikeRentalStation) -> Bool {
         return rhs.id == lhs.id
-    }
-}
-
-// MARK: - Comparable
-extension BikeRentalStation: Comparable {
-    static func < (lhs: BikeRentalStation, rhs: BikeRentalStation) -> Bool {
-        guard let userLocation = UserLocationService.shared.userLocation else { return false }
-        guard let lhsDistance = lhs.distance(to: userLocation) else { return false }
-        guard let rhsDistance = rhs.distance(to: userLocation) else { return true }
-        return lhsDistance < rhsDistance
-    }
-
-    static func <= (lhs: BikeRentalStation, rhs: BikeRentalStation) -> Bool {
-        guard let userLocation = UserLocationService.shared.userLocation else { return false }
-        guard let lhsDistance = lhs.distance(to: userLocation) else { return false }
-        guard let rhsDistance = rhs.distance(to: userLocation) else { return true }
-        return lhsDistance <= rhsDistance
-    }
-
-    static func > (lhs: BikeRentalStation, rhs: BikeRentalStation) -> Bool {
-        guard let userLocation = UserLocationService.shared.userLocation else { return false }
-        guard let lhsDistance = lhs.distance(to: userLocation) else { return false }
-        guard let rhsDistance = rhs.distance(to: userLocation) else { return true }
-        return lhsDistance > rhsDistance
-    }
-
-    static func >= (lhs: BikeRentalStation, rhs: BikeRentalStation) -> Bool {
-        guard let userLocation = UserLocationService.shared.userLocation else { return false }
-        guard let lhsDistance = lhs.distance(to: userLocation) else { return false }
-        guard let rhsDistance = rhs.distance(to: userLocation) else { return true }
-        return lhsDistance >= rhsDistance
     }
 }
 

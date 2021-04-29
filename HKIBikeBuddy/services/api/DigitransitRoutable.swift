@@ -11,6 +11,7 @@ enum DigitransitRoutable: Routable {
 
     case fetchBikeRentalStation(stationId: String)
     case fetchNearbyBikeRentalStations(lat: Double, lon: Double, nearbyRadius: Int)
+    case fetchBikeRentalStations(stationIds: [String])
 
     var url: URL {
         URL(string: "https://api.digitransit.fi/routing/v1/routers/hsl/index/" + self.endPoint)!
@@ -41,7 +42,7 @@ enum DigitransitRoutable: Routable {
         case .fetchNearbyBikeRentalStations(let lat, let lon, let nearbyRadius):
             var data = Data()
             let parameter = [
-                            "query": """
+                "query": """
                                 {
                                   nearest(lat: \(lat), lon: \(lon), maxDistance: \(nearbyRadius), filterByPlaceTypes: BICYCLE_RENT) {
                                     edges {
@@ -75,7 +76,7 @@ enum DigitransitRoutable: Routable {
         case .fetchBikeRentalStation(let stationId):
             var data = Data()
             let parameter = [
-                            "query": """
+                "query": """
                                 {
                                   bikeRentalStation(id:"\(stationId)") {
                                     stationId
@@ -96,21 +97,39 @@ enum DigitransitRoutable: Routable {
                 data = Data()
             }
             return data
+
+        case .fetchBikeRentalStations(let stationIds):
+            var data = Data()
+            let parameter = ["query": """
+                                {
+                                  bikeRentalStations(ids: \(stationIds)) {
+                                    stationId
+                                    name
+                                    bikesAvailable
+                                    spacesAvailable
+                                    lat
+                                    lon
+                                    allowDropoff
+                                    state
+                                  }
+                                }
+
+                                """
+            ] as [String: Any]
+            do {
+                data = try JSONSerialization.data(withJSONObject: parameter, options: [])
+            } catch {
+                data = Data()
+            }
+            return data
+
         }
 
     }
 
     var request: URLRequest {
         switch self {
-
-        case .fetchBikeRentalStation:
-            var request = URLRequest(url: url)
-            request.httpMethod = method.rawValue
-            request.allHTTPHeaderFields = headers
-            request.httpBody = body
-            return request
-
-        case .fetchNearbyBikeRentalStations:
+        default:
             var request = URLRequest(url: url)
             request.httpMethod = method.rawValue
             request.allHTTPHeaderFields = headers

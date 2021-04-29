@@ -30,9 +30,7 @@ class BikeRentalStationStore {
     private(set) var bikeRentalStations: [String: BikeRentalStation] = [:]
     public let bikeRentalStationIds = CurrentValueSubject<[String], Never>([])
 
-    private init() {
-        loadData()
-    }
+    private init() {}
 
 }
 
@@ -56,8 +54,7 @@ extension BikeRentalStationStore {
     }
 
     /// Loads contents of persistent store to *bikeRentalStations* and *bikeRentalStationIds*
-    private func loadData() {
-        if Helper.isRunningTests() { return }
+    func loadData() throws {
         DispatchQueue.main.async {
             guard let data = try? Data(contentsOf: Self.fileUrl) else {
                 return
@@ -69,15 +66,14 @@ extension BikeRentalStationStore {
                 return
             }
 
-            _ = self.insertStations(bikeRentalStationsFromData)
+            self.insertStations(bikeRentalStationsFromData)
 
         }
     }
 
     /// Saves the favourite Bike Rental Stations persistently.
     /// Data is written in background thread
-    func saveData() {
-        if Helper.isRunningTests() { return }
+    func saveData() throws {
         DispatchQueue.global(qos: .background).async { [weak self] in
 
             guard let bikeRentalStationsToSave = self?.bikeRentalStations.values.filter({ $0.favourite }) else {
@@ -104,28 +100,15 @@ extension BikeRentalStationStore {
 // MARK: - Interaction with the store
 extension BikeRentalStationStore {
 
-    var favouritesEmpty: Bool {
-        bikeRentalStations.values.contains { !$0.favourite }
-    }
-
     /// Insert Bike Rental Stations to the store
     /// If station is already present in the store its values are updated
     /// - Parameter stationsToAdd: Bike Rental Station objects to be added
-    /// - Returns: A set of stationIds that were not updated with new values
-    func insertStations(_ stationsToAdd: [BikeRentalStation]) -> Set<String> {
-        var stationIdsNotUpdated = Set<String>(bikeRentalStations.keys)
-
+    /// - Returns: A set of stationIds that were updated / inserted
+    func insertStations(_ stationsToAdd: [BikeRentalStation]) {
         for rentalStationToAdd in stationsToAdd {
             // Station already in store, update values
             if let existingStation = bikeRentalStations[rentalStationToAdd.stationId] {
-                existingStation.name = rentalStationToAdd.name
-                existingStation.lat = rentalStationToAdd.lat
-                existingStation.lon = rentalStationToAdd.lon
-                existingStation.allowDropoff = rentalStationToAdd.allowDropoff
-                existingStation.state = rentalStationToAdd.state
-                existingStation.bikes = rentalStationToAdd.bikes
-                existingStation.spaces = rentalStationToAdd.spaces
-                stationIdsNotUpdated.remove(rentalStationToAdd.stationId)
+                updateStationValues(existingStation, to: rentalStationToAdd)
                 continue
             }
             // Inserting new station
@@ -133,29 +116,30 @@ extension BikeRentalStationStore {
         }
 
         bikeRentalStationIds.value = [String](bikeRentalStations.keys)
-        return stationIdsNotUpdated
     }
 
-    func insertStation(_ rentalStationToAdd: BikeRentalStation) {
-        if let existingStation = bikeRentalStations[rentalStationToAdd.stationId] {
-            // Station already in store, update values
-            existingStation.name = rentalStationToAdd.name
-            existingStation.lat = rentalStationToAdd.lat
-            existingStation.lon = rentalStationToAdd.lon
-            existingStation.allowDropoff = rentalStationToAdd.allowDropoff
-            existingStation.state = rentalStationToAdd.state
-            existingStation.bikes = rentalStationToAdd.bikes
-            existingStation.spaces = rentalStationToAdd.spaces
-            return
-        }
-        // Inserting new station
-        bikeRentalStations[rentalStationToAdd.stationId] = rentalStationToAdd
-        bikeRentalStationIds.value = [String](bikeRentalStations.keys)
+    /// Update Bike Rental Station with new values
+    /// - Parameter stationToUpdate: Bike Rental Station object to update
+    /// - Parameter values: Bike Rental Station object with new data
+    private func updateStationValues(_ stationToUpdate: BikeRentalStation, to values: BikeRentalStation) {
+        stationToUpdate.name = values.name
+        stationToUpdate.lat = values.lat
+        stationToUpdate.lon = values.lon
+        stationToUpdate.allowDropoff = values.allowDropoff
+        stationToUpdate.state = values.state
+        stationToUpdate.bikes = values.bikes
+        stationToUpdate.spaces = values.spaces
+        stationToUpdate.fetched = Date()
     }
 
-    func isStationFavourite(stationId: String) -> Bool {
-        guard let bikeRentalStation = bikeRentalStations[stationId] else { return false }
-        return bikeRentalStation.favourite
+    /// Removes all Bike Rental Stations from store
+    func clearStore() {
+        bikeRentalStations = [:]
+        bikeRentalStationIds.value = []
     }
+}
 
+// MARK: - Enums
+extension BikeRentalStationStore {
+    
 }
