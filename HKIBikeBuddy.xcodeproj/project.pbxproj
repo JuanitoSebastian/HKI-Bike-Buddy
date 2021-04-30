@@ -134,7 +134,6 @@
 		28E21AA426107FDB00A605D9 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E21A9626107A7500A605D9 /* Log.swift */; };
 		28E21AA926107FDB00A605D9 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E21A9626107A7500A605D9 /* Log.swift */; };
 		28E3A98C2608FA0E0093BC1B /* HBB_Screen1.png in Resources */ = {isa = PBXBuildFile; fileRef = 28E3A98B2608FA0E0093BC1B /* HBB_Screen1.png */; };
-		28E3A9992609D1310093BC1B /* ArchitectureGraph.png in Resources */ = {isa = PBXBuildFile; fileRef = 28E3A9982609D1310093BC1B /* ArchitectureGraph.png */; };
 		28EB4E0E2634406A005B29ED /* TextTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28EB4E0D2634406A005B29ED /* TextTag.swift */; };
 		28EB4E0F2634406A005B29ED /* TextTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28EB4E0D2634406A005B29ED /* TextTag.swift */; };
 		28EB4E102634406A005B29ED /* TextTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28EB4E0D2634406A005B29ED /* TextTag.swift */; };
@@ -267,7 +266,6 @@
 		28E21A9626107A7500A605D9 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		28E3A9862608D8610093BC1B /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		28E3A98B2608FA0E0093BC1B /* HBB_Screen1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HBB_Screen1.png; sourceTree = "<group>"; };
-		28E3A9982609D1310093BC1B /* ArchitectureGraph.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ArchitectureGraph.png; sourceTree = "<group>"; };
 		28E3A99D2609D4070093BC1B /* Architecture.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Architecture.md; sourceTree = "<group>"; };
 		28EB4E0D2634406A005B29ED /* TextTag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextTag.swift; sourceTree = "<group>"; };
 		28F036BD261C5F7E00824273 /* BikeRentalStation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BikeRentalStation.swift; sourceTree = "<group>"; };
@@ -279,6 +277,7 @@
 		28F89AF1263C0042009DB296 /* UserGuide.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = UserGuide.md; sourceTree = "<group>"; };
 		28F89AF3263C04E4009DB296 /* StartAndAuth.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = StartAndAuth.gif; sourceTree = "<group>"; };
 		28F89AF4263C064A009DB296 /* DetailedFavourite.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = DetailedFavourite.gif; sourceTree = "<group>"; };
+		28F89AF5263C6BFE009DB296 /* ArchitectureGraph.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ArchitectureGraph.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -564,13 +563,13 @@
 		28E3A9972609D1310093BC1B /* graphics */ = {
 			isa = PBXGroup;
 			children = (
+				28F89AF5263C6BFE009DB296 /* ArchitectureGraph.png */,
 				28F89AF4263C064A009DB296 /* DetailedFavourite.gif */,
 				28F89AF3263C04E4009DB296 /* StartAndAuth.gif */,
 				28F32157263055F80020CF35 /* BikeRentalStation.png */,
 				28F3214126301E0A0020CF35 /* ReadMeHeader.png */,
 				28F5B6DB260A2B1800105E0B /* ModelsDiagram.png */,
 				28E3A98B2608FA0E0093BC1B /* HBB_Screen1.png */,
-				28E3A9982609D1310093BC1B /* ArchitectureGraph.png */,
 			);
 			path = graphics;
 			sourceTree = "<group>";
@@ -747,7 +746,6 @@
 				28A21CB625CEF1800062C7AC /* .swiftlint.yml in Resources */,
 				28A21C6225CEEA150062C7AC /* Preview Assets.xcassets in Resources */,
 				28A21C5F25CEEA150062C7AC /* Assets.xcassets in Resources */,
-				28E3A9992609D1310093BC1B /* ArchitectureGraph.png in Resources */,
 				28F5B6DC260A2B1800105E0B /* ModelsDiagram.png in Resources */,
 				28F3214226301E0A0020CF35 /* ReadMeHeader.png in Resources */,
 				28E3A98C2608FA0E0093BC1B /* HBB_Screen1.png in Resources */,
