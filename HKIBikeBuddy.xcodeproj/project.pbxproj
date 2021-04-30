@@ -277,7 +277,8 @@
 		28F5B6DB260A2B1800105E0B /* ModelsDiagram.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ModelsDiagram.png; sourceTree = "<group>"; };
 		28F89AEF263BE4F2009DB296 /* DigitransitRoutableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DigitransitRoutableTests.swift; sourceTree = "<group>"; };
 		28F89AF1263C0042009DB296 /* UserGuide.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = UserGuide.md; sourceTree = "<group>"; };
-		28F89AF2263C0080009DB296 /* StartAndAuth.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = StartAndAuth.gif; sourceTree = "<group>"; };
+		28F89AF3263C04E4009DB296 /* StartAndAuth.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = StartAndAuth.gif; sourceTree = "<group>"; };
+		28F89AF4263C064A009DB296 /* DetailedFavourite.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = DetailedFavourite.gif; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -563,7 +564,8 @@
 		28E3A9972609D1310093BC1B /* graphics */ = {
 			isa = PBXGroup;
 			children = (
-				28F89AF2263C0080009DB296 /* StartAndAuth.gif */,
+				28F89AF4263C064A009DB296 /* DetailedFavourite.gif */,
+				28F89AF3263C04E4009DB296 /* StartAndAuth.gif */,
 				28F32157263055F80020CF35 /* BikeRentalStation.png */,
 				28F3214126301E0A0020CF35 /* ReadMeHeader.png */,
 				28F5B6DB260A2B1800105E0B /* ModelsDiagram.png */,
