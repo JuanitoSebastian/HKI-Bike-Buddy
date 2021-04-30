@@ -10,6 +10,7 @@ import SwiftUI
 import Combine
 import CoreLocation
 
+/// A class that handles the global state of the application
 class AppState: ObservableObject {
 
     static let shared = AppState()

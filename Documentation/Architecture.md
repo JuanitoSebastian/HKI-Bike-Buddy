@@ -1,6 +1,6 @@
 # 🏛 Architecture 
 ## Structure
-HKI Bike Buddy is built using SwiftU. The apps global state is contained in an instance of the class AppState wihch is injected using the [@EnvironmentObject](https://developer.apple.com/documentation/swiftui/environmentobject) property wrapper in the root view of the application. All of the data presented in the UI and all of the user actions are handled by the AppState. AppState makes the necessary requests to services and handles interaction with Bike Rental Station objects in the store.
+HKI Bike Buddy is built using SwiftU. The apps global state is contained in an instance of the class [AppState](https://github.com/JuanitoSebastian/HelsinkiBikeBuddy/blob/main/HKIBikeBuddy/state/AppState.swift) which is injected using the [@EnvironmentObject](https://developer.apple.com/documentation/swiftui/environmentobject) property wrapper in the root view of the application. All of the data presented in the UI and all of the user actions are handled by the AppState. AppState makes the necessary requests to services and handles interaction with Bike Rental Station objects in the store.
 
 ![ArchitectureDiagram](https://raw.githubusercontent.com/JuanitoSebastian/HelsinkiBikeBuddy/main/Documentation/graphics/ArchitectureGraph.png)
 
