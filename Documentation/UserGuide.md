@@ -1,4 +1,4 @@
-#  User Guide
+# 📱 User Guide
 ## Launching The App
 <p align="center">
 <img src="https://raw.githubusercontent.com/JuanitoSebastian/HelsinkiBikeBuddy/main/Documentation/graphics/StartAndAuth.gif">

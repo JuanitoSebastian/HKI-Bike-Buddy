@@ -1,4 +1,4 @@
-#  Architecture
+# 🏛 Architecture 
 ## Structure
 HKI Bike Buddy is built using SwiftU. The apps global state is contained in an instance of the class AppState wihch is injected using the [@EnvironmentObject](https://developer.apple.com/documentation/swiftui/environmentobject) property wrapper in the root view of the application. All of the data presented in the UI and all of the user actions are handled by the AppState. AppState makes the necessary requests to services and handles interaction with Bike Rental Station objects in the store.
 
@@ -12,7 +12,7 @@ HKI Bike Buddy is built using SwiftU. The apps global state is contained in an i
 * extensions: Extensions to existing classes and structs
 * utils: Utilities (Logging, Haptics...)
 
-## User interface
+## User Interface
 ![ArchitectureUiViews](https://raw.githubusercontent.com/JuanitoSebastian/HelsinkiBikeBuddy/main/Documentation/graphics/ArchitectureUiViews.png)
 ### The UI of the application consists of the following views:
 1. Welcome screen featuring a prompt asking the user to enable location services.
@@ -28,9 +28,11 @@ UiKit is used on only one view where MapKit is needed (MapView).
 
 ## Models
 ### Bike Rental Station
-Information about a city bike stations current state is stored in a Bike Rental Station object. Creation of new BikeRentalStation objects is handled by BikeRentalStationApiService which fetches stations from Routing API. BikeRentalStationStore in turn handles marking stations as favourites and the persistent storage of station objects. BikeRentalStations conform to the [Codable](https://developer.apple.com/documentation/swift/codable) protocol. This makes it possible to encode them into JSON objects (enables saving them persistently into a file) and makes it easy to convert the RoutingAPI responses into BikeRentalStation objects.
+<p align="center">
+<img src="https://raw.githubusercontent.com/JuanitoSebastian/HelsinkiBikeBuddy/main/Documentation/graphics/BikeRentalStation.png">
+</p>
 
-![BikeRentalStationModel](https://raw.githubusercontent.com/JuanitoSebastian/HelsinkiBikeBuddy/main/Documentation/graphics/BikeRentalStation.png)
+Information about a city bike stations current state is stored in a Bike Rental Station object. Creation of new BikeRentalStation objects is handled by BikeRentalStationApiService which fetches stations from Routing API. BikeRentalStationStore in turn handles marking stations as favourites and the persistent storage of station objects. BikeRentalStations conform to the [Codable](https://developer.apple.com/documentation/swift/codable) protocol. This makes it possible to encode them into JSON objects (enables saving them persistently into a file) and makes it easy to convert the RoutingAPI responses into BikeRentalStation objects.
 
 Some fruther information about the variables and functions:
 *  ``fetched`` is Date object containing the information of when the data of the station was last updated with from the API
@@ -40,7 +42,7 @@ Some fruther information about the variables and functions:
 BikeRentalStations are stored in the BikeRentalStationStore class. This class is accessed via a [singleton](https://en.wikipedia.org/wiki/Singleton_pattern) instance. BikeRentalStation objects are stored in a `[String: BikeRentalStation]` dictionary where the stationIds work as keys. In addition to the dictionary the stationIds are stored in a `[String]` array which is wrapped in a [CurrentValueSubject](https://developer.apple.com/documentation/combine/currentvaluesubject). This enables the AppState to listen for changes in the array containing the stationIds. Whenever new station objects are inserted into the dictionary the array is updated. This way the AppState knows when to re-render the main rental stations view so that it includes the new stations.
 
 ### Persistence
-BikeRentalStationStore persistently stores the favourite stations. BikeRentalStation objects are encoded to JSON objects and saved into a `.data`file. The BikeRentalStations are loaded into from the file when the application is first opened. The contents of the file are updated whenever the application is moved to the background or closed. Below is an example of how the BikeRentalStations are encoded and saved.
+BikeRentalStationStore persistently stores the favourite stations. BikeRentalStation objects are encoded to JSON objects and saved into a `.data` file. The BikeRentalStations are loaded into from the file when the application is first opened. The contents of the file are updated whenever the application is moved to the background or closed. Below is an example of how the BikeRentalStations are encoded and saved.
 ```
 [
     {

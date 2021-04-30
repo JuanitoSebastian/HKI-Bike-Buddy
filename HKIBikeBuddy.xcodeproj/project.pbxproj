@@ -271,13 +271,16 @@
 		28F036BD261C5F7E00824273 /* BikeRentalStation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BikeRentalStation.swift; sourceTree = "<group>"; };
 		28F036C5261C6E3C00824273 /* BikeRentalStationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BikeRentalStationStore.swift; sourceTree = "<group>"; };
 		28F3214126301E0A0020CF35 /* ReadMeHeader.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ReadMeHeader.png; sourceTree = "<group>"; };
-		28F32157263055F80020CF35 /* BikeRentalStation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BikeRentalStation.png; sourceTree = "<group>"; };
 		28F5B6DB260A2B1800105E0B /* ModelsDiagram.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ModelsDiagram.png; sourceTree = "<group>"; };
 		28F89AEF263BE4F2009DB296 /* DigitransitRoutableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DigitransitRoutableTests.swift; sourceTree = "<group>"; };
 		28F89AF1263C0042009DB296 /* UserGuide.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = UserGuide.md; sourceTree = "<group>"; };
 		28F89AF3263C04E4009DB296 /* StartAndAuth.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = StartAndAuth.gif; sourceTree = "<group>"; };
 		28F89AF4263C064A009DB296 /* DetailedFavourite.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = DetailedFavourite.gif; sourceTree = "<group>"; };
 		28F89AF5263C6BFE009DB296 /* ArchitectureGraph.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ArchitectureGraph.png; sourceTree = "<group>"; };
+		28F89AF6263C7824009DB296 /* BikeRentalStation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BikeRentalStation.png; sourceTree = "<group>"; };
+		28F89AF7263C79AD009DB296 /* Testing.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Testing.md; sourceTree = "<group>"; };
+		28F89AF8263C79C4009DB296 /* ProjectReport.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ProjectReport.md; sourceTree = "<group>"; };
+		28F89AF9263C7AF5009DB296 /* TimeSpent.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TimeSpent.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -556,6 +559,8 @@
 				28E3A9972609D1310093BC1B /* graphics */,
 				28E3A99D2609D4070093BC1B /* Architecture.md */,
 				28F89AF1263C0042009DB296 /* UserGuide.md */,
+				28F89AF7263C79AD009DB296 /* Testing.md */,
+				28F89AF8263C79C4009DB296 /* ProjectReport.md */,
 			);
 			path = Documentation;
 			sourceTree = "<group>";
@@ -563,10 +568,11 @@
 		28E3A9972609D1310093BC1B /* graphics */ = {
 			isa = PBXGroup;
 			children = (
+				28F89AF9263C7AF5009DB296 /* TimeSpent.png */,
+				28F89AF6263C7824009DB296 /* BikeRentalStation.png */,
 				28F89AF5263C6BFE009DB296 /* ArchitectureGraph.png */,
 				28F89AF4263C064A009DB296 /* DetailedFavourite.gif */,
 				28F89AF3263C04E4009DB296 /* StartAndAuth.gif */,
-				28F32157263055F80020CF35 /* BikeRentalStation.png */,
 				28F3214126301E0A0020CF35 /* ReadMeHeader.png */,
 				28F5B6DB260A2B1800105E0B /* ModelsDiagram.png */,
 				28E3A98B2608FA0E0093BC1B /* HBB_Screen1.png */,
