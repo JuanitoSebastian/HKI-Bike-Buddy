@@ -7,10 +7,10 @@ An iOS app for viewing real-time information of city bike stations in Helsinki, 
 - 🗂 **Documentation**: Project documentation
 - 🗂 **LogicTests**: Unit tests for the app
 - 🗂 **Widget**: Widget implementation
-- 🗂 **Intention**: [https://developer.apple.com/design/human-interface-guidelines/siri/overview/custom-intents/](Intents) implementation (required for customizable widget)
+- 🗂 **Intention**: [Intents](https://developer.apple.com/design/human-interface-guidelines/siri/overview/custom-intents/) implementation (required for customizable widget)
 ## Requirements
 HKI Bike Buddy can be run on iPhones with iOS 13 or later. 
-### Accessing project in development environment
+### Accessing project in the development environment
 If you are interested in exploring this project you are going to need:
 1. A macOS computer
 2. Xcode 9.3 or a later release
@@ -24,5 +24,5 @@ git clone https://github.com/JuanitoSebastian/HelsinkiBikeBuddy.git
 ## Documentation
 [🏛 Architecture](https://github.com/JuanitoSebastian/HelsinkiBikeBuddy/blob/main/Documentation/Architecture.md)\
 [🧪 Testing](https://github.com/JuanitoSebastian/HelsinkiBikeBuddy)\
-[📱 User's guide](https://github.com/JuanitoSebastian/HelsinkiBikeBuddy)\
+[📱 User's guide](https://github.com/JuanitoSebastian/HelsinkiBikeBuddy/blob/main/Documentation/UserGuide.md)\
 [⏱ Project report](https://github.com/JuanitoSebastian/HelsinkiBikeBuddy)

@@ -68,7 +68,8 @@ class RoutingAPI: ObservableObject {
 
         let router = DigitransitRoutable.fetchBikeRentalStations(stationIds: stationIds)
 
-        bikeRentalStationAPI.requestData(router: router) { (_ responseData: WelcomeMultipleStations?, _ error: Error?) in
+        bikeRentalStationAPI.requestData(router: router) {
+            (_ responseData: WelcomeMultipleStations?, _ error: Error?) in
             guard error == nil else {
                 completion(nil, error)
                 return

@@ -8,7 +8,7 @@
 import SwiftUI
 import MapKit
 
-/// MapView displayes a MapKit map with an annotation for the users location and an annotation for the bike rental station
+/// MapView shows a MapKit map with an annotation for the users location and an annotation for the bike rental station
 /// MapView determines the right area to display on the map: keeping the user and the bike rental station always visible
 struct MapView: UIViewRepresentable {
 

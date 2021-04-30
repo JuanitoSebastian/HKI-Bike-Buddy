@@ -11,8 +11,8 @@ import Intents
 
 struct Provider: IntentTimelineProvider {
 
-    /// This function is called when the actual widget is loading and the system needs to display a placeholder item when the
-    /// actual content of the widget is loading
+    /// This function is called when the actual widget is loading and the system needs to display a
+    /// placeholder item when the actual content of the widget is loading
     func placeholder(in context: Context) -> BikeRentalStationWidgetEntry {
 
         let placeholderStation = BikeRentalStation.placeholderStations[

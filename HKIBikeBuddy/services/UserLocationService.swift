@@ -17,7 +17,7 @@ class UserLocationService: NSObject, ObservableObject {
     @Published private(set) var locationAuthorization = LocationAuthorizationStatus.denied
     @Published private(set) var userLocation: CLLocation?
 
-    private let manager: CLLocationManager
+    let manager: CLLocationManager
     private let operationMode: OperationMode
     var testingLocation: CLLocation?
 

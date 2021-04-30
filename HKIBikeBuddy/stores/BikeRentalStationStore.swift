@@ -39,59 +39,71 @@ extension BikeRentalStationStore {
 
     /// Directory URL for where to save the data files. File is saved in the HelsinkiBikeBuddy -group
     /// folder enabling the widget and intents extension to access the Bike Rental Stations.
-    static var documentsFolder: URL {
+    static var documentsFolder: URL? {
         guard let url = FileManager.default.containerURL(
-                forSecurityApplicationGroupIdentifier: "group.HelsinkiBikeBuddy"
+            forSecurityApplicationGroupIdentifier: "group.HelsinkiBikeBuddy"
         ) else {
-            fatalError("Directory not found")
+            Log.e("Failed to unwrap appgroup directory URL")
+            return nil
         }
         return url
     }
 
     /// URL BikeRentalStations .data file
-    static var fileUrl: URL {
-        return documentsFolder.appendingPathComponent("bikerentalstations.data")
+    static var fileUrl: URL? {
+        #if DEBUG
+        if Helper.isRunningTests() {
+            return URL(string: "bikerentalstations_tests.data")
+        }
+        #endif
+        return URL(string: "bikerentalstations.data")
     }
 
     /// Loads contents of persistent store to *bikeRentalStations* and *bikeRentalStationIds*
     func loadData() throws {
-        DispatchQueue.main.async {
-            guard let data = try? Data(contentsOf: Self.fileUrl) else {
-                return
-            }
-
-            guard let bikeRentalStationsFromData =
-                    try? JSONDecoder().decode([BikeRentalStation].self, from: data) else {
-                Log.e("Failed to decode saved Bike Rental Stations!")
-                return
-            }
-
-            self.insertStations(bikeRentalStationsFromData)
-
+        guard let directory = Self.documentsFolder,
+              let fileExtension = Self.fileUrl else {
+            throw BikeRentalStationStoreError.fileAccessFailed
         }
+
+        let fullFilePath = directory.appendingPathComponent(fileExtension.absoluteString)
+
+        guard let data = try? Data(contentsOf: fullFilePath) else {
+            Log.e("Failed to read file from: \(fullFilePath)")
+            return
+        }
+
+        guard let bikeRentalStationsFromData =
+                try? JSONDecoder().decode([BikeRentalStation].self, from: data) else {
+            Log.e("Failed to decode saved Bike Rental Stations!")
+            throw BikeRentalStationStoreError.fileLoadFailed
+        }
+
+        self.insertStations(bikeRentalStationsFromData)
     }
 
     /// Saves the favourite Bike Rental Stations persistently.
-    /// Data is written in background thread
     func saveData() throws {
-        DispatchQueue.global(qos: .background).async { [weak self] in
 
-            guard let bikeRentalStationsToSave = self?.bikeRentalStations.values.filter({ $0.favourite }) else {
-                Log.e("Self out of scope")
-                return
-            }
+        guard let directory = Self.documentsFolder,
+              let fileExtension = Self.fileUrl else {
+            throw BikeRentalStationStoreError.fileAccessFailed
+        }
 
-            guard let data = try? JSONEncoder().encode(bikeRentalStationsToSave) else {
-                Log.e("Failed to encode data")
-                return
-            }
+        let fullFilePath = directory.appendingPathComponent(fileExtension.absoluteString)
 
-            do {
-                let outfile = Self.fileUrl
-                try data.write(to: outfile)
-            } catch {
-                Log.e("Failed to write to file")
-            }
+        let bikeRentalStationsToSave = bikeRentalStations.values.filter { $0.favourite }
+
+        guard let data = try? JSONEncoder().encode(bikeRentalStationsToSave) else {
+            Log.e("Failed to encode data")
+            throw BikeRentalStationStoreError.fileWriteFailed
+        }
+
+        do {
+            try data.write(to: fullFilePath)
+        } catch {
+            Log.e("Failed to write to file: \(fullFilePath)")
+            throw BikeRentalStationStoreError.fileWriteFailed
         }
     }
 
@@ -141,5 +153,10 @@ extension BikeRentalStationStore {
 
 // MARK: - Enums
 extension BikeRentalStationStore {
-    
+
+    enum BikeRentalStationStoreError: Error {
+        case fileAccessFailed
+        case fileWriteFailed
+        case fileLoadFailed
+    }
 }

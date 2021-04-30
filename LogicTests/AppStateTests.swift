@@ -115,7 +115,9 @@ class AppStateTests: XCTestCase {
         BikeRentalStationStore.shared.clearStore()
         let expectation = self.expectation(description: "Awaiting publisher")
 
-        UserLocationService.shared.setUserLocation(location: CLLocation(latitude: 60.168756, longitude: 24.941775)) // Stockan kelllo
+        UserLocationService.shared.setUserLocation(
+            location: CLLocation(latitude: 60.168756, longitude: 24.941775)
+        ) // Stockan kelllo
 
         BikeRentalStationStore.shared.insertStations(BikeRentalStation.placeholderStations)
 
@@ -164,4 +166,15 @@ class AppStateTests: XCTestCase {
         appState.setNearbyRadius(radius: 1000)
     }
 
+    func test_l_call_save() {
+        appState.saveBikeRentalStationStore()
+        // Checking that no alert was set
+        XCTAssertNil(appState.alert)
+    }
+
+    func test_m_call_load() {
+        appState.loadBikeRentalStationStore()
+        // Checking that no alert was set
+        XCTAssertNil(appState.alert)
+    }
 }

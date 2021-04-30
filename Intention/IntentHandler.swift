@@ -14,7 +14,14 @@ class IntentHandler: INExtension, ConfigurationIntentHandling {
         with completion: @escaping (INObjectCollection<WidgetStation>?, Error?) -> Void
     ) {
 
-        guard let data = try? Data(contentsOf: BikeRentalStationStore.fileUrl) else {
+        guard let directory = BikeRentalStationStore.documentsFolder,
+              let fileExtension = BikeRentalStationStore.fileUrl else {
+            return
+        }
+
+        let fullFilePath = directory.appendingPathComponent(fileExtension.absoluteString)
+
+        guard let data = try? Data(contentsOf: fullFilePath) else {
             return
         }
 

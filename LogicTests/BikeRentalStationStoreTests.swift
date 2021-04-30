@@ -11,6 +11,7 @@ class BikeRentalStationStoreTests: XCTestCase {
 
     let store = BikeRentalStationStore.shared
     let timeout: TimeInterval = 10
+    var stationIds: [String] = []
 
     func test_a_initial_state_of_store() {
         XCTAssertTrue(store.bikeRentalStations.isEmpty)
@@ -88,6 +89,18 @@ class BikeRentalStationStoreTests: XCTestCase {
     }
 
     func test_e_save_store() {
-        // XCTAssertNoThrow(try store.saveData())
+        stationIds = store.bikeRentalStationIds.value
+        XCTAssertNoThrow(try store.saveData())
+        store.clearStore()
+    }
+
+    func test_f_load_store() {
+        XCTAssertNoThrow(try store.loadData())
+        let loadedStationsIds = Set<String>(BikeRentalStationStore.shared.bikeRentalStationIds.value)
+
+        for stationId in stationIds {
+            XCTAssertTrue(loadedStationsIds.contains(stationId))
+        }
+        store.clearStore()
     }
 }

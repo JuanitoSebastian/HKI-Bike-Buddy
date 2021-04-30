@@ -43,4 +43,16 @@ class UserLocationServiceTests: XCTestCase {
         waitForExpectations(timeout: timeout)
     }
 
+    func test_c_user_location_2d() {
+        userLocationService.setUserLocation(location: CLLocation(latitude: 60.184569, longitude: 24.949303))
+        XCTAssertEqual(
+            userLocationService.userLocation!.coordinate.latitude,
+            userLocationService.userLocation2D?.latitude
+        )
+        XCTAssertEqual(
+            userLocationService.userLocation!.coordinate.longitude,
+            userLocationService.userLocation2D?.longitude
+        )
+    }
+
 }

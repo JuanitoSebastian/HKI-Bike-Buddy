@@ -150,6 +150,7 @@
 		28F22FD626247578002D9A38 /* PrettyButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284F9CF525F8CDEC0005D714 /* PrettyButton.swift */; };
 		28F3214226301E0A0020CF35 /* ReadMeHeader.png in Resources */ = {isa = PBXBuildFile; fileRef = 28F3214126301E0A0020CF35 /* ReadMeHeader.png */; };
 		28F5B6DC260A2B1800105E0B /* ModelsDiagram.png in Resources */ = {isa = PBXBuildFile; fileRef = 28F5B6DB260A2B1800105E0B /* ModelsDiagram.png */; };
+		28F89AF0263BE4F2009DB296 /* DigitransitRoutableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F89AEF263BE4F2009DB296 /* DigitransitRoutableTests.swift */; };
 		28FE4E7E2635B69500AF6F1D /* UserLocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28335B5C25D3CAAA00F447D5 /* UserLocationService.swift */; };
 		28FE4E832635B6B000AF6F1D /* UserDefaultsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C97BF125F2473C0062FA00 /* UserDefaultsStore.swift */; };
 		28FE4E882635B6B900AF6F1D /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 281C5BB225D0111D001502BE /* Helper.swift */; };
@@ -274,6 +275,9 @@
 		28F3214126301E0A0020CF35 /* ReadMeHeader.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ReadMeHeader.png; sourceTree = "<group>"; };
 		28F32157263055F80020CF35 /* BikeRentalStation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BikeRentalStation.png; sourceTree = "<group>"; };
 		28F5B6DB260A2B1800105E0B /* ModelsDiagram.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ModelsDiagram.png; sourceTree = "<group>"; };
+		28F89AEF263BE4F2009DB296 /* DigitransitRoutableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DigitransitRoutableTests.swift; sourceTree = "<group>"; };
+		28F89AF1263C0042009DB296 /* UserGuide.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = UserGuide.md; sourceTree = "<group>"; };
+		28F89AF2263C0080009DB296 /* StartAndAuth.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = StartAndAuth.gif; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -317,6 +321,7 @@
 		2801B9102635B2FC0076CF1F /* LogicTests */ = {
 			isa = PBXGroup;
 			children = (
+				28F89AEF263BE4F2009DB296 /* DigitransitRoutableTests.swift */,
 				28DA51E1263AD657004E96AD /* AlertContentTests.swift */,
 				280DB2842638471700687704 /* DoubleTests.swift */,
 				280DB2212637D3A300687704 /* DateExtensionTests.swift */,
@@ -372,6 +377,7 @@
 		281C5BA825D0103B001502BE /* views */ = {
 			isa = PBXGroup;
 			children = (
+				28A21C5C25CEEA140062C7AC /* ContentView.swift */,
 				28335B4625D3AE2A00F447D5 /* components */,
 				2833F51E2626C6C800E336C7 /* station_views */,
 				28803001261883AF00E6D5D0 /* ListView.swift */,
@@ -477,9 +483,8 @@
 				28A21C9625CEEDCD0062C7AC /* services */,
 				28E21A9526107A0300A605D9 /* utils */,
 				28A6E77A262D9F7800A488A1 /* extensions */,
+				28F89AEE263BD900009DB296 /* state */,
 				28A21C5A25CEEA140062C7AC /* HelsinkiBikeBuddyApp.swift */,
-				284A01302617562C0082404D /* AppState.swift */,
-				28A21C5C25CEEA140062C7AC /* ContentView.swift */,
 				28A21C5E25CEEA150062C7AC /* Assets.xcassets */,
 				28A21C6825CEEA150062C7AC /* Info.plist */,
 				28A21C6025CEEA150062C7AC /* Preview Content */,
@@ -550,6 +555,7 @@
 			children = (
 				28E3A9972609D1310093BC1B /* graphics */,
 				28E3A99D2609D4070093BC1B /* Architecture.md */,
+				28F89AF1263C0042009DB296 /* UserGuide.md */,
 			);
 			path = Documentation;
 			sourceTree = "<group>";
@@ -557,6 +563,7 @@
 		28E3A9972609D1310093BC1B /* graphics */ = {
 			isa = PBXGroup;
 			children = (
+				28F89AF2263C0080009DB296 /* StartAndAuth.gif */,
 				28F32157263055F80020CF35 /* BikeRentalStation.png */,
 				28F3214126301E0A0020CF35 /* ReadMeHeader.png */,
 				28F5B6DB260A2B1800105E0B /* ModelsDiagram.png */,
@@ -564,6 +571,14 @@
 				28E3A9982609D1310093BC1B /* ArchitectureGraph.png */,
 			);
 			path = graphics;
+			sourceTree = "<group>";
+		};
+		28F89AEE263BD900009DB296 /* state */ = {
+			isa = PBXGroup;
+			children = (
+				284A01302617562C0082404D /* AppState.swift */,
+			);
+			path = state;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -769,6 +784,7 @@
 				282E25852636CCFB00E8D53B /* BikeRentalStationStoreTests.swift in Sources */,
 				280DB2692637E65D00687704 /* ReachabilityObserverDelegate.swift in Sources */,
 				280DB2222637D3A300687704 /* DateExtensionTests.swift in Sources */,
+				28F89AF0263BE4F2009DB296 /* DigitransitRoutableTests.swift in Sources */,
 				282E25AA2637095500E8D53B /* UserDefaultStoreTests.swift in Sources */,
 				282E25A02636FCC700E8D53B /* AppStateTests.swift in Sources */,
 				280DB24F2637E53D00687704 /* AlertContent.swift in Sources */,

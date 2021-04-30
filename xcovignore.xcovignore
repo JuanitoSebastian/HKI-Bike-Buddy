@@ -1,0 +1,37 @@
+# UI files
+- HelsinkiBikeBuddyApp.swift
+- ListView.swift
+- SettingsView.swift
+- PermissionsPromptView.swift
+- MainRentalStationsView.Swift
+- StationCardView.swift
+- BikeRentalStationViewBuilder.swift
+- DetailedBikeRentalStationSheetView.swift
+- MapView.swift
+- TextTag.swift
+- CapacityBar.swift
+- FavouriteMarker.swift
+- PrettyButton.swift
+- SquarePlaceholder.swift
+- Card.swift
+- ButtonStyles.swift
+- PullToRefreshScrollView.swift
+- Haptics.swift
+- ContentView.swift
+- AlertBuilder.swift
+
+# Intention
+- IntentHandler.swift
+
+# Widget
+- BikeBuddyWidget.swift
+- BikeRentalStationWidgetEntry.swift
+- BikeBuddyWidgetProvider.swift
+- BikeRentalStationWidgetEntry.swift
+- BikeBuddyWidgetView.swift
+- WidgetStationCard.swift
+
+# Dependencies/Other
+- Log.swift
+- ReachabilityObserverDelegate.swift 
+
