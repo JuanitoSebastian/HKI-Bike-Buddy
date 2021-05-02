@@ -9,15 +9,25 @@ import Foundation
 import CoreLocation
 import MapKit
 
+/// A class for accessing the location data of the system. This class listens to changes
+/// in the location services authorization and the current location of the user and
+/// relays this information to other parts of the application.
+/// # Usage
+/// Class is accessed via a singleton instance
+/// ```
+/// UserLocationService.shared
+/// ```
+/// # Testing
+/// During testing the current location of the device and the location services authorization state
+/// can be changed using the setUserLocation and setLocationAuthorization methods.
 class UserLocationService: NSObject, ObservableObject {
 
-    // Singleton instance
     static let shared: UserLocationService = UserLocationService()
 
     @Published private(set) var locationAuthorization = LocationAuthorizationStatus.denied
     @Published private(set) var userLocation: CLLocation?
 
-    let manager: CLLocationManager
+    private let manager: CLLocationManager
     private let operationMode: OperationMode
     var testingLocation: CLLocation?
 
@@ -44,27 +54,35 @@ class UserLocationService: NSObject, ObservableObject {
 // MARK: - Functions
 extension UserLocationService {
 
-    /// Requests user to authorize location services
+    /// Request location services authorization from the system. Calling this method
+    /// triggers the "Allow HKI Bike Buddy to user your location?" alert.
+    /// - *The alert is only shown once!* After calling this method the first time
+    /// the alert will no longer be triggered and the user will have to enable location services
+    /// form the settings of the device.
     func requestLocationServicesPermission() {
         manager.requestWhenInUseAuthorization()
     }
 
+    /// Starts frequent updating the user location
     func startUpdatingUserLocation() {
         Log.i("Starting user location udpates")
         manager.startUpdatingLocation()
     }
 
+    /// Stops frequent updating of the user location
     func stopUpdatingUserLocation() {
         Log.i("Stopping user location updates")
         manager.stopUpdatingLocation()
     }
 
+    /// Set the user location during testing
     func setUserLocation(location: CLLocation) {
         if operationMode == .testing {
             userLocation = location
         }
     }
 
+    /// Set location authorization status during testing
     func setLocationAuthorization(authorization: LocationAuthorizationStatus) {
         if operationMode == .testing {
             locationAuthorization = authorization

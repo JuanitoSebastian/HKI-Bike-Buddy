@@ -14,9 +14,9 @@ import Foundation
 /// ```
 /// RoutingAPI.shared
 /// ```
-class RoutingAPI: ObservableObject {
+class BikeRentalStationAPI: ObservableObject {
 
-    static let shared = RoutingAPI()
+    static let shared = BikeRentalStationAPI()
 
     private init() {}
 

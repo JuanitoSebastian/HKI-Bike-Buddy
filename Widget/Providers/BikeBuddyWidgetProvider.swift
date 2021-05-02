@@ -61,7 +61,7 @@ struct Provider: IntentTimelineProvider {
                 Int.random(in: 0..<BikeRentalStation.placeholderStations.count)
             ].stationId
 
-        RoutingAPI  .shared.fetchBikeRentalStation(
+        BikeRentalStationAPI  .shared.fetchBikeRentalStation(
             stationId: idToFetch
         ) { (_ bikeRentalStation: BikeRentalStation?, _ error: Error?) in
 

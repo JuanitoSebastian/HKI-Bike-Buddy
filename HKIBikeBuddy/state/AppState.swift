@@ -24,7 +24,7 @@ class AppState: ObservableObject {
     @Published var detailedBikeRentalStation: BikeRentalStation?
 
     @Published var reachability: Bool?
-    var apiState: ApiState
+    var apiState: NetworkingState
 
     private var storeCancellable: AnyCancellable?
     private var userLocationAuthorizationCancellable: AnyCancellable?
@@ -251,7 +251,7 @@ extension AppState {
         var stationsAlreadyUpdated: Set<String>?
         let semaphore = DispatchSemaphore(value: 0)
 
-        RoutingAPI.shared.fetchNearbyBikeRentalStations(
+        BikeRentalStationAPI.shared.fetchNearbyBikeRentalStations(
             lat: userLocationUnwrapped.coordinate.latitude,
             lon: userLocationUnwrapped.coordinate.longitude,
             radius: nearbyRadius
@@ -289,7 +289,7 @@ extension AppState {
         stationsToUpdate: [String]
     ) {
         Log.i("Upading remaining stations: \(stationsToUpdate)")
-        RoutingAPI.shared.fetchBikeRentalStations(
+        BikeRentalStationAPI.shared.fetchBikeRentalStations(
             stationIds: stationsToUpdate
         ) { (_ bikeRentalStations: [BikeRentalStation]?, _ error: Error?) in
             guard error == nil else {
@@ -406,20 +406,23 @@ extension AppState {
 
 // MARK: - Enums
 extension AppState {
+
     enum MainViewState {
         case rentalStations
         case locationPrompt
     }
 
-    enum ApiState {
+    enum NetworkingState {
         case idle
         case loading
     }
+
 }
 
 // MARK: - ReachabilityObserverDelegate
-
 extension AppState: ReachabilityObserverDelegate {
+    /// Listens for changes in the connectivity state of the device and updates the value of reachability accordingly
+    /// If internet connectivity is gained from a previously unconnected state a fetchFromApi is called
     func reachabilityChanged(_ isReachable: Bool) {
         let performFetch = isReachable && reachability != true
         reachability = isReachable
