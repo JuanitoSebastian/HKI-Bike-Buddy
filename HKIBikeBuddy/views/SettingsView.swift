@@ -14,7 +14,7 @@ struct SettingsView: View {
     @State var nearbyRange: Double = 1000
 
     init() {
-        // Makes background modifier visible
+        // Makes custom background colors visible in Section view
         UITableView.appearance().backgroundColor = .clear
     }
 

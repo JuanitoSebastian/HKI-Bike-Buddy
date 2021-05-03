@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// A model for the content to be dispalyed in an alert 🚨
+/// Content to be dispalyed in an alert 🚨
 struct AlertContent: Identifiable {
 
     let id = UUID()

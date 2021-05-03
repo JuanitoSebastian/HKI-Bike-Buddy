@@ -7,7 +7,12 @@
 
 import Foundation
 
-/// Saves default values to the UserDefaults store. Access via singleton.
+/// Saves default values to the UserDefaults store.
+/// # Usage
+/// Class is accessed via a singleton instance
+/// ```
+/// UserDefaultsStore.shared
+/// ```
 class UserDefaultsStore {
 
     // Singleton instance

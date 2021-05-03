@@ -18,6 +18,7 @@ struct HelsinkiBikeBuddyApp: App {
         self.appState.subscribeToUserLocationServiceAuthorization()
     }
 
+    /// Passing appState as environmentObject here at the root of the app
     var body: some Scene {
         WindowGroup {
             ContentView()

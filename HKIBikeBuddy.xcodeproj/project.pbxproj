@@ -111,9 +111,6 @@
 		28C97BDC25F0C0B90062FA00 /* Reachability in Frameworks */ = {isa = PBXBuildFile; productRef = 28C97BDB25F0C0B90062FA00 /* Reachability */; };
 		28C97BE025F0C6580062FA00 /* ReachabilityObserverDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C97BDF25F0C6580062FA00 /* ReachabilityObserverDelegate.swift */; };
 		28C97BEC25F2082F0062FA00 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C97BEB25F2082F0062FA00 /* MapView.swift */; };
-		28CDAAE4261E19F90060699B /* SquarePlaceholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CDAAE3261E19F90060699B /* SquarePlaceholder.swift */; };
-		28CDAAE5261E19F90060699B /* SquarePlaceholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CDAAE3261E19F90060699B /* SquarePlaceholder.swift */; };
-		28CDAAE6261E19F90060699B /* SquarePlaceholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CDAAE3261E19F90060699B /* SquarePlaceholder.swift */; };
 		28CF83CD26317AD50026EA4A /* ApiRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CF83CC26317AD50026EA4A /* ApiRouter.swift */; };
 		28CF83CE26317AD50026EA4A /* ApiRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CF83CC26317AD50026EA4A /* ApiRouter.swift */; };
 		28CF83CF26317AD50026EA4A /* ApiRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CF83CC26317AD50026EA4A /* ApiRouter.swift */; };
@@ -256,7 +253,6 @@
 		28C97BDF25F0C6580062FA00 /* ReachabilityObserverDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReachabilityObserverDelegate.swift; sourceTree = "<group>"; };
 		28C97BEB25F2082F0062FA00 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		28C97BF125F2473C0062FA00 /* UserDefaultsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsStore.swift; sourceTree = "<group>"; };
-		28CDAAE3261E19F90060699B /* SquarePlaceholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquarePlaceholder.swift; sourceTree = "<group>"; };
 		28CF83CC26317AD50026EA4A /* ApiRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiRouter.swift; sourceTree = "<group>"; };
 		28CF83D826317E030026EA4A /* Routable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Routable.swift; sourceTree = "<group>"; };
 		28CF83E02631863A0026EA4A /* DigitransitRoutable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DigitransitRoutable.swift; sourceTree = "<group>"; };
@@ -403,7 +399,6 @@
 				28335B4725D3AE3500F447D5 /* CapacityBar.swift */,
 				2805C8C125DFAFA600FE7D56 /* FavouriteMarker.swift */,
 				284F9CF525F8CDEC0005D714 /* PrettyButton.swift */,
-				28CDAAE3261E19F90060699B /* SquarePlaceholder.swift */,
 				285ED541262301400080D9B1 /* Card.swift */,
 				2878678E2625BA66002DF114 /* ButtonStyles.swift */,
 				284AF0B926272FE10048F046 /* PullToRefreshScrollView.swift */,
@@ -700,7 +695,7 @@
 				};
 			};
 			buildConfigurationList = 28A21C5225CEEA140062C7AC /* Build configuration list for PBXProject "HKIBikeBuddy" */;
-			compatibilityVersion = "Xcode 9.3";
+			compatibilityVersion = "Xcode 8.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -843,7 +838,6 @@
 				280BD93525FA35AF005568EF /* BikeBuddyWidget.swift in Sources */,
 				280CDCE12631CFF200CB4743 /* JsonParsing.swift in Sources */,
 				285D34C225FA4F7100ED13E3 /* UserDefaultsStore.swift in Sources */,
-				28CDAAE5261E19F90060699B /* SquarePlaceholder.swift in Sources */,
 				28085F44262D5FE900EB9F49 /* BikeBuddyWidgetProvider.swift in Sources */,
 				285ED543262301400080D9B1 /* Card.swift in Sources */,
 				28D524AD262ED6BD008515A7 /* AlertContent.swift in Sources */,
@@ -871,7 +865,6 @@
 				285D34CA25FA732700ED13E3 /* CapacityBar.swift in Sources */,
 				287D835126039D4600426B33 /* ReachabilityObserverDelegate.swift in Sources */,
 				28CF83CF26317AD50026EA4A /* ApiRouter.swift in Sources */,
-				28CDAAE6261E19F90060699B /* SquarePlaceholder.swift in Sources */,
 				280DB22F2637D76B00687704 /* Double.swift in Sources */,
 				284AF0B426270D450048F046 /* DetailedBikeRentalStationSheetView.swift in Sources */,
 				28CF83E32631863A0026EA4A /* DigitransitRoutable.swift in Sources */,
@@ -937,7 +930,6 @@
 				28803002261883AF00E6D5D0 /* ListView.swift in Sources */,
 				28CF83CD26317AD50026EA4A /* ApiRouter.swift in Sources */,
 				284A01312617562C0082404D /* AppState.swift in Sources */,
-				28CDAAE4261E19F90060699B /* SquarePlaceholder.swift in Sources */,
 				28D524A4262ED60A008515A7 /* AlertContent.swift in Sources */,
 				28335B4825D3AE3500F447D5 /* CapacityBar.swift in Sources */,
 				287D833326039D0700426B33 /* UserLocationService.swift in Sources */,

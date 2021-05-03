@@ -6,18 +6,14 @@
 //
 
 import SwiftUI
-import CoreData
 
 struct ContentView: View {
+
     @EnvironmentObject var appState: AppState
 
+    /// If the app has access to location services the main view is shown
+    /// otherwise the permission prompt is shown
     var body: some View {
-        ZStack {
-            mainContentToDisplay
-        }
-    }
-
-    var mainContentToDisplay: AnyView {
         switch appState.mainView {
         case .rentalStations:
             return AnyView(MainRentalStationsView())
@@ -25,5 +21,4 @@ struct ContentView: View {
             return AnyView(PermissionsPromptView())
         }
     }
-
 }

@@ -9,6 +9,7 @@ import Foundation
 
 class Helper {
 
+    /// Determines if tests are being run
     static func isRunningTests() -> Bool {
         return UserDefaults.standard.bool(forKey: "isTest")
     }
