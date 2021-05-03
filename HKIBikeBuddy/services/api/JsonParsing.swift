@@ -7,6 +7,8 @@
 
 import Foundation
 
+/// These structs are used for the decoding of API responses
+
 // MARK: - NearbyStations
 struct WelcomeNearby: Codable {
     let data: DataClassNearby
@@ -38,7 +40,7 @@ struct DataClassSingle: Codable {
     let bikeRentalStation: BikeRentalStation
 }
 
-// MARK: Fetch multiple stations
+// MARK: - Fetch multiple stations
 struct WelcomeMultipleStations: Codable {
     let data: DataMultipleStations
 }

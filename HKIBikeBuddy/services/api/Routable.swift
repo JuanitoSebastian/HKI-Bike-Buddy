@@ -19,8 +19,6 @@ protocol Routable {
 }
 
 enum HTTPMethod: String {
-
     case POST
     case GET
-
 }

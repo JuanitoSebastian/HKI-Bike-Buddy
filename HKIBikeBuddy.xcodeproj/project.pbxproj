@@ -695,7 +695,7 @@
 				};
 			};
 			buildConfigurationList = 28A21C5225CEEA140062C7AC /* Build configuration list for PBXProject "HKIBikeBuddy" */;
-			compatibilityVersion = "Xcode 8.0";
+			compatibilityVersion = "Xcode 11.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
