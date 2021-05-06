@@ -37,7 +37,11 @@ Updating the store features two asynchronous functions that have to be executed 
 
 ### Marking a Station as Favourite
 When users want to mark stations as favourites they tap the heart.
-![MarkAsFavouriteDiagram](https://raw.githubusercontent.com/JuanitoSebastian/HKI-Bike-Buddy/main/Documentation/graphics/FavouritingStation.png)
+
+<p align="center">
+<img src="https://raw.githubusercontent.com/JuanitoSebastian/HKI-Bike-Buddy/main/Documentation/graphics/FavouritingStation.png">
+</p>
+
 When the heart is tapped the UI first calls the [Haptics](https://github.com/JuanitoSebastian/HKI-Bike-Buddy/blob/main/HKIBikeBuddy/utils/Haptics.swift) ``feedback()`` function to generate a light haptic nudge of the device. Then two methods of the AppState are called. First the ``markStationAsFavourite(_ bikeRentalStation: BikeRentalStation)`` function is called which simply sets the favourite value of a given bike rental station to true. Then the ``addStationToFavouritesList(_ bikeRentalStation: BikeRentalStation)`` function is called. This function inserts the given bike rental station object to the list of favourite stations (by calling the AppStates private function  ``insertStation``). The station is inserted to the list so that the list is kept in the right order (stations sorted from nearest to furthest from user). After the station object is inserted into the array of favourite stations a re-render of the view is triggered.
 
 ## Models
