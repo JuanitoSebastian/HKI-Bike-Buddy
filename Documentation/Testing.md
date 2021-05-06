@@ -2,7 +2,7 @@
 HKI Bike Buddy features automated unit and integration testing on the business logic. System testing is done manually in the simulator and in real use case scenarios with an iPhone 12 Pro Max and an iPhone X.
 ## Automated tests
 The application features automated unit tests which can be found in the [LogicTests](https://github.com/JuanitoSebastian/HKI-Bike-Buddy/tree/main/LogicTests) folder. 
-The tests can be run in Xcode by pressing ⌘ + U.
+The tests can be run in Xcode by pressing ``⌘ + U``.
 ### Testing Asynchronous Operations
 Testing of async functions (such as Combine publishers) is performed using the [XCTestExpectation](https://developer.apple.com/documentation/xctest/asynchronous_tests_and_expectations/testing_asynchronous_operations_with_expectations) class. XCTestExpectation allows us to monitor if an asynchronous task succeeds or fails. 
 ``` swift

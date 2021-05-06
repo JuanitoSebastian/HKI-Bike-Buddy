@@ -245,6 +245,9 @@ extension AppState {
 // MARK: - Functions
 extension AppState {
 
+    /// Fetches stations nearby the location of the user and inserts them to the BikeRentalStationStore
+    /// - Returns: A set containing the stationIds of the stations that were included in the response
+    /// from the API. Incase of error nil is returned.
     private func fetchNearbyStationsFromApi() -> Set<String>? {
         guard let userLocationUnwrapped = self.userLocation else { return nil }
 
@@ -285,6 +288,8 @@ extension AppState {
         return stationsAlreadyUpdated
     }
 
+    /// Fetches given stations from API and inserts them in the BikeRentalStationStore
+    /// - Parameter stationsToUpdate: Array containgin the stationIds of stations that should be fetched.
     private func updateStationsWithAPI(
         stationsToUpdate: [String]
     ) {
