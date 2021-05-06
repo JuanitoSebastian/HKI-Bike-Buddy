@@ -43,7 +43,7 @@ BikeRentalStations are stored in the BikeRentalStationStore class. This class is
 
 ### Persistence
 BikeRentalStationStore persistently stores the favourite stations. BikeRentalStation objects are encoded to JSON objects and saved into a `.data` file. The BikeRentalStations are loaded into from the file when the application is first opened. The contents of the file are updated whenever the application is moved to the background or closed. Below is an example of how the BikeRentalStations are encoded and saved.
-```
+```json
 [
     {
         "spacesAvailable":16,
