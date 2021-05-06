@@ -30,12 +30,15 @@ UiKit is used on only one view where MapKit is needed (MapView).
 Here are a few of the main actions of the application explained.
 
 ### Updating the Store with the API
-The ``fetchFromApi()``method is called when the app first starts, when the app becomes active from the backround and when the user manually requests an update by pulling down the list of bike rental stations.
+The AppStates ``fetchFromApi()``method is called when the app first starts, when the app becomes active from the backround and when the user manually requests an update by pulling down the list of bike rental stations.
 ![ApiUpdateDiagram](https://raw.githubusercontent.com/JuanitoSebastian/HKI-Bike-Buddy/main/Documentation/graphics/UpdatingStationsWithAPI.png)
 The AppState first check that the device is connected to the internet. If there is no internet connection an alert is displayed to the user and the fetch is not performed. Interaction between the AppState and BikeRentalStationAPI is done in a separate background thread so that waiting for the fetch to finish does not freeze the UI on the main thread. AppState first calls the ``fetchNearbyBikeRentalStations()`` function. This function requests bike rental station objects from the API that are nearest to the users current location. Once the stations are received they are inserted to the store. AppState then checks if there are stations in the store that were not updated by ``fetchNearbyBikeRentalStations()`` (these could be stations that are favourited by the user but are not currently nearby). These stations are then updated using the ``fetchBikeRentalStations()`` function. 
 Updating the store features two asynchronous functions that have to be executed one after the other in the correct order. This is achieved using [DispatchSemaphores](https://developer.apple.com/documentation/dispatch/dispatchsemaphore).
 
-### Setting the Nearby Radius
+### Marking a Station as Favourite
+When users want to mark stations as favourites they tap the heart.
+![MarkAsFavouriteDiagram](https://raw.githubusercontent.com/JuanitoSebastian/HKI-Bike-Buddy/main/Documentation/graphics/FavouritingStation.png)
+When the heart is tapped the UI first calls the [Haptics](https://github.com/JuanitoSebastian/HKI-Bike-Buddy/blob/main/HKIBikeBuddy/utils/Haptics.swift) ``feedback()`` function to generate a light haptic nudge of the device. Then two methods of the AppState are called. First the ``markStationAsFavourite(_ bikeRentalStation: BikeRentalStation)`` function is called which simply sets the favourite value of a given bike rental station to true. Then the ``addStationToFavouritesList(_ bikeRentalStation: BikeRentalStation)`` function is called. This function inserts the given bike rental station object to the list of favourite stations (by calling the AppStates private function  ``insertStation``). The station is inserted to the list so that the list is kept in the right order (stations sorted from nearest to furthest from user). After the station object is inserted into the array of favourite stations a re-render of the view is triggered.
 
 ## Models
 ### Bike Rental Station
