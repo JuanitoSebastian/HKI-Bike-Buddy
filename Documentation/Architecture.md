@@ -34,6 +34,9 @@ The ``fetchFromApi()``method is called when the app first starts, when the app b
 ![ApiUpdateDiagram](https://raw.githubusercontent.com/JuanitoSebastian/HKI-Bike-Buddy/main/Documentation/graphics/UpdatingStationsWithAPI.png)
 The AppState first check that the device is connected to the internet. If there is no internet connection an alert is displayed to the user and the fetch is not performed. Interaction between the AppState and BikeRentalStationAPI is done in a separate background thread so that waiting for the fetch to finish does not freeze the UI on the main thread. AppState first calls the ``fetchNearbyBikeRentalStations()`` function. This function requests bike rental station objects from the API that are nearest to the users current location. Once the stations are received they are inserted to the store. AppState then checks if there are stations in the store that were not updated by ``fetchNearbyBikeRentalStations()`` (these could be stations that are favourited by the user but are not currently nearby). These stations are then updated using the ``fetchBikeRentalStations()`` function. 
 Updating the store features two asynchronous functions that have to be executed one after the other in the correct order. This is achieved using [DispatchSemaphores](https://developer.apple.com/documentation/dispatch/dispatchsemaphore).
+
+### Setting the Nearby Radius
+
 ## Models
 ### Bike Rental Station
 <p align="center">

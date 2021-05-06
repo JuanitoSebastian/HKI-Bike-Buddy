@@ -95,6 +95,7 @@ extension StationCardView {
 }
 // MARK: - Functions
 extension StationCardView {
+    /// Toggles the favourite status of the station
     private func toggleFavourite() {
         if toggleTriggered { return }
         toggleTriggered = true
@@ -117,6 +118,7 @@ extension StationCardView {
         }
     }
 
+    /// Sets the bikeRentalStation object as the detailedBikeRentalStation
     private func longPressAction() {
         appState.detailedBikeRentalStation = bikeRentalStation
     }
