@@ -10,7 +10,6 @@ import SwiftUI
 struct WidgetStationCard: View {
 
     let bikeRentalStation: BikeRentalStation
-    let lastRefreshOccasion: BikeRentalStationWidgetEntry.LastRefreshOccasion
     let widgetDisplayType: BikeRentalStationWidgetEntry.WidgetDisplayType
 
     var fetchedDate: Date {

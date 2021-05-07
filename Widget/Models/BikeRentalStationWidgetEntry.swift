@@ -13,18 +13,11 @@ struct BikeRentalStationWidgetEntry: TimelineEntry {
     let date: Date
     let configuration: ConfigurationIntent
     let bikeRentalStation: BikeRentalStation?
-    let lastRefreshOccasion: LastRefreshOccasion
     let widgetDisplayType: WidgetDisplayType
 
 }
 // MARK: - Enums
 extension BikeRentalStationWidgetEntry {
-
-    public enum LastRefreshOccasion {
-        case now
-        case recently
-        case prolonged
-    }
 
     public enum WidgetDisplayType {
         case preview

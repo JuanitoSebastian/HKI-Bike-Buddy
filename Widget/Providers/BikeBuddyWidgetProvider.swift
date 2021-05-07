@@ -23,7 +23,6 @@ struct Provider: IntentTimelineProvider {
             date: Date(),
             configuration: ConfigurationIntent(),
             bikeRentalStation: placeholderStation,
-            lastRefreshOccasion: .now,
             widgetDisplayType: .preview
         )
     }
@@ -44,7 +43,6 @@ struct Provider: IntentTimelineProvider {
             date: Date(),
             configuration: configuration,
             bikeRentalStation: placeholderStation,
-            lastRefreshOccasion: .now,
             widgetDisplayType: .preview
         )
         completion(entry)
@@ -73,33 +71,16 @@ struct Provider: IntentTimelineProvider {
                 return
             }
 
-            let entryNow = BikeRentalStationWidgetEntry(
+            let entry = BikeRentalStationWidgetEntry(
                 date: Date(),
                 configuration: configuration,
                 bikeRentalStation: bikeRentalStationUnwrapped,
-                lastRefreshOccasion: .now,
-                widgetDisplayType: .operational
-            )
-
-            let entryRecently = BikeRentalStationWidgetEntry(
-                date: Calendar.current.date(byAdding: .minute, value: 6, to: Date())!,
-                configuration: configuration,
-                bikeRentalStation: bikeRentalStationUnwrapped,
-                lastRefreshOccasion: .recently,
-                widgetDisplayType: .operational
-            )
-
-            let entryProlonged = BikeRentalStationWidgetEntry(
-                date: Calendar.current.date(byAdding: .minute, value: 15, to: Date())!,
-                configuration: configuration,
-                bikeRentalStation: bikeRentalStationUnwrapped,
-                lastRefreshOccasion: .prolonged,
                 widgetDisplayType: .operational
             )
 
             let timeline = Timeline(
-                entries: [entryNow, entryRecently, entryProlonged],
-                policy: .atEnd
+                entries: [entry],
+                policy: .after(Date().addingTimeInterval(900)) // 15 minutes
             )
 
             completion(timeline)

@@ -16,7 +16,7 @@ struct BikeBuddyWidgetEntryView: View {
 
         guard let bikeRentalStation = entry.bikeRentalStation else {
             return AnyView(
-                Text("An error has ocurred 🥺")
+                Text("Unable to fetch station")
                     .font(.caption)
             )
         }
@@ -24,7 +24,6 @@ struct BikeBuddyWidgetEntryView: View {
         return AnyView(
             WidgetStationCard(
                 bikeRentalStation: bikeRentalStation,
-                lastRefreshOccasion: entry.lastRefreshOccasion,
                 widgetDisplayType: entry.widgetDisplayType
             )
         )
@@ -39,7 +38,6 @@ struct BikeBuddyWidget_Previews: PreviewProvider {
                 date: Date(),
                 configuration: ConfigurationIntent(),
                 bikeRentalStation: BikeRentalStation.placeholderStations[1],
-                lastRefreshOccasion: .prolonged,
                 widgetDisplayType: .operational
             )
         )

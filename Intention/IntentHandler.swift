@@ -6,9 +6,12 @@
 //
 
 import Intents
-import CoreData
 
+/// This class is used for the customizable widget implementation
+/// The IntentHandler provides list of favourite stations from which the user chooses
+/// the station for the widget.
 class IntentHandler: INExtension, ConfigurationIntentHandling {
+
     func provideBikeRentalStationOptionsCollection(
         for intent: ConfigurationIntent,
         with completion: @escaping (INObjectCollection<WidgetStation>?, Error?) -> Void
@@ -16,18 +19,21 @@ class IntentHandler: INExtension, ConfigurationIntentHandling {
 
         guard let directory = BikeRentalStationStore.documentsFolder,
               let fileExtension = BikeRentalStationStore.fileUrl else {
+            completion(nil, IntentHandlerError.failedToLoadStations)
             return
         }
 
         let fullFilePath = directory.appendingPathComponent(fileExtension.absoluteString)
 
         guard let data = try? Data(contentsOf: fullFilePath) else {
+            completion(nil, IntentHandlerError.failedToLoadStations)
             return
         }
 
         guard let bikeRentalStationsFromData =
                 try? JSONDecoder().decode([BikeRentalStation].self, from: data) else {
             Log.e("Failed to decode saved Bike Rental Stations!")
+            completion(nil, IntentHandlerError.failedToLoadStations)
             return
         }
 
@@ -48,11 +54,8 @@ class IntentHandler: INExtension, ConfigurationIntentHandling {
 
     }
 
-    override func handler(for intent: INIntent) -> Any {
-        // This is the default implementation.  If you want different objects to handle different intents,
-        // you can override this and return the handler you want for that particular intent.
-
-        return self
+    enum IntentHandlerError: Error {
+        case failedToLoadStations
     }
 
 }
