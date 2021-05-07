@@ -36,18 +36,18 @@ class AlertBuilder {
 
     /// Creates an alert with an ok button (no action)
     private func notice(
-        title: String,
-        message: String
+        title: LocalizedStringKey,
+        message: LocalizedStringKey
     ) -> Alert {
         Alert(title: Text(title), message: Text(message))
     }
 
     /// Creates an actionable alert
     private func ationable(
-        title: String,
-        message: String,
+        title: LocalizedStringKey,
+        message: LocalizedStringKey,
         action: @escaping () -> Void,
-        actionableButtonText: String
+        actionableButtonText: LocalizedStringKey
     ) -> Alert {
         Alert(
             title: Text(title),
