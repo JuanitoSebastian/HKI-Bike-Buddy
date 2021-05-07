@@ -8,13 +8,16 @@
 import Foundation
 import SwiftUI
 
-/// Builds alerts
+/// A class for building alerts 🚨
 class AlertBuilder {
 
     static let shared = AlertBuilder()
 
     private init() {}
 
+    /// Create an alert based on AlertContent
+    /// - Parameter content: Content of the alert
+    /// - Returns a displayable Alert object
     func alert(
         content: AlertContent
     ) -> Alert {
@@ -31,6 +34,7 @@ class AlertBuilder {
         }
     }
 
+    /// Creates an alert with an ok button (no action)
     private func notice(
         title: String,
         message: String
@@ -38,6 +42,7 @@ class AlertBuilder {
         Alert(title: Text(title), message: Text(message))
     }
 
+    /// Creates an actionable alert
     private func ationable(
         title: String,
         message: String,

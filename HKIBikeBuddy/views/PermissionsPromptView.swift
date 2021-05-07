@@ -7,18 +7,10 @@
 
 import SwiftUI
 
+/// View asking for permission to use location services 📍
 struct PermissionsPromptView: View {
 
     @EnvironmentObject var appState: AppState
-
-    let locationPromptText =
-        "HKI Bike Buddy uses the location information of your device to determine the nearest bike rental stations." +
-        " To start using this application you have to grant it access to the location services."
-
-    let locationPromptTextFromSettings =
-        "HKI Bike Buddy uses the location information of your device to determine the nearest bike rental stations." +
-        " To start using this application you have to grant it access to the location services. \n \n " +
-        "To enable location services go to:"
 
 }
 
@@ -44,29 +36,44 @@ extension PermissionsPromptView {
             return AnyView(
                 Group {
                     VStack(alignment: .leading) {
-                        Text("Before we get started")
+                        Text(LocalizedStringKey("headerTitlePermissionsPrompt"))
                             .font(.custom("Helvetica Neue Bold", size: 30))
                             .foregroundColor(Color("TextTitle"))
                             .padding([.bottom], 5)
 
-                        Text(locationPromptTextFromSettings)
+                        Text(LocalizedStringKey("infoMessagePermissionPrompt"))
                             .multilineTextAlignment(.leading)
                             .padding([.bottom], 10)
 
                         HStack {
-                            TextTag("Settings", backgroundColor: Color.white, underlineColor: Color.white)
+                            TextTag(LocalizedStringKey("textTagSettings"),
+                                    backgroundColor: Color.white,
+                                    underlineColor: Color.white
+                            )
                             Image(systemName: "arrow.right")
                                 .font(.caption)
-                            TextTag("Privacy", backgroundColor: Color.white, underlineColor: Color.white)
+                            TextTag(
+                                LocalizedStringKey("textTagPrivacy"),
+                                backgroundColor: Color.white,
+                                underlineColor: Color.white
+                            )
                             Image(systemName: "arrow.right")
                                 .font(.caption)
                         }
                         .padding(.bottom, 2)
                         HStack {
-                            TextTag("Location Services", backgroundColor: Color.white, underlineColor: Color.white)
+                            TextTag(
+                                LocalizedStringKey("textTagLocationServices"),
+                                backgroundColor: Color.white,
+                                underlineColor: Color.white
+                            )
                             Image(systemName: "arrow.right")
                                 .font(.caption)
-                            TextTag("HKI Bike Buddy", backgroundColor: Color.white, underlineColor: Color.white)
+                            TextTag(
+                                LocalizedStringKey("textTagHkiBikeBuddy"),
+                                backgroundColor: Color.white,
+                                underlineColor: Color.white
+                            )
                         }
 
                     }
@@ -78,16 +85,16 @@ extension PermissionsPromptView {
         return AnyView(
             VStack {
                 VStack(alignment: .leading) {
-                    Text("Before we get started")
+                    Text(LocalizedStringKey("headerTitlePermissionsPrompt"))
                         .font(.custom("Helvetica Neue Bold", size: 30))
                         .foregroundColor(Color("TextTitle"))
                         .padding([.bottom], 5)
-                    Text(locationPromptText)
+                    Text(LocalizedStringKey("infoMessagePermissionPromptFirstTime"))
                         .multilineTextAlignment(.leading)
                         .padding([.bottom], 10)
-                    PrettyButton(textToDisplay: "Enable location services", perform: {
-                        appState.requestLocationAuthorization()
-                    })
+                    Button { appState.requestLocationAuthorization() } label: {
+                        Text(LocalizedStringKey("buttonEnableLocationServices"))
+                    }.buttonStyle(PrettyButton())
                 }
                 .padding(15)
             }

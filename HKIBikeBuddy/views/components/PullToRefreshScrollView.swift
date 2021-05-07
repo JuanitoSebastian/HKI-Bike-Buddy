@@ -7,12 +7,15 @@
 
 import SwiftUI
 
+/// A scrollable view where the user can pull-to-refresh
 struct PullToRefreshScrollView<Content: View>: View {
 
     @State var refresh: Refresh = Refresh(started: false, released: false)
     var builder: () -> Content
     let onRelease: () -> Void
 
+    /// - Parameter onRelease: Action to perform when the view is pulled and released
+    /// - Parameter builder: Content to display in the view
     init(
         onRelease: @escaping () -> Void,
         @ViewBuilder builder: @escaping () -> Content
@@ -20,7 +23,10 @@ struct PullToRefreshScrollView<Content: View>: View {
         self.builder = builder
         self.onRelease = onRelease
     }
+}
 
+// MARK: - Views
+extension PullToRefreshScrollView {
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
             GeometryReader { geometry -> AnyView in
@@ -95,10 +101,12 @@ extension PullToRefreshScrollView {
     }
 }
 
+// MARK: - Refresh struct
 struct Refresh {
     var startOffset: CGFloat = 0
     var offset: CGFloat = 0
     var started: Bool
     var released: Bool
     var invalid: Bool = false
+
 }

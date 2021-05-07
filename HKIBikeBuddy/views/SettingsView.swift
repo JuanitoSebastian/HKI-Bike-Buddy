@@ -40,9 +40,9 @@ extension SettingsView {
     var body: some View {
         VStack {
             Form {
-                Section(header: Text("NEARBY STATIONS")) {
+                Section(header: Text(LocalizedStringKey("headerSettingsNearbyStations"))) {
                     VStack {
-                        Text("Maximum distance to nearby station")
+                        Text(LocalizedStringKey("labelSettingsMaxDistance"))
                             .font(.subheadline)
                             .foregroundColor(Color("TextMain"))
                         Slider(
@@ -75,17 +75,17 @@ extension SettingsView {
 
             VStack {
                 HStack(spacing: 0) {
-                    Text("HKI Bike Buddy by ")
+                    Text(LocalizedStringKey("textTagHkiBikeBuddy"))
                         .font(.footnote)
                         .padding([.bottom], 5)
                     Button { openJuanitoHomepage() } label: {
-                        Text("juan.fi")
+                        Text(LocalizedStringKey("buttonJuanWebsite"))
                             .font(.footnote)
                             .fontWeight(.bold)
                             .padding([.bottom], 5)
                     }
                 }
-                Text("Data provided by © Helsinki Region Transport \(currentYear)")
+                Text(LocalizedStringKey("infoMessageDataProvided \(currentYear)"))
                     .font(.footnote)
             }
         }
@@ -94,7 +94,7 @@ extension SettingsView {
         .background(
             Color("AppBackground")
         )
-        .navigationTitle(Text("Settings"))
+        .navigationTitle(Text(LocalizedStringKey("screenTitleSettings")))
         .onAppear(perform: {
             nearbyRange = Double(appState.nearbyRadius)
         })

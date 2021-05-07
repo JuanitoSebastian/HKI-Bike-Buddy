@@ -50,8 +50,12 @@ struct WidgetStationCard: View {
 
                 HStack {
                     TextTag(
-                        bikeRentalStation.allowDropoffString,
-                        underlineColor: bikeRentalStation.allowDropoff ? Color("GreenUnderline") : Color("RedUnderline")
+                        bikeRentalStation.allowDropoff ?
+                            LocalizedStringKey("textTagStationDropoffAllowed") :
+                            LocalizedStringKey("textTagStationDropoffNotAllowed"),
+                        underlineColor: bikeRentalStation.allowDropoff ?
+                            Color("GreenUnderline") :
+                            Color("RedUnderline")
                     )
                     Spacer()
                 }

@@ -7,8 +7,8 @@
 
 import SwiftUI
 
+/// Displayes a list of given BikeRentalStation objects
 struct ListView: View {
-
     @EnvironmentObject var appState: AppState
     let rentalStations: [BikeRentalStation]
     let listType: BikeRentalStationListType
@@ -38,9 +38,8 @@ struct ListView: View {
 
 }
 
-    // MARK: - Views
+// MARK: - Views
 extension ListView {
-
     var body: some View {
         VStack {
             contentToDisplay
@@ -61,22 +60,22 @@ extension ListView {
 
     private var stationsLoadedView: AnyView {
         AnyView(
-                VStack {
-                    PullToRefreshScrollView(onRelease: { appState.fetchFromApi() }) {
-                        LazyVGrid(columns: layout) {
-                            ForEach(rentalStations, id: \.id) { rentalStation in
-                                StationCardView(bikeRentalStation: rentalStation)
-                                    .highPriorityGesture(
-                                        TapGesture(count: 2)
-                                            .onEnded { _ in
+            VStack {
+                PullToRefreshScrollView(onRelease: { appState.fetchFromApi() }) {
+                    LazyVGrid(columns: layout) {
+                        ForEach(rentalStations, id: \.id) { rentalStation in
+                            StationCardView(bikeRentalStation: rentalStation)
+                                .highPriorityGesture(
+                                    TapGesture(count: 2)
+                                        .onEnded { _ in
 
-                                            }
-                                    )
-                            }
+                                        }
+                                )
                         }
-
                     }
+
                 }
+            }
         )
     }
 
@@ -102,8 +101,10 @@ extension ListView {
             }
         )
     }
+}
 
-    // MARK: - Enums
+// MARK: - Enums
+extension ListView {
     private enum ListState {
         case stationsLoaded
         case empty

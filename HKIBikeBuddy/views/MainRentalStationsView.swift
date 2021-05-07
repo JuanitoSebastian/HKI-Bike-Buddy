@@ -7,16 +7,18 @@
 
 import SwiftUI
 
+/// Main view of the application featuring a TabBar for navigation between favourite and nearby stations.
+/// This view handles the apps life-cycle events.
 struct MainRentalStationsView: View {
 
     @EnvironmentObject var appState: AppState
     @Environment(\.scenePhase) private var scenePhase
     @State var tabBarSelection: TabBarSelection = TabBarSelection.nearbyStations
 
-    var title: String {
+    var title: LocalizedStringKey {
         switch tabBarSelection {
-        case .nearbyStations: return "Nearby Stations"
-        case .myStations: return "My Stations"
+        case .nearbyStations: return LocalizedStringKey("screenTitleNearbyStations")
+        case .myStations: return LocalizedStringKey("screenTitleMyStations")
         }
     }
 
@@ -34,7 +36,7 @@ extension MainRentalStationsView {
                     }
                     .tabItem {
                         Image(systemName: "bicycle")
-                        Text("Neaby Stations")
+                        Text(LocalizedStringKey("tabBarNearbyStations"))
                     }
                     .tag(TabBarSelection.nearbyStations)
 
@@ -44,7 +46,7 @@ extension MainRentalStationsView {
                     }
                     .tabItem {
                         Image(systemName: "heart.fill")
-                        Text("My Stations")
+                        Text(LocalizedStringKey("tabBarMyStations"))
                     }
                     .tag(TabBarSelection.myStations)
 

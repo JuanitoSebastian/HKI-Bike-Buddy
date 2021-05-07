@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import CoreLocation
 
 @main
 struct HelsinkiBikeBuddyApp: App {

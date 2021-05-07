@@ -46,12 +46,16 @@ struct DetailedBikeRentalStationSheetView: View {
                     ScrollView(.horizontal) {
                         HStack {
                             TextTag(
-                                bikeRentalStation.stationInUseString,
+                                bikeRentalStation.state == BikeRentalStation.State.inUse ?
+                                    LocalizedStringKey("textTagStationInUse") :
+                                    LocalizedStringKey("textTagStationNotInUse"),
                                 underlineColor: bikeRentalStation.state == BikeRentalStation.State.inUse ?
                                     Color("GreenUnderline") : Color("RedUnderline")
                             )
                             TextTag(
-                                bikeRentalStation.allowDropoffString,
+                                bikeRentalStation.allowDropoff ?
+                                    LocalizedStringKey("textTagStationDropoffAllowed") :
+                                    LocalizedStringKey("textTagStationDropoffNotAllowed"),
                                 underlineColor: bikeRentalStation.allowDropoff ?
                                     Color("GreenUnderline") : Color("RedUnderline")
                             )

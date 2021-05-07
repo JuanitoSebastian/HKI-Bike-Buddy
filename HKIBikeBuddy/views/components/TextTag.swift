@@ -9,12 +9,12 @@ import SwiftUI
 
 struct TextTag: View {
 
-    let textToDisplay: String
+    let textToDisplay: LocalizedStringKey
     let textColor: Color
     let backgroundColor: Color
     let underlineColor: Color
 
-    init(_ textToDisplay: String,
+    init(_ textToDisplay: LocalizedStringKey,
          textColor: Color = Color("TextMain"),
          backgroundColor: Color = Color("TextTagBg"),
          underlineColor: Color = Color.gray.opacity(0.5)

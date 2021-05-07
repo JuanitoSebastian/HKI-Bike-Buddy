@@ -1,0 +1,44 @@
+/* 
+  Localizable.strings
+  HKIBikeBuddy
+
+  Created by Juan Covarrubias on 7.5.2021.
+  
+*/
+
+// Screen titles
+"screenTitleNearbyStations" = "Nearby Stations";
+"screenTitleMyStations" = "My Stations";
+"screenTitleSettings" = "Settings";
+
+// Header titles
+"headerTitlePermissionsPrompt" = "Before we get started";
+"headerSettingsNearbyStations" = "NEARBY STATIONS";
+
+// Info Messages
+"infoMessagePermissionPromptFirstTime" = "HKI Bike Buddy uses the location information of your device to determine the nearest bike rental stations. To start using this application you have to grant it access to the location services.";
+"infoMessagePermissionPrompt" = "HKI Bike Buddy uses the location information of your device to determine the nearest bike rental stations. To start using this application you have to grant it access to the location services.\n\nTo enable location services go to:";
+"infoMessageDataProvided %@" = "Data provided by © Helsinki Region Transport %@";
+"infoMessageAppAuthor" = "HKI Bike Buddy by ";
+
+// Text Tags
+"textTagSettings" = "Settings";
+"textTagPrivacy" = "Privacy";
+"textTagLocationServices" = "Location Services";
+"textTagHkiBikeBuddy" = "HKI Bike Buddy by ";
+
+"textTagStationInUse" = "Station in use";
+"textTagStationNotInUse" = "Station not in use";
+"textTagStationDropoffAllowed" = "Accepts dropoffs";
+"textTagStationDropoffNotAllowed" = "No dropoffs";
+
+// Labels
+"labelSettingsMaxDistance" = "Maximum distance to nearby station";
+
+// Buttons
+"buttonEnableLocationServices" = "Enable location services";
+"buttonJuanWebsite" = "juan.fi";
+
+// TabBar
+"tabBarNearbyStations" = "Nearby Stations";
+"tabBarMyStations" = "My Stations";
