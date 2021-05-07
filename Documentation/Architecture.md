@@ -4,13 +4,11 @@ HKI Bike Buddy is built using SwiftU. The apps state is contained in an instance
 
 ![ArchitectureDiagram](https://raw.githubusercontent.com/JuanitoSebastian/HelsinkiBikeBuddy/main/Documentation/graphics/ArchitectureGraph.png)
 
-### The main application code is divided into the following groups:
-* **state:** Contains the AppState
-* **stores:** Handles storing the state of the app
-* **services:** Handles fetching data from the [Routing API](https://digitransit.fi/en/developers/apis/1-routing-api/) and management of user location.
-* **views:** Contains the views of the UI
-* **extensions:** Extensions to existing classes and structs
-* **utils:** Utilities (Logging, Haptics...)
+### The main application code is divided into the following directories:
+* **Stores:** Handles storing the state of the app
+* **Services:** Handles fetching data from the [Routing API](https://digitransit.fi/en/developers/apis/1-routing-api/) and management of user location.
+* **Views:** Contains the views of the UI
+* **Supporting Files:** Extensions, localization and utilitie
 
 ### Code Style
 This project follows the [Google Swift Style Guide](https://google.github.io/swift). [SwiftLint](https://github.com/realm/SwiftLint) is used for style enforcement.
