@@ -6,23 +6,24 @@
 //
 
 import Foundation
+import SwiftUI
 
 /// Content to be dispalyed in an alert 🚨
 struct AlertContent: Identifiable {
 
     let id = UUID()
-    let title: String
-    let message: String
+    let title: LocalizedStringKey
+    let message: LocalizedStringKey
     let type: AlertType
     let action: () -> Void
-    let actionableButtonText: String
+    let actionableButtonText: LocalizedStringKey
 
     init(
-        title: String,
-        message: String,
+        title: LocalizedStringKey,
+        message: LocalizedStringKey,
         type: AlertType,
         action: @escaping () -> Void = {},
-        actionableButtonText: String = ""
+        actionableButtonText: LocalizedStringKey = LocalizedStringKey("")
     ) {
         self.title = title
         self.message = message
@@ -48,8 +49,8 @@ extension AlertContent {
 
     static var fetchError: AlertContent {
         AlertContent(
-            title: "Network Error",
-            message: "Failed to fetch stations",
+            title: LocalizedStringKey("alertTitleApiError"),
+            message: LocalizedStringKey("alertMessageApiError"),
             type: .actionable,
             action: AppState.shared.fetchFromApi,
             actionableButtonText: "Try again"
@@ -58,8 +59,8 @@ extension AlertContent {
 
     static var noInternet: AlertContent {
         AlertContent(
-            title: "Network Error",
-            message: "No internet connection",
+            title: LocalizedStringKey("alertTitleNetworkError"),
+            message: LocalizedStringKey("alertMessageNetworkError"),
             type: .actionable,
             action: AppState.shared.fetchFromApi,
             actionableButtonText: "Try again"
@@ -68,16 +69,16 @@ extension AlertContent {
 
     static var noLocation: AlertContent {
         AlertContent(
-            title: "Current Location Not Available",
-            message: "Your current location could not be determined",
+            title: LocalizedStringKey("alertTitleLocationError"),
+            message: LocalizedStringKey("alertMessageLocationError"),
             type: .notice
         )
     }
 
     static var failedToLoadStore: AlertContent {
         AlertContent(
-            title: "Could Not Load Favourite Stations",
-            message: "Failed to load favourite stations from memory",
+            title: LocalizedStringKey("alertTitleStoreLoadError"),
+            message: LocalizedStringKey("alertMessageStoreLoadError"),
             type: .actionable,
             action: { AppState.shared.loadBikeRentalStationStore() },
             actionableButtonText: "Try again"
@@ -86,8 +87,8 @@ extension AlertContent {
 
     static var failedToSaveStore: AlertContent {
         AlertContent(
-            title: "Could Not Save Favourite Stations",
-            message: "Failed to save favourite stations to memory",
+            title: LocalizedStringKey("alertTitleStoreSaveError"),
+            message: LocalizedStringKey("alertMessageStoreSaveError"),
             type: .actionable,
             action: { AppState.shared.saveBikeRentalStationStore() },
             actionableButtonText: "Try again"

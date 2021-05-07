@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+/// A class that provides elements for Bike Renntal Station Views
 class BikeRentalStationViewBuilder {
 
     static let shared = BikeRentalStationViewBuilder()
@@ -61,7 +62,7 @@ class BikeRentalStationViewBuilder {
     }
 
     @ViewBuilder func distanceFromUserComponent(
-        distanceFromUserString: String = "",
+        distanceFromUser: LocalizedStringKey = LocalizedStringKey(""),
         lastUpdatedString: String = "",
         bikeRentalStationViewType: BikeRentalStationViewType
     ) -> some View {
@@ -70,7 +71,7 @@ class BikeRentalStationViewBuilder {
                 Image(systemName: "figure.walk")
                     .font(.footnote)
                     .foregroundColor(Color("TextMain"))
-                Text("\(distanceFromUserString) away")
+                Text(distanceFromUser)
                     .foregroundColor(Color("TextMain"))
                     .font(.footnote)
             }

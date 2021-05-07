@@ -8,7 +8,7 @@
 import SwiftUI
 import CoreLocation
 
-// MARK: - Properties
+/// A card view diplaying information of a given Bike Rental Station 🚴
 struct StationCardView: View {
 
     @EnvironmentObject var appState: AppState
@@ -20,9 +20,9 @@ struct StationCardView: View {
         Color(Color.RGBColorSpace.sRGB, white: 0.5, opacity: 0.1)
     }
 
-    private var distanceString: String {
+    private var distanceString: LocalizedStringKey {
         guard let userLocation = appState.userLocation else {
-            return "-"
+            return LocalizedStringKey("")
         }
 
         var distanceDouble = Int(
@@ -33,10 +33,10 @@ struct StationCardView: View {
 
         if distanceDouble >= 1000 {
             distanceDouble /= 1000
-            return "\(String(distanceDouble)) km"
+            return LocalizedStringKey("stationInfoDistanceKm \(String(distanceDouble))")
         }
 
-        return "\(String(distanceDouble)) m"
+        return LocalizedStringKey("stationInfoDistanceM \(String(distanceDouble))")
     }
 
 }
@@ -79,7 +79,7 @@ extension StationCardView {
                 )
 
                 BikeRentalStationViewBuilder.shared.distanceFromUserComponent(
-                    distanceFromUserString: distanceString,
+                    distanceFromUser: distanceString,
                     bikeRentalStationViewType: .card
                 )
                 .padding(.bottom, 2)

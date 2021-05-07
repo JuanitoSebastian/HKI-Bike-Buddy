@@ -497,7 +497,7 @@
 		28A21C9625CEEDCD0062C7AC /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				28CF83CB26317AC50026EA4A /* api */,
+				28CF83CB26317AC50026EA4A /* Api */,
 				28335B5C25D3CAAA00F447D5 /* UserLocationService.swift */,
 				28C97BDF25F0C6580062FA00 /* ReachabilityObserverDelegate.swift */,
 				280CDCE72631D10F00CB4743 /* BikeRentalStationAPI.swift */,
@@ -505,7 +505,7 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
-		28CF83CB26317AC50026EA4A /* api */ = {
+		28CF83CB26317AC50026EA4A /* Api */ = {
 			isa = PBXGroup;
 			children = (
 				28CF83CC26317AD50026EA4A /* ApiRouter.swift */,
@@ -513,7 +513,7 @@
 				28CF83E02631863A0026EA4A /* DigitransitRoutable.swift */,
 				280CDCDF2631CFF200CB4743 /* JsonParsing.swift */,
 			);
-			path = api;
+			path = Api;
 			sourceTree = "<group>";
 		};
 		28CFB61E25D1B6E4002E006A /* Stores */ = {

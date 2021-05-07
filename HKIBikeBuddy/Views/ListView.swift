@@ -25,14 +25,12 @@ struct ListView: View {
         return .stationsLoaded
     }
 
-    private var listEmptyText: String {
+    private var listEmptyText: LocalizedStringKey {
         switch listType {
         case .favourite:
-            return "Nothing here yet...\n" +
-                "Start by marking a station as your favourite 💖"
+            return LocalizedStringKey("infoMessageListEmptyFavourite")
         case .nearby:
-            return "No stations nearby 😔\n" +
-                "Try increasing the nearby radius from settings"
+            return LocalizedStringKey("infoMessageListEmptyNearby")
         }
     }
 

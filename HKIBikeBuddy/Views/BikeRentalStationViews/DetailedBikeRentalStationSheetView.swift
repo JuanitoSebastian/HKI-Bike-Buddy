@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// A Detailed view of a Bike Rental Station 🚴
 struct DetailedBikeRentalStationSheetView: View {
 
     @EnvironmentObject var appState: AppState
@@ -36,7 +37,7 @@ struct DetailedBikeRentalStationSheetView: View {
                     .padding(.horizontal, 15)
 
                     BikeRentalStationViewBuilder.shared.distanceFromUserComponent(
-                        distanceFromUserString: distanceString,
+                        distanceFromUser: distanceString,
                         lastUpdatedString: bikeRentalStation.lastUpdatedString,
                         bikeRentalStationViewType: .detailed
                     )
@@ -102,11 +103,12 @@ struct DetailedBikeRentalStationSheetView: View {
     }
 }
 
+// MARK: - Functions and properties
 extension DetailedBikeRentalStationSheetView {
 
-    private var distanceString: String {
+    private var distanceString: LocalizedStringKey {
         guard let userLocation = appState.userLocation else {
-            return "-"
+            return LocalizedStringKey("")
         }
 
         var distanceDouble = Int(
@@ -117,10 +119,10 @@ extension DetailedBikeRentalStationSheetView {
 
         if distanceDouble >= 1000 {
             distanceDouble /= 1000
-            return "\(String(distanceDouble)) km"
+            return LocalizedStringKey("stationInfoDistanceKm \(String(distanceDouble))")
         }
 
-        return "\(String(distanceDouble)) m"
+        return LocalizedStringKey("stationInfoDistanceM \(String(distanceDouble))")
     }
 
     private func toggleFavourite() {

@@ -18,8 +18,12 @@
 // Info Messages
 "infoMessagePermissionPromptFirstTime" = "HKI Bike Buddy uses the location information of your device to determine the nearest bike rental stations. To start using this application you have to grant it access to the location services.";
 "infoMessagePermissionPrompt" = "HKI Bike Buddy uses the location information of your device to determine the nearest bike rental stations. To start using this application you have to grant it access to the location services.\n\nTo enable location services go to:";
+
 "infoMessageDataProvided %@" = "Data provided by © Helsinki Region Transport %@";
 "infoMessageAppAuthor" = "HKI Bike Buddy by ";
+
+"infoMessageListEmptyFavourite" = "Nothing here yet...\nStart by marking a station as your favourite 💖";
+"infoMessageListEmptyNearby" = "No stations nearby 😔\nTry increasing the nearby radius from settings";
 
 // Text Tags
 "textTagSettings" = "Settings";
@@ -42,3 +46,21 @@
 // TabBar
 "tabBarNearbyStations" = "Nearby Stations";
 "tabBarMyStations" = "My Stations";
+
+// Alert Titles
+"alertTitleNetworkError" = "Internet Connection Not Available";
+"alertTitleApiError" = "API Service Not Available";
+"alertTitleLocationError" = "Current Location Not Available";
+"alertTitleStoreLoadError" = "Could Not Load Favourite Stations";
+"alertTitleStoreSaveError" = "Could Not Save Favourite Stations";
+
+// Alert Messages
+"alertMessageApiError" = "Failed to fetch stations from Helsinki Region Transport API";
+"alertMessageNetworkError" = "Make sure your device has an active internet connection";
+"alertMessageLocationError" = "Your current location could not be determined";
+"alertMessageStoreLoadError" = "Failed to load favourite stations from memory";
+"alertMessageStoreSaveError" = "Failed to save favourite stations to memory";
+
+// Station Info
+"stationInfoDistanceKm %@" = "%@ km away";
+"stationInfoDistanceM %@" = "%@ m away";
