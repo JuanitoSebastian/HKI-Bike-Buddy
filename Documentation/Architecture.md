@@ -1,6 +1,6 @@
 # 🏛 Architecture 
 ## Introduction
-HKI Bike Buddy is built using SwiftU. The apps state is contained in an instance of the class [AppState](https://github.com/JuanitoSebastian/HKI-Bike-Buddy/blob/main/HKIBikeBuddy/AppState.swift) which is injected using the [@EnvironmentObject](https://developer.apple.com/documentation/swiftui/environmentobject) property wrapper in the [root of the application](https://github.com/JuanitoSebastian/HKI-Bike-Buddy/blob/main/HKIBikeBuddy/HelsinkiBikeBuddyApp.swift#L25). All of the data presented in the UI and all of the user actions are handled by the AppState. AppState makes the necessary requests to services and handles interaction with Bike Rental Station objects in the store. AppState works as an abstracting layer between the UI and the business logic of the applicaiton.
+HKI Bike Buddy is built using SwiftU. The apps state is contained in an instance of the class [AppState](https://github.com/JuanitoSebastian/HKI-Bike-Buddy/blob/main/HKIBikeBuddy/AppState.swift) which is injected using the [@EnvironmentObject](https://developer.apple.com/documentation/swiftui/environmentobject) property wrapper in the [root of the application](https://github.com/JuanitoSebastian/HKI-Bike-Buddy/blob/main/HKIBikeBuddy/HelsinkiBikeBuddyApp.swift#L24). All of the data presented in the UI and all of the user actions are handled by the AppState. AppState makes the necessary requests to services and handles interaction with Bike Rental Station objects in the store. AppState works as an abstracting layer between the UI and the business logic of the applicaiton.
 
 ![ArchitectureDiagram](https://raw.githubusercontent.com/JuanitoSebastian/HelsinkiBikeBuddy/main/Documentation/graphics/ArchitectureGraph.png)
 
@@ -31,10 +31,9 @@ The state of the application and content in the views are kept in sync using the
 
 ## Main Operations of the App
 ### Updating the Store with the API
-The AppStates ``fetchFromApi()``method is called when the app first starts, when the app becomes active from the backround and when the user manually requests an update by pulling down the list of bike rental stations.
+The AppStates ``fetchFromApi()``method is called when the app first starts, when the app becomes active from the backround and when the user manually requests an update by pulling down the list of bike rental stations. Updating the store features two asynchronous functions that have to be executed one after the other in the correct order. This is achieved using [DispatchSemaphores](https://developer.apple.com/documentation/dispatch/dispatchsemaphore).
 ![ApiUpdateDiagram](https://raw.githubusercontent.com/JuanitoSebastian/HKI-Bike-Buddy/main/Documentation/graphics/UpdatingStationsWithAPI.png)
 The AppState first check that the device is connected to the internet. If there is no internet connection an alert is displayed to the user and the fetch is not performed. Interaction between the AppState and BikeRentalStationAPI is done in a separate background thread so that waiting for the fetch to finish does not freeze the UI on the main thread. AppState first calls the ``fetchNearbyBikeRentalStations()`` function. This function requests bike rental station objects from the API that are nearest to the users current location. Once the stations are received they are inserted to the store. AppState then checks if there are stations in the store that were not updated by ``fetchNearbyBikeRentalStations()`` (these could be stations that are favourited by the user but are not currently nearby). These stations are then updated using the ``fetchBikeRentalStations()`` function. 
-Updating the store features two asynchronous functions that have to be executed one after the other in the correct order. This is achieved using [DispatchSemaphores](https://developer.apple.com/documentation/dispatch/dispatchsemaphore).
 
 ### Marking a Station as Favourite
 When users want to mark stations as favourites they tap the heart.

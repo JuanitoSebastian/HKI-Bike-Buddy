@@ -8,6 +8,9 @@ git clone https://github.com/JuanitoSebastian/HKI-Bike-Buddy.git
 3. To build the project you have to [login with your Apple ID to sign the build](https://help.apple.com/xcode/mac/current/#/dev23aab79b4).
 4. Build and run the project with ``⌘ + R``
 
+### App Won't Start: Untrusted Developer?
+When installing apps built in Xcode to an iPhone you might encounter and error stating that the developer is not trusted. This can be fixed by going to ``Settings`` > ``General`` > ``Device Management`` and marking the Apple ID you used to build the app as trusted.
+
 ## Launching The App
 Launch the application by tapping the HKI Bike Buddy icon on the home screen of your device.
 <p align="center">
