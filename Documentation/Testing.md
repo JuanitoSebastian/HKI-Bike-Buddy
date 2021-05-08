@@ -16,7 +16,7 @@ waitForExpectations(timeout: timeout) // Wait for expectation
 ```
 ### Determining if tests are running
 To test some of the applications functionalities we need to be able to determine if the app is being run in testing mode. When the app is being tested it is run with a  ``-isTest`` flag. This lets the application know that tests are performed. 
-This is needed in the testing of [UserLocationServices](https://github.com/JuanitoSebastian/HKI-Bike-Buddy/blob/main/HKIBikeBuddy/services/UserLocationService.swift). UserLocationServices provide a CLLocation object which contains the current coordinate data of the device. When the application is in normal operation we are not able to edit this object. During testing it is necessary to be able to change the location data so we can see that the application reacts to the changes correctly. 
+This is needed in the testing of [UserLocationServices](https://github.com/JuanitoSebastian/HKI-Bike-Buddy/blob/main/HKIBikeBuddy/Services/UserLocationService.swift). UserLocationServices provide a CLLocation object which contains the current coordinate data of the device. When the application is in normal operation we are not able to edit this object. During testing it is necessary to be able to change the location data so we can see that the application reacts to the changes correctly. 
 ### Testing the store
 The saving and loading of data is also tested. During testing the data is written to a separate test file.
 ### Test coverage

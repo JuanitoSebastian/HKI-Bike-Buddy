@@ -1,6 +1,6 @@
 # ⏱ Project Report
 ![Time spent](https://raw.githubusercontent.com/JuanitoSebastian/HelsinkiBikeBuddy/main/Documentation/graphics/TimeSpent.png)
-A total of 185 hours have been spent on this project (last updated 30th of April). About 85% of the time has been spent on writing code and 15% on documentation. Working hours were tracked using Toggl.
+A total of 205 hours have been spent on this project (last updated 9th of May). About 85% of the time has been spent on writing code and 15% on documentation. Working hours were tracked using Toggl.
 | Week       | Tasks           | Time spent           |    
 | :------------- |:-------------|:-------------|
 | Week 5      | Start of the project. Studying GraphQL and the [Routing API](https://digitransit.fi/en/developers/apis/1-routing-api/).  | 2h 30min |
@@ -16,3 +16,4 @@ A total of 185 hours have been spent on this project (last updated 30th of April
 | Week 15     | Ditching CoreData and moving to a JSON .data file implementation for persistent storage. Detailed Station view now shown with the SwiftUIs .sheet() method. | 18h 42min |
 | Week 16     | Updating documentation because of changes to apps logic. Ditching Apollo and creating own implementation for GraphQL networking. | 23h 24min |
 | Week 17     | Updating and refining tests. Dealing with error handling in networking and creation of AlertContent -class for easily displaying alerts to user. Writing documentation. | 18h min |
+| Week 18     | Moved strings used in the UI to [Localizable.strings](https://github.com/JuanitoSebastian/HKI-Bike-Buddy/blob/main/HKIBikeBuddy/Supporting%20Files/Localizable.strings), made the structure of the project more clear and finalized the documentation | 11h 25min |

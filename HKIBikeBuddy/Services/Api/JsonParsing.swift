@@ -7,9 +7,8 @@
 
 import Foundation
 
-/// These structs are used for the decoding of API responses
-
 // MARK: - NearbyStations
+/// These structs are used for the decoding of API responses
 struct WelcomeNearby: Codable {
     let data: DataClassNearby
 }
