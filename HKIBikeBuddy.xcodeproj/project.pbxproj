@@ -190,7 +190,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		2801B90F2635B2FC0076CF1F /* HkiBikeBuddyLogicTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HkiBikeBuddyLogicTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2801B90F2635B2FC0076CF1F /* UnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2801B9112635B2FC0076CF1F /* BikeRentalStationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BikeRentalStationTests.swift; sourceTree = "<group>"; };
 		2801B9132635B2FC0076CF1F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2805C8C125DFAFA600FE7D56 /* FavouriteMarker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouriteMarker.swift; sourceTree = "<group>"; };
@@ -314,7 +314,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		2801B9102635B2FC0076CF1F /* LogicTests */ = {
+		2801B9102635B2FC0076CF1F /* UnitTests */ = {
 			isa = PBXGroup;
 			children = (
 				287B0A12263E952100152DB2 /* BikeRentalStationAPITests.swift */,
@@ -329,7 +329,7 @@
 				2801B9112635B2FC0076CF1F /* BikeRentalStationTests.swift */,
 				2801B9132635B2FC0076CF1F /* Info.plist */,
 			);
-			path = LogicTests;
+			path = UnitTests;
 			sourceTree = "<group>";
 		};
 		28085F42262D5FD500EB9F49 /* Providers */ = {
@@ -450,7 +450,7 @@
 				28A21C5925CEEA140062C7AC /* HKIBikeBuddy */,
 				280BD93325FA35AF005568EF /* Widget */,
 				285D342925FA376500ED13E3 /* Intention */,
-				2801B9102635B2FC0076CF1F /* LogicTests */,
+				2801B9102635B2FC0076CF1F /* UnitTests */,
 				284F9CFE25F8E26A0005D714 /* Frameworks */,
 				28A21C5825CEEA140062C7AC /* Products */,
 			);
@@ -462,7 +462,7 @@
 				28A21C5725CEEA140062C7AC /* HKIBikeBuddy.app */,
 				280BD93025FA35AF005568EF /* BikeBuddyWidgetExtension.appex */,
 				285D342725FA376500ED13E3 /* BikeBuddyIntention.appex */,
-				2801B90F2635B2FC0076CF1F /* HkiBikeBuddyLogicTests.xctest */,
+				2801B90F2635B2FC0076CF1F /* UnitTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -567,9 +567,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		2801B90E2635B2FC0076CF1F /* HkiBikeBuddyLogicTests */ = {
+		2801B90E2635B2FC0076CF1F /* UnitTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2801B9162635B2FC0076CF1F /* Build configuration list for PBXNativeTarget "HkiBikeBuddyLogicTests" */;
+			buildConfigurationList = 2801B9162635B2FC0076CF1F /* Build configuration list for PBXNativeTarget "UnitTests" */;
 			buildPhases = (
 				2801B90B2635B2FC0076CF1F /* Sources */,
 				2801B90C2635B2FC0076CF1F /* Frameworks */,
@@ -580,9 +580,9 @@
 			dependencies = (
 				2801B9152635B2FC0076CF1F /* PBXTargetDependency */,
 			);
-			name = HkiBikeBuddyLogicTests;
+			name = UnitTests;
 			productName = HkiBikeBuddyLogicTests;
-			productReference = 2801B90F2635B2FC0076CF1F /* HkiBikeBuddyLogicTests.xctest */;
+			productReference = 2801B90F2635B2FC0076CF1F /* UnitTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		280BD92F25FA35AF005568EF /* BikeBuddyWidgetExtension */ = {
@@ -691,7 +691,7 @@
 				28A21C5625CEEA140062C7AC /* HKIBikeBuddy */,
 				280BD92F25FA35AF005568EF /* BikeBuddyWidgetExtension */,
 				285D342625FA376500ED13E3 /* BikeBuddyIntention */,
-				2801B90E2635B2FC0076CF1F /* HkiBikeBuddyLogicTests */,
+				2801B90E2635B2FC0076CF1F /* UnitTests */,
 			);
 		};
 /* End PBXProject section */
@@ -937,7 +937,7 @@
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HKIBikeBuddy.app/HKIBikeBuddy";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = H9XF3442XB;
-				INFOPLIST_FILE = LogicTests/Info.plist;
+				INFOPLIST_FILE = UnitTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -957,7 +957,7 @@
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HKIBikeBuddy.app/HKIBikeBuddy";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = H9XF3442XB;
-				INFOPLIST_FILE = LogicTests/Info.plist;
+				INFOPLIST_FILE = UnitTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1232,7 +1232,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		2801B9162635B2FC0076CF1F /* Build configuration list for PBXNativeTarget "HkiBikeBuddyLogicTests" */ = {
+		2801B9162635B2FC0076CF1F /* Build configuration list for PBXNativeTarget "UnitTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2801B9172635B2FC0076CF1F /* Debug */,

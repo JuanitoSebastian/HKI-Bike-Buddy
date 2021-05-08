@@ -61,6 +61,9 @@
 "alertMessageStoreLoadError" = "Failed to load favourite stations from memory";
 "alertMessageStoreSaveError" = "Failed to save favourite stations to memory";
 
+// Alert Buttons
+"alertButtonTryAgain" = "Try again";
+
 // Station Info
 "stationInfoDistanceKm %@" = "%@ km away";
 "stationInfoDistanceM %@" = "%@ m away";

@@ -19,32 +19,8 @@ class BikeRentalStationTests: XCTestCase {
         XCTAssertEqual(firstBikeRentalStation.lat, firstBikeRentalStation.location.coordinate.latitude)
         XCTAssertEqual(firstBikeRentalStation.lon, firstBikeRentalStation.location.coordinate.longitude)
 
-        XCTAssertEqual("Station in use", firstBikeRentalStation.stationInUseString)
-        XCTAssertEqual("Accepts dropoffs", firstBikeRentalStation.allowDropoffString)
-
         XCTAssertTrue(firstBikeRentalStation.distance(to: seconBikeRentalStation.location) < 863)
         XCTAssertTrue(firstBikeRentalStation.distance(to: seconBikeRentalStation.location) > 861)
-    }
-
-    func test_b_bike_rental_station_computed_string_station_in_use() {
-
-        let bikeRentalStation = BikeRentalStation.placeholderStations[
-            Int.random(in: 0..<BikeRentalStation.placeholderStations.count)
-        ]
-
-        XCTAssertEqual("Station in use", bikeRentalStation.stationInUseString)
-        XCTAssertEqual("Accepts dropoffs", bikeRentalStation.allowDropoffString)
-
-        XCTAssertTrue(bikeRentalStation.lastUpdatedString.hasPrefix("Updated "))
-        XCTAssertFalse(bikeRentalStation.lastUpdatedString.hasPrefix("Updated yesterday "))
-
-        bikeRentalStation.fetched.addTimeInterval(-86400)
-
-        XCTAssertTrue(bikeRentalStation.lastUpdatedString.hasPrefix("Updated yesterday "))
-
-        bikeRentalStation.fetched.addTimeInterval(-86400)
-
-        XCTAssertEqual(bikeRentalStation.lastUpdatedString, "Updated a long time ago")
     }
 
     func test_c_bike_rental_station_computed_string_station_not_in_use() {
@@ -54,9 +30,6 @@ class BikeRentalStationTests: XCTestCase {
 
         bikeRentalStation.state = .notInUse
         bikeRentalStation.allowDropoff = false
-
-        XCTAssertEqual("Station not in use", bikeRentalStation.stationInUseString)
-        XCTAssertEqual("No dropoffs", bikeRentalStation.allowDropoffString)
 
     }
 

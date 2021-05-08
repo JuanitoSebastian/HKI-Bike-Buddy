@@ -50,8 +50,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2801B90E2635B2FC0076CF1F"
-               BuildableName = "HkiBikeBuddyLogicTests.xctest"
-               BlueprintName = "HkiBikeBuddyLogicTests"
+               BuildableName = "UnitTests.xctest"
+               BlueprintName = "UnitTests"
                ReferencedContainer = "container:HKIBikeBuddy.xcodeproj">
             </BuildableReference>
          </TestableReference>

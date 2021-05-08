@@ -11,10 +11,10 @@ HKI Bike buddy is an iOS app for viewing real-time information of city bike stat
 - 🗂 **Intention**: [Intents](https://developer.apple.com/design/human-interface-guidelines/siri/overview/custom-intents/) implementation (required for customizable widget)
 
 ## Documentation
-[🏛 Architecture](https://github.com/JuanitoSebastian/HelsinkiBikeBuddy/blob/main/Documentation/Architecture.md)\
-[🧪 Testing](https://github.com/JuanitoSebastian/HelsinkiBikeBuddy/blob/main/Documentation/Testing.md)\
-[📱 User guide](https://github.com/JuanitoSebastian/HelsinkiBikeBuddy/blob/main/Documentation/UserGuide.md)\
-[⏱ Project report](https://github.com/JuanitoSebastian/HelsinkiBikeBuddy/blob/main/Documentation/ProjectReport.md)
+[🏛 Architecture](https://github.com/JuanitoSebastian/HKI-Bike-Buddy/blob/main/Documentation/Architecture.md)\
+[🧪 Testing](https://github.com/JuanitoSebastian/HKI-Bike-Buddy/blob/main/Documentation/Testing.md)\
+[📱 User guide](https://github.com/JuanitoSebastian/HKI-Bike-Buddy/blob/main/Documentation/UserGuide.md)\
+[⏱ Project report](https://github.com/JuanitoSebastian/HKI-Bike-Buddy/blob/main/Documentation/ProjectReport.md)
 
 ## Installation
 HKI Bike Buddy will be available in the App Store at latest July 2021.
@@ -29,11 +29,10 @@ If you are interested in exploring this project you are going to need:
 3. An Apple ID
 
 ### Installation & running the app
-1. Clone the repository:
+1. Download the latest [release](https://github.com/JuanitoSebastian/HKI-Bike-Buddy/releases) or clone the repository:
 ```
 git clone https://github.com/JuanitoSebastian/HKI-Bike-Buddy.git
 ```
-or download the latest [release](https://github.com/mluukkai/OtmTodoApp/releases)
 2. Open HelsinkiBikeBuddy.xcodeproj to access the Xcode workspace
 3. To build the project you have to [login with your Apple ID to sign the build](https://help.apple.com/xcode/mac/current/#/dev23aab79b4).
 4. Build and run the project with ``⌘ + R``

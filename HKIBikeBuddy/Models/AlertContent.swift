@@ -53,7 +53,7 @@ extension AlertContent {
             message: LocalizedStringKey("alertMessageApiError"),
             type: .actionable,
             action: AppState.shared.fetchFromApi,
-            actionableButtonText: "Try again"
+            actionableButtonText: LocalizedStringKey("alertButtonTryAgain")
         )
     }
 
@@ -63,7 +63,7 @@ extension AlertContent {
             message: LocalizedStringKey("alertMessageNetworkError"),
             type: .actionable,
             action: AppState.shared.fetchFromApi,
-            actionableButtonText: "Try again"
+            actionableButtonText: LocalizedStringKey("alertButtonTryAgain")
         )
     }
 
@@ -81,7 +81,7 @@ extension AlertContent {
             message: LocalizedStringKey("alertMessageStoreLoadError"),
             type: .actionable,
             action: { AppState.shared.loadBikeRentalStationStore() },
-            actionableButtonText: "Try again"
+            actionableButtonText: LocalizedStringKey("alertButtonTryAgain")
         )
     }
 
@@ -91,7 +91,7 @@ extension AlertContent {
             message: LocalizedStringKey("alertMessageStoreSaveError"),
             type: .actionable,
             action: { AppState.shared.saveBikeRentalStationStore() },
-            actionableButtonText: "Try again"
+            actionableButtonText: LocalizedStringKey("alertButtonTryAgain")
         )
     }
 
