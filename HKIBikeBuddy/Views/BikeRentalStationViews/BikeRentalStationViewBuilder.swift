@@ -63,7 +63,7 @@ class BikeRentalStationViewBuilder {
 
     @ViewBuilder func distanceFromUserComponent(
         distanceFromUser: LocalizedStringKey = LocalizedStringKey(""),
-        lastUpdatedString: String = "",
+        lastUpdatedString: LocalizedStringKey = LocalizedStringKey(""),
         bikeRentalStationViewType: BikeRentalStationViewType
     ) -> some View {
         HStack {
@@ -121,12 +121,12 @@ class BikeRentalStationViewBuilder {
         VStack {
             CapacityBar(leftValue: bikes, rightValue: spaces)
             HStack {
-                Text("\(bikes) bikes")
+                Text(LocalizedStringKey("stationInfoBikesAmount \(bikes)"))
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .foregroundColor(Color("TextMain"))
                 Spacer()
-                Text("\(spaces) spaces")
+                Text(LocalizedStringKey("stationInfoSpacesAmount \(spaces)"))
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .foregroundColor(Color("TextMain"))
@@ -142,7 +142,7 @@ class BikeRentalStationViewBuilder {
         VStack {
             HStack {
                 Spacer()
-                Text("Station is not in use")
+                Text(LocalizedStringKey("stationInfoStationNotInUse"))
                     .font(.headline)
                     .foregroundColor(Color("TextMain"))
                 Spacer()

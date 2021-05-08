@@ -37,8 +37,8 @@ struct DetailedBikeRentalStationSheetView: View {
                     .padding(.horizontal, 15)
 
                     BikeRentalStationViewBuilder.shared.distanceFromUserComponent(
-                        distanceFromUser: distanceString,
-                        lastUpdatedString: bikeRentalStation.lastUpdatedString,
+                        distanceFromUser: distance,
+                        lastUpdatedString: lastUpdated,
                         bikeRentalStationViewType: .detailed
                     )
                     .padding(.horizontal, 15)
@@ -106,7 +106,24 @@ struct DetailedBikeRentalStationSheetView: View {
 // MARK: - Functions and properties
 extension DetailedBikeRentalStationSheetView {
 
-    private var distanceString: LocalizedStringKey {
+    private var lastUpdated: LocalizedStringKey {
+        let calendar = Calendar.current
+        let formatter = DateFormatter()
+        formatter.setLocalizedDateFormatFromTemplate("HH:mm")
+
+        if calendar.isDateInToday(bikeRentalStation.fetched) {
+            let dateString = formatter.string(from: bikeRentalStation.fetched)
+            return LocalizedStringKey("stationInfoLastUpdatedToday \(dateString)")
+        }
+
+        if calendar.isDateInYesterday(bikeRentalStation.fetched) {
+            let dateString = formatter.string(from: bikeRentalStation.fetched)
+            return LocalizedStringKey("stationInfoLastUpdatedYesterday \(dateString)")
+        }
+        return LocalizedStringKey("stationInfoLastUpdatedProlonged")
+    }
+
+    private var distance: LocalizedStringKey {
         guard let userLocation = appState.userLocation else {
             return LocalizedStringKey("")
         }

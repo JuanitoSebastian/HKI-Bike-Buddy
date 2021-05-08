@@ -76,31 +76,6 @@ extension BikeRentalStation {
         guard let userLocationUnwrapped = UserLocationService.shared.userLocation else { return false }
         return distance(to: userLocationUnwrapped) <= Double(UserDefaultsStore.shared.nearbyRadius)
     }
-
-    var stationInUseString: String {
-        return state == .inUse ? "Station in use" : "Station not in use"
-    }
-
-    var allowDropoffString: String {
-        return allowDropoff ? "Accepts dropoffs" : "No dropoffs"
-    }
-
-    var lastUpdatedString: String {
-        let calendar = Calendar.current
-        let formatter = DateFormatter()
-        formatter.setLocalizedDateFormatFromTemplate("HH:mm")
-
-        if calendar.isDateInToday(fetched) {
-            let dateString = formatter.string(from: fetched)
-            return "Updated \(dateString)"
-        }
-
-        if calendar.isDateInYesterday(fetched) {
-            let dateString = formatter.string(from: fetched)
-            return "Updated yesterday \(dateString)"
-        }
-        return "Updated a long time ago"
-    }
 }
 
 // MARK: - Functions
@@ -116,7 +91,6 @@ extension BikeRentalStation {
 
 // MARK: - Codable
 extension BikeRentalStation: Codable {
-
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(stationId, forKey: .stationId)

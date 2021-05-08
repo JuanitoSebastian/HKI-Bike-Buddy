@@ -64,3 +64,9 @@
 // Station Info
 "stationInfoDistanceKm %@" = "%@ km away";
 "stationInfoDistanceM %@" = "%@ m away";
+"stationInfoBikesAmount %lld" = "%lld bikes";
+"stationInfoSpacesAmount %lld" = "%lld spaces";
+"stationInfoStationNotInUse" = "Station is not in use";
+"stationInfoLastUpdatedToday %@" = "Updated %@";
+"stationInfoLastUpdatedYesterday %@" = "Updated yesterday %@";
+"stationInfoLastUpdatedProlonged" = "Updated a long time ago";

@@ -21,16 +21,31 @@ struct WidgetStationCard: View {
         }
     }
 
-    var lastUpdatedString: String {
+    private var lastUpdated: LocalizedStringKey {
+        let formatter = DateFormatter()
+        let calendar = Calendar.current
+        formatter.setLocalizedDateFormatFromTemplate("HH:mm")
         switch widgetDisplayType {
-        case .operational:
-            return bikeRentalStation.lastUpdatedString
         case .preview:
-            let formatter = DateFormatter()
-            formatter.setLocalizedDateFormatFromTemplate("HH:mm")
-            return "Updated \(formatter.string(from: Date()))"
+            return LocalizedStringKey("stationInfoLastUpdatedToday \(formatter.string(from: Date()))")
+        default:
+            if calendar.isDateInToday(bikeRentalStation.fetched) {
+                let dateString = formatter.string(from: bikeRentalStation.fetched)
+                return LocalizedStringKey("stationInfoLastUpdatedToday \(dateString)")
+            }
+
+            if calendar.isDateInYesterday(bikeRentalStation.fetched) {
+                let dateString = formatter.string(from: bikeRentalStation.fetched)
+                return LocalizedStringKey("stationInfoLastUpdatedYesterday \(dateString)")
+            }
+            return LocalizedStringKey("stationInfoLastUpdatedProlonged")
         }
     }
+
+}
+
+// MARK: - Views
+extension WidgetStationCard {
 
     var body: some View {
         ZStack {
@@ -43,7 +58,7 @@ struct WidgetStationCard: View {
                 )
 
                 BikeRentalStationViewBuilder.shared.distanceFromUserComponent(
-                    lastUpdatedString: bikeRentalStation.lastUpdatedString,
+                    lastUpdatedString: lastUpdated,
                     bikeRentalStationViewType: .widgetCard
                 )
                 .padding(.bottom, 2)
