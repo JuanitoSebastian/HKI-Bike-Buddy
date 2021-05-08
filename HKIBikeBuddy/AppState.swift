@@ -50,6 +50,7 @@ class AppState: ObservableObject {
 // MARK: - Subscriptions
 extension AppState {
 
+    /// Subscribe to listen for changes in the BikeRentalStationStore stationIds publisher
     func subscribeToBikeRentalStore(
         publisher: AnyPublisher<[String], Never> =
             BikeRentalStationStore.shared.bikeRentalStationIds.eraseToAnyPublisher()
@@ -62,6 +63,7 @@ extension AppState {
             }
     }
 
+    /// Subscribe to listen for changes in user location
     func subscribeToUserLocation(
         publisher: AnyPublisher<CLLocation?, Never> =
             UserLocationService.shared.$userLocation.eraseToAnyPublisher()
@@ -73,6 +75,7 @@ extension AppState {
         }
     }
 
+    /// Subscribe to listen for changes in the locatio services authorization state
     func subscribeToUserLocationServiceAuthorization(
         publisher: AnyPublisher<UserLocationService.LocationAuthorizationStatus, Never> =
             UserLocationService.shared.$locationAuthorization.eraseToAnyPublisher()
@@ -221,6 +224,7 @@ extension AppState {
 
     }
 
+    /// Load bike rental stations to the Store from memory
     func loadBikeRentalStationStore() {
         do {
             try BikeRentalStationStore.shared.loadData()

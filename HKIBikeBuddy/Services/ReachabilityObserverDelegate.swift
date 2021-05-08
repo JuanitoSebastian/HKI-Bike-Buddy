@@ -8,6 +8,7 @@
 import Foundation
 import Reachability
 
+/// Used for determining if the device is connected to the internet
 private var reachability: Reachability!
 
 protocol ReachabilityActionDelegate {
