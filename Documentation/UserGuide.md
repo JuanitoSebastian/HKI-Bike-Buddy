@@ -1,6 +1,6 @@
 # 📱 User Guide
 ## Installation & running the app
-1. Clone the repository:
+1. Download the latest [release](https://github.com/JuanitoSebastian/HKI-Bike-Buddy/releases) or clone the repository:
 ```
 git clone https://github.com/JuanitoSebastian/HKI-Bike-Buddy.git
 ```
