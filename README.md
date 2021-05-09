@@ -1,6 +1,6 @@
 # HKI Bike Buddy
 ![HKIBikeBuddy](https://raw.githubusercontent.com/JuanitoSebastian/HKI-Bike-Buddy/main/Documentation/graphics/ReadMeHeader.png)
-HKI Bike buddy is an iOS app for viewing real-time information of city bike stations in Helsinki, Espoo and Vantaa. Instead of having to search a map to find the nearest bike rental stations. HKI Bike Buddy shows the stations as a list ordered from closest to furthest from your current location. Bike rental stations can be favourited for easy access and favourite stations can be placed on the home screen as widgets.
+HKI Bike buddy is an iOS app for viewing real-time information of city bike stations in Helsinki, Espoo and Vantaa. Instead of having to search a map to find the nearest bike rental stations HKI Bike Buddy shows the stations as a list ordered from closest to furthest from your current location. Bike rental stations can be favourited for easy access and favourite stations can be placed on the home screen as widgets.
 
 ## Structure
 - 🗂 **HKIBikeBuddy.xcodeproj**: Xcode project
