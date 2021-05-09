@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+/// A view for displaying information about a bike rental station in a
+/// medium sized widget
 struct WidgetStationCard: View {
 
     let bikeRentalStation: BikeRentalStation

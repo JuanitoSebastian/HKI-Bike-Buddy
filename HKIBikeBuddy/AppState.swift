@@ -37,6 +37,7 @@ class AppState: ObservableObject {
         self.nearbyRentalStations = []
         self.mainView = .locationPrompt
         #if DEBUG
+        // If tests are running do not add reachabilityObserver
         guard !Helper.isRunningTests() else { return }
         #endif
         try? addReachabilityObserver()

@@ -28,7 +28,7 @@ struct Provider: IntentTimelineProvider {
     }
 
     /// Called when the system needs an example instance of the widget
-    /// A snapshot is displayed when the user is previews widgets
+    /// A snapshot is displayed when the user previews widgets
     func getSnapshot(
         for configuration: ConfigurationIntent,
         in context: Context,
@@ -48,6 +48,7 @@ struct Provider: IntentTimelineProvider {
         completion(entry)
     }
 
+    /// This function provides the information for the widget when it is in use
     func getTimeline(
         for configuration: ConfigurationIntent,
         in context: Context,

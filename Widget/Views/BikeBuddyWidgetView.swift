@@ -9,6 +9,8 @@ import WidgetKit
 import SwiftUI
 import Intents
 
+/// This view wraps the WidgetStationCard view.
+/// If the station was not fetched succesfully an error message is displayed
 struct BikeBuddyWidgetEntryView: View {
     var entry: Provider.Entry
 
