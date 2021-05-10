@@ -33,7 +33,7 @@ If you are interested in exploring this project you are going to need:
 ```
 git clone https://github.com/JuanitoSebastian/HKI-Bike-Buddy.git
 ```
-2. Open HelsinkiBikeBuddy.xcodeproj to access the Xcode workspace
+2. Open HKIBikeBuddy.xcodeproj to access the Xcode workspace
 3. To build the project you have to [login with your Apple ID to sign the build](https://help.apple.com/xcode/mac/current/#/dev23aab79b4).
 4. Build and run the project with ``⌘ + R``
 
